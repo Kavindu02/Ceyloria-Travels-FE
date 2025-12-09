@@ -51,7 +51,7 @@ const FadeInSection = ({ children, delay = "0ms" }) => {
 const heroSlides = [
   {
     image: "/gallery/maligawa.png",
-    title: "Dalada Maligawa",
+    title: "Temple Of Tooth",
     subtitle: "Sacred temple of the Tooth Relic",
     location: "Kandy"
   },
@@ -69,7 +69,7 @@ const heroSlides = [
   },
   {
     image: "/gallery/colombo2.png",
-    title: "Galle Face Beach",
+    title: "Colombo City",
     subtitle: "Relax by the scenic coastline",
     location: "Colombo"
   }
