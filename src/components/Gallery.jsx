@@ -1,14 +1,26 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 1. IMPORT THIS
 
 const galleryItems = [
-  { id: 1, title: "Colombo", img: "/gallery/Colombo.png", size: "md:col-span-1 md:row-span-1" },
-  { id: 2, title: "Anuradhapura", img: "/gallery/Anuradhapura.png", size: "md:col-span-1 md:row-span-1" },
-  { id: 3, title: "Galle", img: "/gallery/Galle.png", size: "md:col-span-1 md:row-span-2" },
-  { id: 4, title: "Ella", img: "/gallery/Ella.png", size: "md:col-span-2 md:row-span-1" },
+  // 2. ADD A 'link' PROPERTY TO YOUR DATA
+  { id: 1, title: "Colombo", img: "/gallery/Colombo.png", size: "md:col-span-1 md:row-span-1", link: "/colombo" },
+  { id: 2, title: "Anuradhapura", img: "/gallery/Anuradhapura.png", size: "md:col-span-1 md:row-span-1", link: "/anuradhapura" }, // <--- THIS IS THE TARGET
+  { id: 3, title: "Galle", img: "/gallery/Galle.png", size: "md:col-span-1 md:row-span-2", link: "/galle" },
+  { id: 4, title: "Ella", img: "/gallery/Ella.png", size: "md:col-span-2 md:row-span-1", link: "/ella" },
 ];
 
 const Gallery = () => {
   const [hoveredId, setHoveredId] = useState(null);
+  const navigate = useNavigate(); // 3. INITIALIZE THE HOOK
+
+  // 4. FUNCTION TO HANDLE CLICK
+  const handleNavigation = (link) => {
+    if (link) {
+        navigate(link);
+        // Scrolls to top of new page automatically
+        window.scrollTo(0, 0); 
+    }
+  };
 
   return (
     <div className="w-full py-8 md:py-12 px-2 md:px-4">
@@ -17,6 +29,8 @@ const Gallery = () => {
           {galleryItems.map((item, index) => (
             <div
               key={item.id}
+              // 5. ADD THE ONCLICK EVENT HERE
+              onClick={() => handleNavigation(item.link)}
               className={`relative overflow-hidden cursor-pointer group ${item.size}`}
               style={{
                 animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
