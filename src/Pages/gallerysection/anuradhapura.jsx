@@ -1,369 +1,386 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, MapPin, Compass, Star, ArrowDown, Clock, History } from 'lucide-react'; 
+import React, { useState, useEffect, useRef } from 'react';
+import { ArrowRight, MapPin, Compass, Star, ArrowDown, Clock, History, ChevronRight, Play } from 'lucide-react';
 
 const AnuradhapuraPage = () => {
-  const [scrolled, setScrolled] = useState(false);
-  // Map Pin Location (Anuradhapura Coordinates)
-  const mapLocation = { x: 45, y: 38, label: "Anuradhapura" };
+  // --- Custom Hook for Scroll Animations ---
+  const useElementOnScreen = (options) => {
+    const containerRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
 
-  // Scroll listener for nice reveal effects (optional)
+    useEffect(() => {
+      const observer = new IntersectionObserver((entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) setIsVisible(true);
+      }, options);
+
+      if (containerRef.current) observer.observe(containerRef.current);
+
+      return () => {
+        if (containerRef.current) observer.unobserve(containerRef.current);
+      };
+    }, [containerRef, options]);
+
+    return [containerRef, isVisible];
+  };
+
+  // --- Scroll Progress Bar Logic ---
+  const [scrollProgress, setScrollProgress] = useState(0);
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scroll = `${totalScroll / windowHeight}`;
+      setScrollProgress(Number(scroll));
+    }
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="font-sans text-slate-800 bg-slate-50 selection:bg-amber-200 selection:text-amber-900">
+    <div className="font-sans text-stone-800 bg-stone-50 selection:bg-amber-200 selection:text-amber-900 overflow-x-hidden">
       
-      {/* ==================== 1. IMMERSIVE HERO SECTION ==================== */}
-      <div className="relative h-[90vh] w-full overflow-hidden">
-        {/* Parallax-style Background with Slow Zoom Animation */}
-        <div className="absolute inset-0">
+      {/* Sticky Progress Bar */}
+      <div className="fixed top-0 left-0 h-1 bg-amber-600 z-50 transition-all duration-300 ease-out" style={{ width: `${scrollProgress * 100}%` }} />
+
+      {/* ==================== 1. CINEMATIC HERO SECTION ==================== */}
+      <div className="relative h-[95vh] w-full overflow-hidden group">
+        
+        {/* Background Image with Slow Parallax Scale */}
+        <div className="absolute inset-0 overflow-hidden">
             <img 
-            src="/pagesPhotos/anuradhapura/hero.png" 
-            alt="Anuradhapura Ruwanwelisaya Stupa" 
-            className="w-full h-full object-cover scale-105 animate-slow-zoom"
+              src="/pagesPhotos/anuradhapura/hero.png" 
+              alt="Anuradhapura Ruwanwelisaya Stupa" 
+              className="w-full h-full object-cover scale-105 animate-slow-pan"
             />
-            {/* Gradient Overlay for Text Readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-transparent to-slate-900/90"></div>
+            {/* Cinematic Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90 mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
         </div>
         
-        {/* Hero Content */}
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 pt-20">
-          <div className="animate-fade-in-up">
-            
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-medium text-white mb-6 tracking-tight drop-shadow-2xl">
-              Anuradhapura
-            </h1>
-            <p className="text-lg md:text-2xl text-white/90 font-light max-w-3xl mx-auto leading-relaxed tracking-wide">
-              The First Capital. The Sacred City. The Beginning of a Civilization.
-            </p>
-          </div>
+        {/* Navigation / Header Area (Simulated) */}
+        <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-30 text-white/90">
+             <div className="text-xs font-bold tracking-[0.3em] uppercase border-b border-transparent hover:border-amber-500 transition-colors cursor-pointer">
+                SDK Travel
+             </div>
+             <div className="hidden md:flex gap-8 text-xs font-bold tracking-widest uppercase">
+                <span className="hover:text-amber-400 cursor-pointer transition-colors">History</span>
+                <span className="hover:text-amber-400 cursor-pointer transition-colors">Destinations</span>
+                <span className="hover:text-amber-400 cursor-pointer transition-colors">Luxury</span>
+             </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/50 animate-bounce">
-            <ArrowDown className="w-6 h-6" />
+        {/* Hero Content - Bottom Aligned & Modern */}
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-16 z-20">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+            
+            {/* Title Block */}
+            <div className="lg:col-span-8 animate-slide-up">
+              <span className="inline-block px-3 py-1 mb-4 border border-white/30 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-white backdrop-blur-md">
+                The Sacred City
+              </span>
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif text-white leading-[0.9] tracking-tighter mb-6">
+                Anuradha<span className="text-amber-500 italic">pura</span>
+              </h1>
+              <p className="text-lg md:text-xl text-stone-200 font-light max-w-2xl leading-relaxed border-l-2 border-amber-500 pl-6">
+                The first capital. A testament to a civilization that mastered stone and water while the rest of the world slept.
+              </p>
+            </div>
+
+            {/* Interactive Play/Explore Block */}
+            <div className="lg:col-span-4 flex justify-start lg:justify-end pb-2">
+                <button className="group relative flex items-center gap-4 pl-2 pr-6 py-2 overflow-hidden rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-amber-600 hover:border-amber-600 transition-all duration-500">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-stone-900 group-hover:scale-110 transition-transform">
+                        <ArrowDown size={18} />
+                    </div>
+                    <span className="text-xs font-bold tracking-widest uppercase text-white">Begin Journey</span>
+                </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ==================== 2. FLOATING STATS BAR (New Interactive Element) ==================== */}
-      <div className="relative z-20 max-w-6xl mx-auto -mt-16 px-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-slate-100 items-center">
-            <div className="text-center group cursor-default">
-                <div className="flex justify-center mb-2 text-amber-500"><History size={20}/></div>
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Founded</p>
-                <p className="text-xl font-serif font-bold text-slate-800 group-hover:text-amber-600 transition-colors">4th Century BC</p>
-            </div>
-            <div className="text-center pl-4 group cursor-default">
-                <div className="flex justify-center mb-2 text-amber-500"><Clock size={20}/></div>
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Dynasty Duration</p>
-                <p className="text-xl font-serif font-bold text-slate-800 group-hover:text-amber-600 transition-colors">1,000+ Years</p>
-            </div>
-            <div className="text-center pl-4 group cursor-default">
-                <div className="flex justify-center mb-2 text-amber-500"><Star size={20}/></div>
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Significance</p>
-                <p className="text-xl font-serif font-bold text-slate-800 group-hover:text-amber-600 transition-colors">First Capital</p>
-            </div>
-            <div className="text-center pl-4 flex items-center justify-center">
-                 <button className="bg-slate-900 hover:bg-amber-600 text-white rounded-full p-4 transition-all shadow-lg hover:scale-110">
-                    <ArrowDown className="w-5 h-5" />
-                 </button>
-            </div>
-        </div>
-      </div>
-
-      {/* ==================== 3. NARRATIVE & MAP SECTION ==================== */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
-          {/* Left: Narrative Text */}
-          <div className="lg:col-span-7 space-y-8">
-            <h2 className="text-4xl md:text-5xl font-serif text-slate-900 leading-tight">
-              A Kingdom of <span className="italic text-amber-600">Colossal</span> Proportions
-            </h2>
-            <div className="prose prose-lg text-slate-600">
-                <p className="leading-relaxed">
-                   Anuradhapura was the first historical capital of Sri Lanka, and its marvels still radiate greatness. Reigning for over a millennium, the kingdom had 117 rulers who built magnificent palaces, great reservoirs and irrigation systems, pleasure gardens and Buddhist temples.
-                </p>
-                <p className="leading-relaxed">
-                   Some of these structures are amongst the biggest architectural creations of the ancient world, smaller in size only to the pyramids of Giza.
-                </p>
-            </div>
-            
-            {/* Fact Box */}
-            <div className="border-l-4 border-amber-500 pl-6 py-4 bg-amber-50 rounded-r-xl">
-                <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Traveler Tip</p>
-                <p className="text-slate-700 italic text-sm">
-                    "The surviving ruins, and the restored temples and stupas are just a few of the places to visit in the sacred city."
-                </p>
-            </div>
-          </div>
-
-          {/* Right: Interactive Map Card */}
-          <div className="lg:col-span-5 relative group">
-             <div className="bg-white p-3 rounded-[2rem] shadow-2xl border border-slate-100 relative overflow-hidden transform transition-transform duration-700 hover:-translate-y-2">
-                
-                {/* Map Tag */}
-                <div className="absolute top-6 left-6 z-10">
-                    <span className="flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1.5 rounded-full text-xs font-bold text-slate-800 shadow-sm border border-slate-200">
-                        <Compass className="w-3 h-3 text-amber-500" /> Location Context
-                    </span>
+      {/* ==================== 2. ELEGANT STATS STRIP ==================== */}
+      <div className="bg-stone-900 text-white py-12 px-6 border-b border-stone-800">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 divide-x divide-stone-800/50">
+            {[
+                { label: "Established", value: "4th Century BC", icon: History },
+                { label: "Reign", value: "1,300 Years", icon: Clock },
+                { label: "Status", value: "UNESCO Site", icon: Star },
+                { label: "Location", value: "North Central", icon: MapPin },
+            ].map((stat, idx) => (
+                <div key={idx} className="pl-4 md:pl-8 group cursor-default">
+                    <stat.icon className="w-5 h-5 text-amber-600 mb-3 group-hover:animate-bounce" />
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 mb-1">{stat.label}</p>
+                    <p className="text-xl md:text-2xl font-serif text-stone-100">{stat.value}</p>
                 </div>
+            ))}
+        </div>
+      </div>
 
-                {/* The Map Image */}
-                <img 
-                  src="/srilanka-map.png" 
-                  alt="Map of Sri Lanka" 
-                  className="w-full h-auto object-contain opacity-90 rounded-3xl"
-                />
-                
-                {/* Interactive Pin Logic */}
-                <div 
-                  className="absolute" 
-                  style={{ left: `${mapLocation.x}%`, top: `${mapLocation.y}%` }}
-                >
-                    <div className="w-6 h-6 bg-amber-500/30 rounded-full absolute -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
-                    <div className="w-3 h-3 bg-amber-600 rounded-full absolute -translate-x-1/2 -translate-y-1/2 border-2 border-white shadow-md z-20"></div>
-                    
-                    {/* Tooltip Label */}
-                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 bg-slate-900 text-white text-xs px-4 py-2 rounded-lg shadow-xl font-medium tracking-wide whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
-                        <div className="flex items-center gap-2">
-                             <MapPin size={10} /> {mapLocation.label}
-                        </div>
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-slate-900"></div>
+      {/* ==================== 3. NARRATIVE & MAP (Asymmetrical Layout) ==================== */}
+      <section className="py-32 px-6 max-w-7xl mx-auto overflow-hidden">
+        <div className="relative">
+             {/* Decorative Background Text */}
+            <div className="absolute -top-20 -left-20 text-[12rem] font-serif text-stone-100 select-none opacity-50 z-0 leading-none">
+                KINGDOM
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+                {/* Image/Map Side (Spans 7 columns) */}
+                <div className="lg:col-span-7 relative group">
+                    <div className="relative rounded-[2rem] overflow-hidden shadow-2xl transition-transform duration-700 hover:scale-[1.01]">
+                         <img 
+                            src="/srilanka-map.png" 
+                            alt="Map of Sri Lanka" 
+                            className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                         />
+                         {/* Animated Pin */}
+                         <div className="absolute top-[38%] left-[45%] translate-x-[-50%] translate-y-[-50%]">
+                            <span className="relative flex h-8 w-8">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-8 w-8 bg-amber-500 border-4 border-white shadow-lg"></span>
+                            </span>
+                            <div className="absolute left-10 top-1 bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-500 -translate-x-4 group-hover:translate-x-0">
+                                You are here
+                            </div>
+                         </div>
                     </div>
                 </div>
-             </div>
-          </div>
 
+                {/* Text Side (Overlaps visually on large screens) */}
+                <div className="lg:col-span-5 lg:-ml-20 mt-8 lg:mt-0">
+                    <div className="bg-white/90 backdrop-blur-xl p-8 md:p-12 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-white/50">
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="w-12 h-[1px] bg-amber-600"></span>
+                            <span className="text-amber-600 text-xs font-bold uppercase tracking-widest">The Origin Story</span>
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-serif text-stone-900 leading-tight mb-6">
+                            Where History is <br/><span className="italic text-stone-400">Etched in Stone.</span>
+                        </h2>
+                        <div className="space-y-4 text-stone-600 font-light leading-relaxed">
+                            <p>
+                                Anuradhapura was not merely a city; it was a hydraulic civilization that defied the engineering limitations of the ancient world. 
+                            </p>
+                            <p>
+                                Reigning for over a millennium, 117 rulers built magnificent palaces and stupas smaller in size only to the pyramids of Giza. Today, the ruins whisper tales of a golden era.
+                            </p>
+                        </div>
+                        <div className="mt-8 pt-8 border-t border-stone-100 flex items-center gap-4">
+                             <div className="bg-amber-50 p-3 rounded-full text-amber-600">
+                                <Compass size={24} />
+                             </div>
+                             <div>
+                                <p className="text-xs font-bold uppercase text-stone-400">Travel Distance</p>
+                                <p className="font-serif text-lg text-stone-800">205 km from Colombo</p>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
       </section>
 
-      {/* ==================== 4. FEATURED EXPERIENCES (PRESERVED AS REQUESTED) ==================== */}
-      <section className="bg-white py-24 px-6">
+      {/* ==================== 4. FEATURED EXPERIENCES (Modern Cards) ==================== */}
+      <section className="bg-white py-32 px-6">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div className="max-w-2xl">
-              <span className="text-purple-600 font-bold uppercase tracking-widest text-xs mb-2 block">
-                Discover
-              </span>
-              <h2 className="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">
-                [cite_start]Featured Experiences in Anuradhapura 
-              </h2>
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+                 <span className="text-amber-600 font-bold uppercase tracking-widest text-xs mb-3 block">Curated Exploration</span>
+                 <h2 className="text-4xl md:text-6xl font-serif text-stone-900">Iconic Landmarks</h2>
             </div>
-            <p className="text-gray-500 max-w-sm text-sm md:text-right pb-2">
-              Immerse yourself in the sacred history and architectural marvels of the ancient capital.
-            </p>
+            <div className="flex gap-2">
+                <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight className="rotate-180" size={18}/></button>
+                <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight size={18}/></button>
+            </div>
           </div>
 
-          {/* Modern Card Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            {/* Card 1: Sri Maha Bodhiya */}
-            <div className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer shadow-xl">
-              <img 
-                src="/pagesPhotos/anuradhapura/Sri Maha Bodhiya.png" 
-                alt="Sri Maha Bodhiya" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 transition-opacity duration-300"></div>
-              
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
-                <div className="w-12 h-1 bg-yellow-500 mb-4 transition-all duration-300 group-hover:w-20"></div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">Sri Maha Bodhiya </h3>
-                <p className="text-gray-300 text-sm leading-relaxed opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-40 transition-all duration-500 ease-in-out overflow-hidden">
-                  Considered to be the oldest planted tree in the world with a recorded history, this sacred Bo tree dates back to 245 BC.
-                </p>
-                <div className="mt-4 flex items-center text-white/80 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-                  Explore <ArrowRight className="ml-2 w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Ruwanweli Maha Seya */}
-            <div className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer shadow-xl">
-              <img 
-                src="/pagesPhotos/anuradhapura/Ruwanweli Maha Seya.png" 
-                alt="Ruwanweli Maha Seya" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 transition-opacity duration-300"></div>
-              
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
-                <div className="w-12 h-1 bg-yellow-500 mb-4 transition-all duration-300 group-hover:w-20"></div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">Ruwanweli Maha Seya </h3>
-                <p className="text-gray-300 text-sm leading-relaxed opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-40 transition-all duration-500 ease-in-out overflow-hidden">
-                 Built by King Dutugemuna around 140 BC, this giant stupa contains the largest collection of relics of Lord Buddha.
-                </p>
-                <div className="mt-4 flex items-center text-white/80 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-                  Explore <ArrowRight className="ml-2 w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3: Mihintale */}
-            <div className="group relative h-[500px] overflow-hidden rounded-3xl cursor-pointer shadow-xl">
-              <img 
-                src="/pagesPhotos/anuradhapura/Mihintale.png" 
-                alt="Mihintale" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 transition-opacity duration-300"></div>
-              
-              <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
-                <div className="w-12 h-1 bg-yellow-500 mb-4 transition-all duration-300 group-hover:w-20"></div>
-                <h3 className="text-2xl font-serif font-bold text-white mb-3">Mihintale </h3>
-                <p className="text-gray-300 text-sm leading-relaxed opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-40 transition-all duration-500 ease-in-out overflow-hidden">
-                   Deemed the birthplace of Buddhism in Sri Lanka, this 500m tall outcrop features ancient stupas and cave dwellings.
-                </p>
-                <div className="mt-4 flex items-center text-white/80 text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-                  Explore <ArrowRight className="ml-2 w-4 h-4" />
-                </div>
-              </div>
-            </div>
-
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+             <ExperienceCard 
+                img="/pagesPhotos/anuradhapura/Sri Maha Bodhiya.png"
+                title="Sri Maha Bodhiya"
+                subtitle="The Sacred Fig Tree"
+                desc="The oldest living human-planted tree in the world, a direct sapling from the Bodhi tree under which the Buddha attained enlightenment."
+             />
+             <ExperienceCard 
+                img="/pagesPhotos/anuradhapura/Ruwanweli Maha Seya.png"
+                title="Ruwanweli Seya"
+                subtitle="The Great Stupa"
+                desc="A marvel of ancient engineering, this bubble-shaped stupa enshrines the largest collection of relics of the Buddha."
+             />
+             <ExperienceCard 
+                img="/pagesPhotos/anuradhapura/Mihintale.png"
+                title="Mihintale"
+                subtitle="The Cradle of Buddhism"
+                desc="A mountain peak believed to be the meeting point between the Buddhist monk Mahinda and King Devanampiyatissa."
+             />
           </div>
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL BLOG SECTION ==================== */}
-      <section className="py-24 px-6 max-w-7xl mx-auto bg-slate-50">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-3 block">Travel Journal</span>
-            <h2 className="text-4xl font-serif text-slate-900 mb-4">Journey Beyond the Guidebooks </h2>
-            <div className="w-16 h-1 bg-slate-200 mx-auto"></div>
-        </div>
+      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
+      <section className="py-32 px-6 max-w-7xl mx-auto">
+         <div className="text-center mb-20">
+            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">The Journal</span>
+            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Unearthing Secrets</h2>
+            <div className="w-[1px] h-16 bg-amber-500 mx-auto"></div>
+         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Article 1 - Image Top */}
-            <div className="group flex flex-col gap-6 cursor-pointer">
-                <div className="overflow-hidden rounded-2xl h-80 w-full relative shadow-md">
-                    <img src="/pagesPhotos/anuradhapura/spa.png" alt="Spa" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-slate-800">Local Insights</div>
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Article 1 */}
+            <div className="group cursor-pointer">
+                <div className="overflow-hidden h-[400px] mb-8 relative">
+                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+                    <img src="/pagesPhotos/anuradhapura/spa.png" alt="Spa" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
                 </div>
-                <div>
-                    <h3 className="text-2xl font-serif font-bold text-slate-800 mb-3 group-hover:text-amber-600 transition-colors">
-                      [cite_start]Unravelling the Secrets of Unexplored Destinations 
+                <div className="flex flex-col gap-4 pr-10">
+                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Wellness & Heritage</span>
+                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-amber-700 transition-colors">
+                        Healing in the Shadow of Giants: Ancient Ayurveda
                     </h3>
-                    <p className="text-slate-500 leading-relaxed mb-4 line-clamp-2">
-                        Step off the beaten path and discover the hidden gems that lie in the shadow of the great stupas...
+                    <p className="text-stone-500 font-light leading-relaxed">
+                        Step off the beaten path and discover the hidden gems that lie in the shadow of the great stupas, where ancient healing practices are still alive.
                     </p>
-                    <span className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 group-hover:border-amber-500 transition-all">
-                        Read Article <ArrowRight size={14} className="ml-2"/>
-                    </span>
+                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-amber-500 underline-offset-4">
+                        Read Story <ChevronRight size={14} />
+                    </div>
                 </div>
             </div>
 
-            {/* Article 2 - Image Top */}
-            <div className="group flex flex-col gap-6 cursor-pointer">
-                <div className="overflow-hidden rounded-2xl h-80 w-full relative shadow-md">
-                    <img src="/pagesPhotos/anuradhapura/wildlife.png" alt="Elephant" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>
-                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-slate-800">Travel Tales</div>
+            {/* Article 2 */}
+            <div className="group cursor-pointer mt-12 lg:mt-0">
+                <div className="overflow-hidden h-[400px] mb-8 relative">
+                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
+                    <img src="/pagesPhotos/anuradhapura/wildlife.png" alt="Wildlife" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
                 </div>
-                <div>
-                    <h3 className="text-2xl font-serif font-bold text-slate-800 mb-3 group-hover:text-amber-600 transition-colors">
-                      [cite_start]Exploring Sri Lanka's Flavourful Tapestry
+                <div className="flex flex-col gap-4 pr-10">
+                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Culinary Journey</span>
+                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-amber-700 transition-colors">
+                        A Taste of the Dry Zone: Village Kitchens
                     </h3>
-                    <p className="text-slate-500 leading-relaxed mb-4 line-clamp-2">
-                        A culinary journey through the rice paddies and village kitchens of the North Central Province...
+                    <p className="text-stone-500 font-light leading-relaxed">
+                        A culinary journey through the rice paddies and village kitchens of the North Central Province, exploring flavors unchanged for centuries.
                     </p>
-                    <span className="inline-flex items-center text-xs font-bold uppercase tracking-widest text-slate-900 border-b border-slate-300 pb-1 group-hover:border-amber-500 transition-all">
-                        Read Article <ArrowRight size={14} className="ml-2"/>
-                    </span>
+                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-amber-500 underline-offset-4">
+                        Read Story <ChevronRight size={14} />
+                    </div>
+                </div>
+            </div>
+         </div>
+      </section>
+
+      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
+      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
+        {/* Abstract Background Elements */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
+                <div>
+                   <h2 className="text-4xl md:text-6xl font-serif mb-2">Exclusive Retreats</h2>
+                   <p className="text-stone-400 font-light">Curated packages for the discerning traveler.</p>
+                </div>
+                <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
+                    View All Offers
+                </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Offer 1 */}
+                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
+                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
+                        <img src="/pagesPhotos/anuradhapura/spa.png" alt="Luxury Spa" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
+                            Best Seller
+                        </div>
+                    </div>
+                    <div className="px-4 pb-4">
+                        <h3 className="text-2xl font-serif mb-2">Royal Wellness Escape</h3>
+                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Experience the healing powers of ancient kings with our specialized Ayurveda treatments.</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
+                                <p className="text-xl font-serif text-amber-500">$2,900</p>
+                            </div>
+                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-amber-600 transition-colors">
+                                <ArrowRight size={16} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Offer 2 */}
+                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
+                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
+                        <img src="/pagesPhotos/anuradhapura/hero.png" alt="Heritage Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                    </div>
+                    <div className="px-4 pb-4">
+                        <h3 className="text-2xl font-serif mb-2">The Kingdom Tour</h3>
+                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">A private guided tour through the sacred city with an archaeologist expert.</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
+                                <p className="text-xl font-serif text-amber-500">$3,360</p>
+                            </div>
+                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-amber-600 transition-colors">
+                                <ArrowRight size={16} />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
       </section>
 
-      {/* ==================== 6. EXCLUSIVE OFFERS ==================== */}
-      <section className="py-24 px-6 bg-white border-t border-slate-100">
-        <div className="max-w-7xl mx-auto">
-           <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-               <div>
-                 <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-2 block">Premium Packages</span>
-                 <h2 className="text-3xl md:text-5xl font-serif text-slate-900">Unmatched Deals </h2>
-               </div>
-               <a href="#" className="hidden md:flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-amber-600 transition-colors mt-4 md:mt-0">
-                   View All Offers <ArrowRight className="w-4 h-4" />
-               </a>
-           </div>
-
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-               {/* Offer Card 1 */}
-               <div className="relative h-[480px] rounded-3xl overflow-hidden group cursor-pointer shadow-2xl">
-                   <img src="/pagesPhotos/anuradhapura/spa.png" alt="Wellness" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
-                   
-                   <div className="absolute top-6 right-6 bg-white text-slate-900 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg z-10">
-                       Save 20%
-                   </div>
-
-                   <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                       <h3 className="text-3xl font-serif text-white mb-2">Luxe Wellness </h3>
-                       <p className="text-white/80 text-sm line-clamp-2 mb-4 font-light">
-                          Immerse yourself in bespoke retreats crafted for ultimate rejuvenation. From exotic spa therapies to exclusive mindfulness escapes.
-                       </p>
-                       <div className="flex items-center justify-between border-t border-white/20 pt-4">
-                           <div className="flex flex-col">
-                               <span className="text-xs text-white/60 uppercase tracking-widest">Starting From</span>
-                               <span className="text-xl font-bold text-white">$2,900 </span>
-                           </div>
-                           <button className="bg-white/10 backdrop-blur border border-white/30 text-white px-6 py-2 rounded-full hover:bg-white hover:text-slate-900 transition-all font-medium uppercase text-xs tracking-widest">
-                               Reserve
-                           </button>
-                       </div>
-                   </div>
-               </div>
-
-               {/* Offer Card 2 */}
-               <div className="relative h-[480px] rounded-3xl overflow-hidden group cursor-pointer shadow-2xl">
-                   <img src="/pagesPhotos/anuradhapura/spa.png" alt="Winter" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
-                   
-                   <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                       [cite_start]<h3 className="text-3xl font-serif text-white mb-2">Luxury Winter Getaway </h3>
-                       <p className="text-white/80 text-sm line-clamp-2 mb-4 font-light">
-                          [cite_start]Embrace the season's charm with our Luxury Winter Getaway Offer. Bask in the cozy embrace of opulent accommodations.
-                       </p>
-                       <div className="flex items-center justify-between border-t border-white/20 pt-4">
-                           <div className="flex flex-col">
-                               <span className="text-xs text-white/60 uppercase tracking-widest">Starting From</span>
-                               [cite_start]<span className="text-xl font-bold text-white">$3,360 </span>
-                           </div>
-                           <button className="bg-white/10 backdrop-blur border border-white/30 text-white px-6 py-2 rounded-full hover:bg-white hover:text-slate-900 transition-all font-medium uppercase text-xs tracking-widest">
-                               Reserve
-                           </button>
-                       </div>
-                   </div>
-               </div>
-           </div>
-        </div>
-      </section>
-
-      
-      
-      {/* CSS Animations (Inline for simplicity) */}
+      {/* Inline Styles for Custom Animations */}
       <style>{`
-        @keyframes slow-zoom {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
+        @keyframes slow-pan {
+            0% { transform: scale(1.05) translate(0,0); }
+            100% { transform: scale(1.15) translate(-1%, -1%); }
         }
-        .animate-slow-zoom {
-            animation: slow-zoom 20s infinite alternate ease-in-out;
+        .animate-slow-pan {
+            animation: slow-pan 20s infinite alternate ease-in-out;
         }
-        @keyframes fade-in-up {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-up {
-            animation: fade-in-up 1s ease-out forwards;
+        .animate-slide-up {
+            animation: slide-up 1s ease-out forwards;
         }
       `}</style>
+
     </div>
   );
 };
+
+// --- Helper Component for Experience Cards (Cleaner Code) ---
+const ExperienceCard = ({ img, title, subtitle, desc }) => (
+    <div className="group relative h-[600px] rounded-[2rem] overflow-hidden cursor-pointer">
+        <img 
+            src={img} 
+            alt={title} 
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+        
+        <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 flex flex-col justify-end h-full">
+            <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                <p className="text-amber-400 text-xs font-bold uppercase tracking-widest mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{subtitle}</p>
+                <h3 className="text-3xl font-serif text-white mb-4">{title}</h3>
+                <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-500">
+                    <p className="text-stone-300 text-sm font-light leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
+                        {desc}
+                    </p>
+                </div>
+                <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
+                    <div className="h-[1px] w-8 bg-current"></div>
+                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
+                </div>
+            </div>
+        </div>
+    </div>
+);
 
 export default AnuradhapuraPage;

@@ -1,9 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight, MapPin, Calendar, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Calendar, Users, ArrowRight, Compass } from "lucide-react";
 import Gallery from "../components/Gallery";
 
-// ---------------------- REUSABLE SCROLL ANIMATION COMPONENT ----------------------
-const FadeInSection = ({ children, delay = "0ms" }) => {
+// ---------------------- FONTS & GLOBAL STYLES ----------------------
+// Ensure these are imported in your index.html/css
+// @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+const fontHead = "font-['Playfair_Display',_serif]";
+const fontBody = "font-['DM_Sans',_sans-serif]";
+
+// ---------------------- REUSABLE ANIMATION COMPONENT ----------------------
+const Reveal = ({ children, className = "", delay = 0, direction = "up" }) => {
   const [isVisible, setVisible] = useState(false);
   const domRef = useRef();
 
@@ -11,551 +18,436 @@ const FadeInSection = ({ children, delay = "0ms" }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Trigger animation when element enters viewport
           if (entry.isIntersecting) {
             setVisible(true);
-            // Optional: Stop observing once visible so it doesn't fade out again
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1 } // Trigger when 10% of the element is visible
+      { threshold: 0.15 }
     );
 
     const currentElement = domRef.current;
-    if (currentElement) {
-      observer.observe(currentElement);
-    }
-
+    if (currentElement) observer.observe(currentElement);
     return () => {
-      if (currentElement) {
-        observer.unobserve(currentElement);
-      }
+      if (currentElement) observer.unobserve(currentElement);
     };
   }, []);
+
+  const getTransform = () => {
+    if (!isVisible) {
+      if (direction === "up") return "translate-y-20 opacity-0";
+      if (direction === "left") return "-translate-x-20 opacity-0";
+      if (direction === "right") return "translate-x-20 opacity-0";
+    }
+    return "translate-y-0 translate-x-0 opacity-100";
+  };
 
   return (
     <div
       ref={domRef}
-      style={{ transitionDelay: delay }}
-      className={`transition-all duration-1000 ease-out transform ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-24"
-      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-1000 ease-out transform ${getTransform()} ${className}`}
     >
       {children}
     </div>
   );
 };
 
-// ---------------------- HERO SLIDES ----------------------
+// ---------------------- DATA ----------------------
 const heroSlides = [
-  {
-    image: "/gallery/maligawa.png",
-    title: "Temple Of Tooth",
-    subtitle: "Sacred temple of the Tooth Relic",
-    location: "Kandy"
-  },
-  {
-    image: "/gallery/sigiriya.png",
-    title: "Sigiriya Rock Fortress",
-    subtitle: "Ancient wonders meet natural beauty",
-    location: "Central Province"
-  },
-  {
-    image: "/gallery/ninearch.png",
-    title: "Nine Arch Bridge",
-    subtitle: "Iconic bridge in lush tea country",
-    location: "Ella"
-  },
-  {
-    image: "/gallery/colombo2.png",
-    title: "Colombo City",
-    subtitle: "Relax by the scenic coastline",
-    location: "Colombo"
-  }
+  { image: "/gallery/maligawa.png", title: "Temple Of Tooth", subtitle: "Sacred temple of the Tooth Relic", location: "Kandy" },
+  { image: "/gallery/sigiriya.png", title: "Sigiriya Fortress", subtitle: "Ancient wonders meet natural beauty", location: "Central Province" },
+  { image: "/gallery/ninearch.png", title: "Nine Arch Bridge", subtitle: "Iconic bridge in lush tea country", location: "Ella" },
+  { image: "/gallery/colombo2.png", title: "Colombo City", subtitle: "Relax by the scenic coastline", location: "Colombo" },
 ];
 
+const scrollImages = [
+  "/gallery/maligawa.png",
+  "/gallery/colombo2.png",
+  "/gallery/ninearch.png",
+  "/gallery/sigiriya.png",
+];
 
-// ---------------------- PACKAGES ----------------------
 const packages = [
-  {
-    title: "Cultural Triangle",
-    desc: "Explore ancient cities, temples, and UNESCO World Heritage sites across Sri Lanka's cultural heartland.",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-    days: "5 Days",
-    people: "2-8"
-  },
-  {
-    title: "Coastal Retreat",
-    desc: "Relax on pristine beaches, enjoy water sports, and witness stunning ocean sunsets.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=800&q=80",
-    days: "7 Days",
-    people: "2-6"
-  },
-  {
-    title: "Hill Country Escape",
-    desc: "Journey through tea plantations, misty mountains, and colonial-era towns.",
-    image: "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?auto=format&fit=crop&w=800&q=80",
-    days: "4 Days",
-    people: "2-10"
-  },
+  { title: "Cultural Triangle", desc: "Explore ancient cities, temples, and UNESCO World Heritage sites across Sri Lanka's cultural heartland.", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80", days: "5 Days", people: "2-8" },
+  { title: "Coastal Retreat", desc: "Relax on pristine beaches, enjoy water sports, and witness stunning ocean sunsets.", image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=800&q=80", days: "7 Days", people: "2-6" },
+  { title: "Hill Country Escape", desc: "Journey through tea plantations, misty mountains, and colonial-era towns.", image: "https://images.unsplash.com/photo-1608481337062-4093bf3ed404?auto=format&fit=crop&w=800&q=80", days: "4 Days", people: "2-10" },
 ];
 
-// ---------------------- INTERACTIVE MAP CATEGORIES ----------------------
 const categories = [
-  {
-    name: "Popular Beaches",
-    image: "/beach.png",
-    locations: [
-      { x: 35, y: 95, label: "Mirissa" },
-      { x: 65, y: 35, label: "Marble Beach" },
-      { x: 25, y: 89, label: "Hikkaduwa" },
-    //   { x: 35, y: 85, label: "Matara" },
-      { x: 84, y: 75, label: "Arugam Bay" },
-    ],
-  },
-  {
-    name: "Wildlife & Nature",
-    image: "/wildlife.png",
-    locations: [
-      { x: 25, y: 29, label: "Wilpattu" },
-      { x: 77, y:83, label: "Yala" },
-    ],
-  },
-  {
-    name: "Adventure",
-    image: "/adventure.png",
-    locations: [
-      { x: 40, y: 75, label: "Kithulgala Rafting" },
-      { x: 60, y: 80, label: "Flying Ravana Adventure Park" },
-    ],
-  },
-  {
-    name: "History & Culture",
-    image: "/culture.png",
-    locations: [
-      { x: 45, y: 63, label: "Sigiriya" },
-      { x: 55, y: 48, label: "Polonnaruwa" },
-      { x: 45, y: 38, label: "Anuradhapura" },
-    ],
-  },
-  {
-    name: "Lesser Travelled",
-    image: "/lessertraveled.png",
-    locations: [
-      { x: 38, y: 97, label: "Polhena" },
-      { x: 38, y: 80, label: "Rathnapura" },
-    ],
-  },
-  {
-    name: "Gastronomy",
-    image: "/food.png",
-    locations: [
-      { x: 22, y: 74, label: "Colombo" },
-      { x: 55, y: 70, label: "Mahiyanganaya" },
-    ],
-  },
+  { name: "Popular Beaches", image: "/beach.png", locations: [{ x: 35, y: 95, label: "Mirissa" }, { x: 65, y: 35, label: "Marble Beach" }, { x: 25, y: 89, label: "Hikkaduwa" }, { x: 84, y: 75, label: "Arugam Bay" }] },
+  { name: "Wildlife & Nature", image: "/wildlife.png", locations: [{ x: 25, y: 29, label: "Wilpattu" }, { x: 77, y: 83, label: "Yala" }] },
+  { name: "Adventure", image: "/adventure.png", locations: [{ x: 40, y: 75, label: "Kithulgala" }, { x: 60, y: 80, label: "Flying Ravana" }] },
+  { name: "History & Culture", image: "/culture.png", locations: [{ x: 45, y: 63, label: "Sigiriya" }, { x: 55, y: 48, label: "Polonnaruwa" }, { x: 45, y: 38, label: "Anuradhapura" }] },
+  { name: "Lesser Travelled", image: "/lessertraveled.png", locations: [{ x: 38, y: 97, label: "Polhena" }, { x: 38, y: 80, label: "Rathnapura" }] },
+  { name: "Gastronomy", image: "/food.png", locations: [{ x: 22, y: 74, label: "Colombo" }, { x: 55, y: 70, label: "Mahiyanganaya" }] },
 ];
 
-// ---------------------- GALLERY IMAGES ----------------------
-const galleryList = [
-  "/gallery/img1.jpg",
-  "/gallery/img2.jpg",
-  "/gallery/img3.jpg",
-  "/gallery/img4.jpg",
-  "/gallery/img5.jpg",
-  "/gallery/img6.jpg",
-];
+const galleryList = ["/gallery/img1.jpg", "/gallery/img2.jpg", "/gallery/img3.jpg", "/gallery/img4.jpg", "/gallery/img5.jpg", "/gallery/img6.jpg"];
 
 export default function HomePage() {
   const [current, setCurrent] = useState(0);
-  const [active, setActive] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
   const [progress, setProgress] = useState(0);
 
-  const nextSlide = () => {
-    setCurrent(current === heroSlides.length - 1 ? 0 : current + 1);
-    setProgress(0);
-  };
-  
-  const prevSlide = () => {
-    setCurrent(current === 0 ? heroSlides.length - 1 : current - 1);
-    setProgress(0);
-  };
+  // Hero Logic
+  const nextSlide = () => { setCurrent(current === heroSlides.length - 1 ? 0 : current + 1); setProgress(0); };
+  const prevSlide = () => { setCurrent(current === 0 ? heroSlides.length - 1 : current - 1); setProgress(0); };
 
   useEffect(() => {
-    const progressTimer = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          nextSlide();
-          return 0;
-        }
-        return prev + 2;
+    const timer = setInterval(() => {
+      setProgress((old) => {
+        if (old >= 100) { nextSlide(); return 0; }
+        return old + 0.5;
       });
-    }, 100);
-    
-    return () => clearInterval(progressTimer);
+    }, 30);
+    return () => clearInterval(timer);
   }, [current]);
 
   return (
-    <div className="font-sans bg-neutral-50">
-
-      {/* HERO SECTION - KEPT AS IS (NO SCROLL ANIM NEEDED) */}
+    <div className={`bg-neutral-50 text-neutral-900 ${fontBody} selection:bg-orange-200 selection:text-orange-900`}>
+      
+      {/* ---------------------- 1. HERO SECTION ---------------------- */}
       <div className="relative w-full h-screen overflow-hidden">
         {heroSlides.map((slide, index) => (
-          <div key={index}
-            className={`absolute top-0 left-0 w-full h-full transition-all duration-700 ${
-              index === current ? "opacity-100 scale-100" : "opacity-0 scale-105"
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === current ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
           >
-            <img src={slide.image} className="w-full h-full object-cover" alt={slide.title} />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70"></div>
+            <div className={`relative w-full h-full transform transition-transform duration-[10000ms] ease-linear ${index === current ? "scale-110" : "scale-100"}`}>
+              <img src={slide.image} className="w-full h-full object-cover" alt={slide.title} />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+            </div>
           </div>
         ))}
 
-        {/* Hero Content */}
-        <div className="absolute inset-0 flex flex-col justify-end pb-32 px-8 md:px-16 lg:px-24">
-          <div className="max-w-4xl">
-            <div className="flex items-center gap-2 mb-4 opacity-90">
-              <MapPin className="w-4 h-4 text-white" />
-              <span className="text-white text-sm tracking-wider uppercase">
-                {heroSlides[current].location}
-              </span>
+        <div className="absolute inset-0 z-20 flex flex-col justify-end pb-24 px-6 md:px-16 lg:px-24 pointer-events-none">
+          <div className="max-w-5xl pointer-events-auto">
+            <div className="flex items-center gap-3 mb-6 overflow-hidden">
+              <div className={`flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full border border-white/10 animate-fade-in-up`}>
+                <MapPin className="w-3.5 h-3.5 text-orange-200" />
+                <span className="text-white text-xs font-bold tracking-widest uppercase">{heroSlides[current].location}</span>
+              </div>
             </div>
-            
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light text-white mb-4 tracking-tight">
-              {heroSlides[current].title}
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-white/90 font-light tracking-wide mb-8">
-              {heroSlides[current].subtitle}
-            </p>
 
-            <button className="group px-8 py-4 bg-white text-neutral-900 font-medium tracking-wide hover:bg-neutral-100 transition-all duration-300 flex items-center gap-3">
-              Explore Destinations
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            <h1 className={`${fontHead} text-5xl md:text-7xl lg:text-9xl text-white leading-[0.9] mb-6 drop-shadow-lg tracking-tight`}>
+              {heroSlides[current].title.split(" ").map((word, i) => (
+                <span key={i} className="inline-block mr-4 animate-slide-up" style={{ animationDelay: `${i * 100}ms` }}>
+                  {word}
+                </span>
+              ))}
+            </h1>
+
+            <div className="flex flex-col md:flex-row md:items-end gap-8 md:gap-16">
+              <p className="text-lg md:text-xl text-white/90 font-light max-w-lg leading-relaxed border-l-2 border-orange-400 pl-6">
+                {heroSlides[current].subtitle}
+              </p>
+              
+              <button className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
+                <span className="relative z-10 flex items-center gap-3">
+                  Explore Destination <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Navigation Buttons */}
-        <button 
-          onClick={prevSlide} 
-          className="absolute top-1/2 left-6 -translate-y-1/2 text-white p-3 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 z-20"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-
-        <button 
-          onClick={nextSlide} 
-          className="absolute top-1/2 right-6 -translate-y-1/2 text-white p-3 bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 z-20"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-
-        {/* Progress Indicators */}
-        <div className="absolute bottom-10 left-8 md:left-16 lg:left-24 flex gap-4 z-20">
-          {heroSlides.map((_, idx) => (
-            <div key={idx} className="relative w-16 h-1 bg-white/30 cursor-pointer overflow-hidden" onClick={() => { setCurrent(idx); setProgress(0); }}>
-              <div 
-                className={`absolute top-0 left-0 h-full bg-white transition-all duration-100 ${
-                  idx === current ? 'opacity-100' : 'opacity-0'
-                }`}
-                style={{ width: idx === current ? `${progress}%` : '0%' }}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Slide Counter */}
-        <div className="absolute bottom-10 right-8 md:right-16 lg:right-24 text-white font-light text-lg z-20">
-          <span className="text-2xl">{String(current + 1).padStart(2, '0')}</span>
-          <span className="text-white/60"> / {String(heroSlides.length).padStart(2, '0')}</span>
+        <div className="absolute bottom-10 right-8 md:right-24 z-30 flex items-center gap-6">
+           <div className="flex gap-3">
+             {heroSlides.map((_, idx) => (
+               <div key={idx} onClick={() => { setCurrent(idx); setProgress(0); }} className="group relative h-1 w-12 bg-white/20 cursor-pointer overflow-hidden rounded-full">
+                 <div className={`absolute top-0 left-0 h-full bg-orange-400 transition-all duration-100 ease-linear ${idx === current ? "opacity-100" : "opacity-0"}`} style={{ width: idx === current ? `${progress}%` : "0%" }} />
+               </div>
+             ))}
+           </div>
+           
+           <div className="flex gap-2">
+             <button onClick={prevSlide} className="p-3 rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all"><ChevronLeft className="w-5 h-5" /></button>
+             <button onClick={nextSlide} className="p-3 rounded-full border border-white/20 text-white hover:bg-white hover:text-black transition-all"><ChevronRight className="w-5 h-5" /></button>
+           </div>
         </div>
       </div>
 
-      {/* INTERACTIVE MAP SECTION */}
-      <section className="py-32 px-8 md:px-16 lg:px-24 bg-white">
-        <FadeInSection>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-5xl md:text-6xl font-light text-neutral-900 text-center mb-6 tracking-tight">
-              Explore Sri Lanka
-            </h2>
-            <p className="text-center text-neutral-600 text-lg mb-20 max-w-2xl mx-auto">
-              Discover the diverse landscapes and rich culture of the pearl of the Indian Ocean
-            </p>
+      {/* ---------------------- 2. INTERACTIVE MAP (UPDATED DESIGN) ---------------------- */}
+      <section className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-white relative overflow-hidden">
+        {/* Decorative Background - Enhanced Size */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-tr from-orange-50/80 via-purple-50/50 to-blue-50/50 rounded-full blur-3xl pointer-events-none -z-0 opacity-80"></div>
 
-            <div className="flex flex-col lg:flex-row justify-between gap-12">
-              {/* LEFT CATEGORIES */}
-              <div className="flex flex-col gap-6 w-full lg:w-1/3">
-                {categories.slice(0, 3).map((cat, i) => (
-                  <div
-                    key={i}
-                    onMouseEnter={() => setActive(cat)}
-                    onMouseLeave={() => setActive(null)}
-                    className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-                  >
-                    <div className="flex items-center gap-5 p-6">
-                      <img
-                        src={cat.image}
-                        className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
-                        alt={cat.name}
-                      />
-                      <p className="text-xl font-semibold text-neutral-900 group-hover:text-indigo-700 transition-colors duration-300">
-                        {cat.name}
-                      </p>
-                    </div>
-                    {/* Animated underline on hover */}
-                    <div className="absolute bottom-0 left-0 w-0 h-1 bg-indigo-500 group-hover:w-full transition-all duration-500"></div>
-                  </div>
-                ))}
-              </div>
-
-              {/* CENTER MAP */}
-              <div className="relative flex justify-center items-center w-full lg:w-1/3">
-                <img src="/srilanka-map.png" className="w-[380px] max-w-full" alt="Sri Lanka Map" />
-                {active && active.locations.map((loc, index) => (
-                  <div key={index} className="absolute" style={{ left: `${loc.x}%`, top: `${loc.y}%` }}>
-                    <div className="w-3 h-3 bg-indigo-600 rounded-full absolute -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
-                    <div className="absolute -translate-x-1/2 -translate-y-full mb-3 bg-indigo-600 text-white text-xs px-3 py-1.5 whitespace-nowrap rounded-full font-medium tracking-wide">
-                      {loc.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* RIGHT CATEGORIES */}
-              <div className="flex flex-col gap-6 w-full lg:w-1/3">
-                {categories.slice(3).map((cat, i) => (
-                  <div
-                    key={i}
-                    onMouseEnter={() => setActive(cat)}
-                    onMouseLeave={() => setActive(null)}
-                    className="relative group cursor-pointer rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-green-50 via-lime-50 to-yellow-50 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
-                  >
-                    <div className="flex items-center gap-5 p-6">
-                      <img
-                        src={cat.image}
-                        className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
-                        alt={cat.name}
-                      />
-                      <p className="text-xl font-semibold text-neutral-900 group-hover:text-green-700 transition-colors duration-300">
-                        {cat.name}
-                      </p>
-                    </div>
-                    <div className="absolute bottom-0 left-0 w-0 h-1 bg-green-500 group-hover:w-full transition-all duration-500"></div>
-                  </div>
-                ))}
-              </div>
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <Reveal>
+            <div className="text-center mb-16 md:mb-24">
+              <span className="text-orange-600 font-bold tracking-widest uppercase text-sm mb-3 block">Discover Sri Lanka</span>
+              <h2 className={`${fontHead} text-4xl md:text-6xl text-neutral-900 mb-6`}>Find Your Perfect Escape</h2>
+              <div className="w-24 h-1 bg-neutral-200 mx-auto rounded-full"></div>
             </div>
-          </div>
-        </FadeInSection>
-      </section>
+          </Reveal>
 
-
-      {/* GALLERY SECTION */}
-      <section className="py-31 px-8 md:px-16 lg:px-24 bg-neutral-50">
-        <FadeInSection>
-          <div className="max-w-12xl mx-auto">
-            <h2 className="text-5xl md:text-6xl font-light text-neutral-900 text-center mb-20 tracking-tight">
-              Latest Gallery
-            </h2>
-            <Gallery images={galleryList} />
-          </div>
-        </FadeInSection>
-      </section>
-
-      {/* SIGIRIYA SECTION */}
-      <section className="py-32 px-8 md:px-16 lg:px-24 bg-white">
-        <FadeInSection>
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col lg:flex-row items-center gap-20">
-
-              {/* IMAGE */}
-              <div className="w-full lg:w-1/2 relative group">
-                {/* Main Image Container */}
-                <div className="relative overflow-hidden shadow-2xl">
-                  <img
-                    src="/aboutsigiriya.png"
-                    alt="Sigiriya Rock Fortress"
-                    className="w-full h-[600px] object-cover transform transition-all duration-1000 ease-out group-hover:scale-110"
-                  />
-                  
-                  {/* Subtle Gradient Overlay on Edges */}
-                  <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.1)] pointer-events-none"></div>
-                  
-                  {/* Corner Accents - Minimal */}
-                  <div className="absolute top-0 left-0 w-16 h-16 border-t border-l border-neutral-300 opacity-60 group-hover:opacity-100 group-hover:w-20 group-hover:h-20 transition-all duration-500"></div>
-                  <div className="absolute bottom-0 right-0 w-16 h-16 border-b border-r border-neutral-300 opacity-60 group-hover:opacity-100 group-hover:w-20 group-hover:h-20 transition-all duration-500"></div>
-                </div>
-                
-                {/* Floating Info Cards - Staggered Animation */}
-                <div className="absolute -top-6 -right-6 bg-white px-8 py-4 shadow-xl border border-neutral-100 transform transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl">
-                  <p className="text-xs tracking-widest text-neutral-500 uppercase mb-1">UNESCO</p>
-                  <p className="text-3xl font-light text-neutral-900">1982</p>
-                </div>
-                
-                <div className="absolute -bottom-6 -left-6 bg-neutral-900 px-8 py-4 shadow-xl transform transition-all duration-700 group-hover:translate-y-2 group-hover:shadow-2xl">
-                  <p className="text-xs tracking-widest text-white/60 uppercase mb-1">Elevation</p>
-                  <p className="text-3xl font-light text-white">200m</p>
-                </div>
-              </div>
-
-              {/* TEXT CONTENT */}
-              <div className="w-full lg:w-1/2 flex flex-col gap-8">
-                {/* Animated Label */}
-                <div className="inline-block overflow-hidden">
-                  <span className="block text-sm tracking-widest text-neutral-500 uppercase animate-[slideIn_0.6s_ease-out]">
-                    Featured Destination
-                  </span>
-                </div>
-                
-                {/* Title with Underline Animation */}
-                <div className="relative">
-                  <h2 className="text-5xl md:text-7xl font-light text-neutral-900 tracking-tight leading-tight">
-                    Sigiriya Rock<br />Fortress
-                  </h2>
-                  <div className="h-1 bg-neutral-900 mt-6 w-0 animate-[expandWidth_1s_ease-out_0.3s_forwards]"></div>
-                </div>
-                
-                {/* Description with Fade In */}
-                <div className="space-y-6 animate-[fadeIn_0.8s_ease-out_0.5s_both]">
-                  <p className="text-xl text-neutral-600 leading-relaxed">
-                    Sigiriya, famously known as Lion Rock, is one of Sri Lanka's most iconic UNESCO World Heritage Sites. 
-                    This ancient fortress stands nearly 200 meters above the surrounding plains, showcasing remarkable engineering, beautiful frescoes, and breathtaking views.
-                  </p>
-                  
-                  <p className="text-xl text-neutral-600 leading-relaxed">
-                    Wander through its meticulously designed water gardens, ascend the Lion's Staircase, and experience a unique blend of history, culture, and natural beauty.
-                  </p>
-                </div>
-                
-                {/* Stats Grid with Staggered Animation */}
-                <div className="grid grid-cols-2 gap-6 mt-4">
-                  {[
-                    { label: "Heritage", value: "UNESCO World Site", delay: "0.7s" },
-                    { label: "Height", value: "200 Meters", delay: "0.8s" },
-                    { label: "Era", value: "5th Century AD", delay: "0.9s" },
-                    { label: "Features", value: "Frescoes & Gardens", delay: "1s" }
-                  ].map((stat, idx) => (
-                    <div 
-                      key={idx} 
-                      className="group/stat border-l-2 border-neutral-300 pl-5 hover:border-neutral-900 transition-all duration-300 animate-[slideInLeft_0.6s_ease-out_both]"
-                      style={{ animationDelay: stat.delay }}
-                    >
-                      <p className="text-xs text-neutral-400 mb-2 uppercase tracking-wider group-hover/stat:text-neutral-600 transition-colors">
-                        {stat.label}
-                      </p>
-                      <p className="text-lg font-light text-neutral-900 group-hover/stat:translate-x-1 transition-transform duration-300">
-                        {stat.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* CTA Button with Hover Effect */}
-                <button className="group/btn mt-8 px-10 py-5 bg-neutral-900 text-white font-light tracking-wider hover:bg-neutral-800 transition-all duration-300 flex items-center gap-3 w-fit relative overflow-hidden">
-                  <span className="relative z-10">Discover More</span>
-                  <ChevronRight className="w-5 h-5 relative z-10 group-hover/btn:translate-x-2 transition-transform duration-300" />
-                  <div className="absolute inset-0 bg-white/10 translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500"></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </FadeInSection>
-      </section>
-
-      <style jsx>{`
-        @keyframes slideIn {
-          from {
-            transform: translateY(-20px);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes expandWidth {
-          from {
-            width: 0;
-          }
-          to {
-            width: 80px;
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-
-
-
-      {/* PACKAGES SECTION */}
-      <section className="py-32 px-8 md:px-16 lg:px-24 bg-white">
-        <FadeInSection>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-5xl md:text-6xl font-light text-neutral-900 text-center mb-6 tracking-tight">
-              Travel Packages
-            </h2>
-            <p className="text-center text-neutral-600 text-lg mb-20 max-w-2xl mx-auto">
-              Curated experiences designed to showcase the best of Sri Lanka
-            </p>
+          <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-8 lg:gap-12">
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {packages.map((pkg, idx) => (
-                <div key={idx} className="group bg-white border border-neutral-200 overflow-hidden hover:border-neutral-900 transition-all duration-300">
-                  <div className="relative h-72 overflow-hidden">
-                    <img src={pkg.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  </div>
-                  <div className="p-8">
-                    <h3 className="text-2xl font-light text-neutral-900 mb-3 tracking-wide">
-                      {pkg.title}
-                    </h3>
-                    <p className="text-neutral-600 mb-6 leading-relaxed">
-                      {pkg.desc}
-                    </p>
-                    <div className="flex items-center gap-6 mb-6 text-sm text-neutral-500">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>{pkg.days}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4" />
-                        <span>{pkg.people} People</span>
-                      </div>
-                    </div>
-                    <button className="w-full py-3 bg-neutral-900 text-white font-light tracking-wider hover:bg-neutral-800 transition-colors duration-300">
-                      View Details
-                    </button>
-                  </div>
-                </div>
+            {/* Left Column Categories */}
+            <div className="w-full lg:w-1/4 flex flex-col gap-6">
+              {categories.slice(0, 3).map((cat, i) => (
+                <CategoryCard key={i} cat={cat} active={activeCategory} setActive={setActiveCategory} align="left" delay={i * 100} />
+              ))}
+            </div>
+
+            {/* Center Map Stage - Made Larger */}
+            <div className="w-full lg:w-1/2 flex justify-center py-8 lg:py-0 relative">
+               <div className="relative w-full max-w-[550px] aspect-[3/4] flex items-center justify-center">
+                 
+                 {/* Concentric Circles */}
+                 <div className="absolute inset-0 border border-neutral-200/50 rounded-full scale-125 pointer-events-none"></div>
+                 <div className="absolute inset-0 border border-neutral-200/50 rounded-full scale-110 pointer-events-none"></div>
+                 
+                 <img 
+                   src="/srilanka-map.png" 
+                   alt="Sri Lanka Map" 
+                   className="relative w-full h-full object-contain drop-shadow-2xl z-10" 
+                 />
+                 
+                 {/* Map Points */}
+                 {activeCategory && activeCategory.locations.map((loc, idx) => (
+                   <div 
+                     key={idx} 
+                     className="absolute z-20" 
+                     style={{ left: `${loc.x}%`, top: `${loc.y}%` }}
+                   >
+                     <div className="relative transform -translate-x-1/2 -translate-y-1/2 animate-scale-in">
+                        <div className="absolute inset-0 -m-3 bg-orange-500/30 rounded-full animate-ping"></div>
+                        <div className="relative w-5 h-5 bg-orange-500 rounded-full border-[3px] border-white shadow-lg"></div>
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 z-30">
+                          <div className="relative bg-white/80 backdrop-blur-xl text-neutral-900 text-sm font-bold px-5 py-2.5 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/60 whitespace-nowrap transform transition-all hover:scale-105">
+                            {loc.label}
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-[6px] border-transparent border-t-white/80"></div>
+                          </div>
+                        </div>
+                     </div>
+                   </div>
+                 ))}
+
+                 {!activeCategory && (
+                   <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md px-6 py-3 rounded-full text-sm font-medium text-neutral-500 border border-white/50 shadow-sm pointer-events-none whitespace-nowrap">
+                     Hover a category to explore
+                   </div>
+                 )}
+               </div>
+            </div>
+
+            {/* Right Column Categories */}
+            <div className="w-full lg:w-1/4 flex flex-col gap-6">
+              {categories.slice(3).map((cat, i) => (
+                <CategoryCard key={i} cat={cat} active={activeCategory} setActive={setActiveCategory} align="right" delay={(i + 3) * 100} />
               ))}
             </div>
           </div>
-        </FadeInSection>
+        </div>
       </section>
 
+      {/* ---------------------- 3. GALLERY ---------------------- */}
+      <section className="py-20 bg-neutral-50 border-t border-neutral-200">
+        <div className="px-6 md:px-12 lg:px-24">
+          <Reveal>
+             <h2 className={`${fontHead} text-4xl md:text-5xl text-center mb-16`}>Captured Moments</h2>
+             <div className="w-full">
+               <Gallery images={galleryList} />
+             </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------------------- 4. FEATURED: SIGIRIYA ---------------------- */}
+      <section className="py-24 md:py-32 px-6 md:px-16 lg:px-24 bg-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-orange-50/50 -skew-x-12 translate-x-1/4 z-0"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+            <div className="w-full lg:w-1/2 relative">
+               <Reveal direction="left">
+                 <div className="relative rounded-2xl overflow-hidden shadow-2xl group">
+                   <img src="/aboutsigiriya.png" alt="Sigiriya" className="w-full h-[500px] md:h-[600px] object-cover transition-transform duration-1000 group-hover:scale-105" />
+                   <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                   
+                   <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/50 max-w-[140px]">
+                     <span className="block text-4xl font-light text-orange-500 mb-1">5th</span>
+                     <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest">Century AD</span>
+                   </div>
+                   <div className="absolute bottom-8 left-8 bg-neutral-900/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/10">
+                      <div className="flex items-center gap-3 mb-1">
+                        <Compass className="w-5 h-5 text-orange-400" />
+                        <span className="text-white text-lg font-medium">200m High</span>
+                      </div>
+                      <span className="text-xs text-neutral-400 uppercase tracking-wider pl-8">Elevation</span>
+                   </div>
+                 </div>
+               </Reveal>
+            </div>
+
+            <div className="w-full lg:w-1/2">
+               <Reveal direction="right" delay={200}>
+                 <div className="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-bold uppercase tracking-widest mb-6">UNESCO World Heritage</div>
+                 <h2 className={`${fontHead} text-5xl md:text-7xl text-neutral-900 mb-8 leading-tight`}>
+                   The Lion Rock <br/> <span className="italic text-neutral-400">Fortress</span>
+                 </h2>
+                 <p className="text-lg text-neutral-600 mb-6 leading-relaxed">
+                   Sigiriya is one of the most valuable historical monuments of Sri Lanka. Referred by locals as the Eighth Wonder of the World, this ancient palace and fortress complex has significant archaeological importance and attracts thousands of tourists every year.
+                 </p>
+                 <div className="grid grid-cols-2 gap-8 my-10 border-y border-neutral-100 py-8">
+                    <div>
+                      <h4 className="text-3xl font-light text-neutral-900 mb-1">1,200</h4>
+                      <p className="text-sm text-neutral-500 uppercase tracking-wider">Steps to Top</p>
+                    </div>
+                    <div>
+                      <h4 className="text-3xl font-light text-neutral-900 mb-1">1982</h4>
+                      <p className="text-sm text-neutral-500 uppercase tracking-wider">Inscribed Year</p>
+                    </div>
+                 </div>
+                 <button className="flex items-center gap-4 text-neutral-900 font-medium hover:gap-6 transition-all group">
+                   Read Full History <div className="w-12 h-[1px] bg-neutral-900 group-hover:bg-orange-500 transition-colors"></div>
+                 </button>
+               </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------- 5. PARALLAX STACK ---------------------- */}
+      <div className="bg-neutral-900 py-24 px-6 text-center">
+         <p className="text-neutral-400 text-sm uppercase tracking-[0.3em] mb-4">The Journey</p>
+         <h3 className={`${fontHead} text-white text-3xl md:text-5xl italic`}>"Sri Lanka is not just a place,<br/>it's a feeling."</h3>
+      </div>
+
+      <section className="relative bg-neutral-900">
+        {scrollImages.map((src, index) => (
+          <div key={index} className="sticky top-0 w-full h-screen overflow-hidden shadow-2xl" style={{ zIndex: index + 1 }}>
+            <img src={src} alt="Scenic" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-12 left-6 md:left-24">
+              <span className="text-white/50 text-8xl md:text-[12rem] font-bold opacity-20 leading-none select-none">{String(index + 1).padStart(2, '0')}</span>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ---------------------- 6. PACKAGES ---------------------- */}
+      <section className="py-32 px-6 md:px-16 lg:px-24 bg-neutral-50 relative z-50 rounded-t-[3rem] -mt-20">
+        <div className="max-w-7xl mx-auto">
+          <Reveal>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+              <div>
+                <h2 className={`${fontHead} text-5xl md:text-6xl text-neutral-900 mb-4`}>Curated Packages</h2>
+                <p className="text-neutral-500 max-w-md">Handpicked experiences designed to show you the soul of the island.</p>
+              </div>
+              <button className="px-8 py-3 border border-neutral-300 rounded-full hover:bg-neutral-900 hover:text-white transition-colors">View All Offers</button>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {packages.map((pkg, idx) => (
+              <Reveal key={idx} delay={idx * 150}>
+                <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+                  <div className="relative h-80 overflow-hidden">
+                    <img src={pkg.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                      Best Seller
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <div className="flex items-center gap-4 text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4">
+                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {pkg.days}</span>
+                      <span className="w-1 h-1 bg-neutral-300 rounded-full"></span>
+                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {pkg.people} Pax</span>
+                    </div>
+                    <h3 className={`${fontHead} text-2xl text-neutral-900 mb-3 group-hover:text-orange-600 transition-colors`}>{pkg.title}</h3>
+                    <p className="text-neutral-500 text-sm leading-relaxed mb-6 border-b border-neutral-100 pb-6">{pkg.desc}</p>
+                    <div className="flex justify-between items-center">
+                       <span className="text-sm font-medium underline decoration-neutral-300 underline-offset-4 group-hover:decoration-orange-400 transition-all">View Itinerary</span>
+                       <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
+                         <ArrowRight className="w-4 h-4" />
+                       </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER SIMPLE */}
+      <footer className="bg-white py-12 border-t border-neutral-200 text-center">
+        <p className="text-neutral-400 text-sm">© 2024 Sri Lanka Travel. Designed with <span className="text-red-400">♥</span></p>
+      </footer>
+
+      <style jsx global>{`
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+          animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          opacity: 0; 
+        }
+        @keyframes fadeUp {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-fade-in-up {
+          animation: fadeUp 0.8s ease-out forwards;
+        }
+        @keyframes scaleIn {
+          from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+          to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        .animate-scale-in {
+          animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+      `}</style>
     </div>
   );
 }
+
+// ---------------------- UPDATED CATEGORY CARD ----------------------
+const CategoryCard = ({ cat, active, setActive, align, delay }) => {
+  const isActive = active?.name === cat.name;
+  
+  return (
+    <Reveal delay={delay} direction={align === "left" ? "right" : "left"}>
+      <div
+        onMouseEnter={() => setActive(cat)}
+        className={`
+          relative flex items-center gap-6 p-5 rounded-2xl cursor-pointer transition-all duration-300 border backdrop-blur-sm
+          ${isActive 
+            ? "bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border-orange-100 scale-105 z-20" 
+            : "bg-white/40 border-white/50 hover:bg-white hover:shadow-lg hover:border-transparent"
+          }
+        `}
+      >
+        {/* Made Image Significantly Bigger (w-20 h-20) */}
+        <img 
+          src={cat.image} 
+          className={`w-20 h-20 rounded-xl object-cover shadow-md transition-transform duration-300 ${isActive ? "scale-105 ring-2 ring-orange-200" : ""}`} 
+          alt={cat.name} 
+        />
+        
+        <div className="flex-1">
+           <h4 className={`text-lg font-bold transition-colors mb-1 ${isActive ? "text-orange-600" : "text-neutral-800"}`}>{cat.name}</h4>
+           <div className="flex items-center gap-2">
+             <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-orange-500" : "bg-neutral-300"}`}></span>
+             <p className="text-sm text-neutral-500 font-medium">{cat.locations.length} Locations</p>
+           </div>
+        </div>
+        
+        {/* Interactive Indicator */}
+        <div className={`
+           w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
+           ${isActive ? "bg-orange-100 text-orange-600 rotate-0 opacity-100" : "bg-transparent text-neutral-300 -rotate-45 opacity-0"}
+        `}>
+          <ArrowRight className="w-4 h-4" />
+        </div>
+      </div>
+    </Reveal>
+  );
+};
