@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import AnuradhapuraPage from "./Pages/gallerysection/anuradhapura"
 import AdminPage from "./Pages/adminpage"
-import { Loader } from "lucide-react"
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -13,7 +12,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/anuradhapura" element={<AnuradhapuraPage />} />
         <Route path="/admin/*" element={<AdminPage/>}/>
-        <Route path="/loader" element={<Loader/>} />
 
       </Routes>
       <Footer/>
