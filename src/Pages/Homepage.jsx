@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Calendar, Users, ArrowRight, Compass } from "lucide-react";
 import Gallery from "../components/Gallery";
+import { Link } from "react-router-dom";
 
 // ---------------------- FONTS & GLOBAL STYLES ----------------------
 // Ensure these are imported in your index.html/css
@@ -304,9 +305,14 @@ export default function HomePage() {
                       <p className="text-sm text-neutral-500 uppercase tracking-wider">Inscribed Year</p>
                     </div>
                  </div>
-                 <button className="flex items-center gap-4 text-neutral-900 font-medium hover:gap-6 transition-all group">
-                   Read Full History <div className="w-12 h-[1px] bg-neutral-900 group-hover:bg-orange-500 transition-colors"></div>
-                 </button>
+               <Link 
+  to="/sigiriyafortress"
+  className="flex items-center gap-4 text-neutral-900 font-medium hover:gap-6 transition-all group"
+>
+  Read More
+  <div className="w-12 h-[1px] bg-neutral-900 group-hover:bg-orange-500 transition-colors"></div>
+</Link>
+
                </Reveal>
             </div>
           </div>
