@@ -132,10 +132,10 @@ const EllaPage = () => {
                          <img 
                             src="/srilanka-map.png" 
                             alt="Map of Sri Lanka" 
-                            className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                            className="w-full h-auto object-cover transition-all duration-1000"
                          />
                          {/* Animated Pin */}
-                         <div className="absolute top-[52%] left-[58%] translate-x-[-50%] translate-y-[-50%]">
+                         <div className="absolute top-[75%] left-[48%] translate-x-[-50%] translate-y-[-50%]">
                             <span className="relative flex h-8 w-8">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-8 w-8 bg-yellow-500 border-4 border-white shadow-lg"></span>
@@ -189,10 +189,10 @@ const EllaPage = () => {
                  <span className="text-yellow-600 font-bold uppercase tracking-widest text-xs mb-3 block">Adventure Awaits</span>
                  <h2 className="text-4xl md:text-6xl font-serif text-stone-900">Natural Wonders</h2>
             </div>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
                 <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight className="rotate-180" size={18}/></button>
                 <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight size={18}/></button>
-            </div>
+            </div> */}
           </div>
 
           {/* Grid */}
@@ -242,9 +242,9 @@ const EllaPage = () => {
                     <p className="text-stone-500 font-light leading-relaxed">
                         Walk through emerald tea estates where pickers still harvest leaves by hand, and discover how Ceylon tea became the world's finest brew.
                     </p>
-                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
+                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
                         Read Story <ChevronRight size={14} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -262,9 +262,9 @@ const EllaPage = () => {
                     <p className="text-stone-500 font-light leading-relaxed">
                         Experience the legendary Kandy to Ella train journey, where every window frames a postcard-perfect view of Sri Lanka's stunning highlands.
                     </p>
-                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
+                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
                         Read Story <ChevronRight size={14} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
          </div>
@@ -281,9 +281,9 @@ const EllaPage = () => {
                    <h2 className="text-4xl md:text-6xl font-serif mb-2">Mountain Retreats</h2>
                    <p className="text-stone-400 font-light">Curated experiences for nature lovers.</p>
                 </div>
-                <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
+                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
                     View All Offers
-                </button>
+                </button> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -303,9 +303,9 @@ const EllaPage = () => {
                                 <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
                                 <p className="text-xl font-serif text-yellow-500">$950</p>
                             </div>
-                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
+                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
                                 <ArrowRight size={16} />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -323,9 +323,9 @@ const EllaPage = () => {
                                 <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
                                 <p className="text-xl font-serif text-yellow-500">$675</p>
                             </div>
-                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
+                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
                                 <ArrowRight size={16} />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -374,10 +374,10 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
+                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
                     <div className="h-[1px] w-8 bg-current"></div>
                     <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
