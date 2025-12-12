@@ -6,7 +6,7 @@ const galleryItems = [
   { id: 1, title: "Colombo", img: "/gallery/Colombo.png", size: "md:col-span-1 md:row-span-1", link: "/colombo" },
   { id: 2, title: "Anuradhapura", img: "/gallery/Anuradhapura.png", size: "md:col-span-1 md:row-span-1", link: "/anuradhapura" }, // <--- THIS IS THE TARGET
   { id: 3, title: "Galle", img: "/gallery/Galle.png", size: "md:col-span-1 md:row-span-2", link: "/galle" },
-  { id: 4, title: "Ella", img: "/gallery/Ella.png", size: "md:col-span-2 md:row-span-1", link: "/ella" },
+  { id: 4, title: "Ella", img: "/gallery/Ella2.png", size: "md:col-span-2 md:row-span-1", link: "/ella" },
 ];
 
 const Gallery = () => {

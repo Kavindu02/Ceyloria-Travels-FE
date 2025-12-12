@@ -64,8 +64,12 @@ const heroSlides = [
 ];
 
 const scrollImages = [
+  "/gallery/Galle2.png",
+  "/gallery/Petta.png",
+  "/gallery/yala.png",
   "/gallery/maligawa.png",
   "/gallery/colombo2.png",
+  "/gallery/mirissa.png",
   "/gallery/ninearch.png",
   "/gallery/sigiriya.png",
 ];
@@ -149,7 +153,7 @@ export default function HomePage() {
               
               <button className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
                 <span className="relative z-10 flex items-center gap-3">
-                  Explore Destination <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  Explore Destinations <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
               </button>
             </div>
@@ -384,7 +388,7 @@ export default function HomePage() {
 
       {/* FOOTER SIMPLE */}
       <footer className="bg-white py-12 border-t border-neutral-200 text-center">
-        <p className="text-neutral-400 text-sm">© 2024 Sri Lanka Travel. Designed with <span className="text-red-400">♥</span></p>
+        {/* <p className="text-neutral-400 text-sm">© 2024 Sri Lanka Travel. Designed with <span className="text-red-400">♥</span></p> */}
       </footer>
 
       <style jsx global>{`
