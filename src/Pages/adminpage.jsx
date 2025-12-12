@@ -9,6 +9,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import { FaUsers, FaHotel, FaMapMarkedAlt } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
+import { FiLogOut } from "react-icons/fi";
 
 // Pages
 import AdminAdminPage from "./admin/adminAdminPage";
@@ -89,6 +90,7 @@ export default function AdminPage() {
   // Admin Auth Check (safe)
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const storedRole = localStorage.getItem("role");
 
     if (!token) {
       // Safe way to avoid cascading render
@@ -96,6 +98,13 @@ export default function AdminPage() {
       return;
     }
 
+    // if the client already knows the role (saved at login), trust it first
+    if (storedRole === "admin") {
+      setStatus("admin");
+      return;
+    }
+
+    // fallback to server-side verification
     axios
       .get(import.meta.env.VITE_BACKEND_URL + "/users", {
         headers: { Authorization: `Bearer ${token}` },
@@ -114,6 +123,7 @@ export default function AdminPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     toast.success("Logged out");
     navigate("/");
   };
@@ -162,6 +172,15 @@ export default function AdminPage() {
             <SidebarLink to="/admin/users" icon={FaUsers} label="Users" />
             <SidebarLink to="/admin/packages" icon={FaMapMarkedAlt} label="Packages" />
             <SidebarLink to="/admin/hotels" icon={FaHotel} label="Hotels" />
+            <button
+              onClick={handleLogout}
+              className={
+                "w-full text-left flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-slate-400 hover:text-white hover:bg-red-600/10"
+              }
+            >
+              <FiLogOut className="text-xl" />
+              <span>Logout</span>
+            </button>
           </div>
         </aside>
 

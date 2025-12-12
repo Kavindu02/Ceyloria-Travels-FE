@@ -26,12 +26,24 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-6 text-white font-medium text-base">
+        {/* Changed gap-6 to gap-10 for better spacing */}
+        <ul className="hidden md:flex items-center gap-10 text-white font-medium text-base">
           <li><Link to="/" className="hover:text-blue-400 transition">Home</Link></li>
           <li><Link to="/countries" className="hover:text-blue-400 transition">Packages</Link></li>
           <li><Link to="/tc" className="hover:text-blue-400 transition">Accommodations</Link></li>
-          <li><Link to="/contact" className="hover:text-blue-400 transition">Contact</Link></li>
+          
+          {/* Moved About here so Contact is last */}
           <li><Link to="/about" className="hover:text-blue-400 transition">About</Link></li>
+
+          {/* Contact Us - Highlighted as a White Button */}
+          <li>
+            <Link 
+              to="/contact" 
+              className="bg-white text-black px-6 py-2.5 rounded-full font-bold hover:bg-gray-200 hover:scale-105 transition-all duration-300 shadow-lg"
+            >
+              Contact Us
+            </Link>
+          </li>
         </ul>
 
         {/* Desktop Search */}
@@ -66,12 +78,21 @@ export default function Navbar() {
           <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/countries" onClick={() => setMenuOpen(false)}>Packages</Link></li>
           <li><Link to="/tc" onClick={() => setMenuOpen(false)}>Accommodations</Link></li>
-          <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
           <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
+          {/* Highlighted Contact Button for Mobile as well */}
+          <li>
+            <Link 
+              to="/contact" 
+              onClick={() => setMenuOpen(false)}
+              className="bg-white text-black px-6 py-2 rounded-full font-bold"
+            >
+              Contact Us
+            </Link>
+          </li>
         </ul>
 
         {/* Mobile Search Bar */}
-        <div className="mt-4 px-6 relative">
+        <div className="mt-6 px-6 relative">
           <input
             type="text"
             placeholder="Search"
@@ -84,5 +105,4 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  );
-}
+  );}

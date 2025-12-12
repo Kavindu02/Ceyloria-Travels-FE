@@ -13,9 +13,25 @@ export default function LoginPage() {
     axios
       .post(`${import.meta.env.VITE_BACKEND_URL}/users/login`, { email, password })
       .then((res) => {
-        localStorage.setItem("token", res.data.token);
+        // save token if present (support couple of possible response shapes)
+        const token = res.data?.token ?? res.data?.data?.token;
+        if (token) localStorage.setItem("token", token);
+
+        // determine role from response or from token payload
+        let role = res.data?.role ?? res.data?.user?.role ?? res.data?.data?.role;
+        if (!role && token) {
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            role = payload?.role ?? payload?.user?.role ?? (payload?.isAdmin ? "admin" : undefined);
+          } catch (err) {
+            // ignore decode errors and fall back to default route
+          }
+        }
+
+        // persist role for quick client-side checks
+        if (role) localStorage.setItem("role", role);
         toast.success("Login Successful");
-        navigate(res.data.role === "admin" ? "/admin" : "/");
+        navigate(role === "admin" ? "/admin" : "/");
       })
       .catch((error) => {
         toast.error(error.response?.data?.message || "Login Failed");
