@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="relative min-h-screen w-full font-sans text-white">
       {/* Background Image - Replace 'travelbg.jpg' with a high-quality Sri Lanka image (e.g., Sigiriya or Nine Arch Bridge) */}
       <div 
-        className="absolute inset-0 bg-[url(./travelbg.jpg)] bg-cover bg-center bg-no-repeat fixed"
+        className="absolute inset-0 bg-[url(./travelbg.jpg)] bg-cover bg-center bg-no-repeat"
         aria-hidden="true"
       />
       
