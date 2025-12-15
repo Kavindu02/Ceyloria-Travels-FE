@@ -46,16 +46,33 @@ const SigiriyaPage = () => {
       <div className="relative h-[95vh] w-full overflow-hidden group">
         
         {/* Background Image with Slow Parallax Scale */}
-        <div className="absolute inset-0 overflow-hidden">
-            <img 
-              src="/pagesPhotos/sigiriya/hero.jpg" 
-              alt="Sigiriya Rock Fortress" 
-              className="w-full h-full object-cover scale-105 animate-slow-pan"
-            />
-            {/* Cinematic Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90 mix-blend-multiply"></div>
-            <div className="absolute inset-0 bg-black/20"></div>
-        </div>
+      <div className="absolute inset-0 overflow-hidden">
+  <img
+    src="/pagesPhotos/sigiriya/hero.jpg"
+    alt="Sigiriya Rock Fortress"
+    loading="eager"
+    decoding="async"
+    className="
+      w-full h-full
+      object-cover
+      object-center
+      animate-slow-pan
+      will-change-transform
+    "
+    style={{
+      transform: 'translateZ(0)',        // GPU sharpen
+      backfaceVisibility: 'hidden',
+      imageRendering: 'auto',
+      filter: 'contrast(1.05) saturate(1.05) brightness(1.02)', // subtle clarity boost
+    }}
+  />
+
+  {/* HIGH-QUALITY CINEMATIC OVERLAYS */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-stone-900/70"></div>
+  <div className="absolute inset-0 bg-black/5"></div>
+</div>
+
+
         
         {/* Navigation / Header Area (Simulated) */}
         <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-30 text-white/90">
@@ -198,19 +215,19 @@ const SigiriyaPage = () => {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
              <ExperienceCard 
-                img="/pagesPhotos/sigiriya/frescoes.jpg"
+                img="/pagesPhotos/sigiriya/frescoes.png"
                 title="Sigiriya Frescoes"
                 subtitle="Ancient Art"
                 desc="Marvel at the 5th-century paintings of celestial maidens on the rock face, showcasing the artistic mastery of ancient Sri Lankan civilization."
              />
              <ExperienceCard 
-                img="/pagesPhotos/sigiriya/mirror-wall.jpg"
+                img="/pagesPhotos/sigiriya/mirrorwall.png"
                 title="Mirror Wall"
                 subtitle="Historical Graffiti"
                 desc="Walk alongside the polished wall that once gleamed like a mirror, now adorned with centuries-old poetry and inscriptions from ancient visitors."
              />
              <ExperienceCard 
-                img="/pagesPhotos/sigiriya/water-gardens.jpg"
+                img="/pagesPhotos/sigiriya/watergardens.png"
                 title="Water Gardens"
                 subtitle="Ancient Engineering"
                 desc="Explore the sophisticated hydraulic systems and geometric water gardens that demonstrate advanced 5th-century engineering and urban planning."
@@ -290,7 +307,7 @@ const SigiriyaPage = () => {
                 {/* Offer 1 */}
                 <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
                     <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/sigiriya/guided-tour.jpg" alt="Private Guided Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                        <img src="/pagesPhotos/sigiriya/guidedtour.png" alt="Private Guided Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
                         <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
                             Exclusive
                         </div>
@@ -313,7 +330,7 @@ const SigiriyaPage = () => {
                 {/* Offer 2 */}
                 <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
                     <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/sigiriya/cultural-triangle.jpg" alt="Cultural Triangle Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                        <img src="/pagesPhotos/sigiriya/culturaltriangle.png" alt="Cultural Triangle Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
                     </div>
                     <div className="px-4 pb-4">
                         <h3 className="text-2xl font-serif mb-2">Cultural Triangle Journey</h3>

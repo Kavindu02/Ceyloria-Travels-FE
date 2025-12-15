@@ -47,15 +47,31 @@ const GallePage = () => {
         
         {/* Background Image with Slow Parallax Scale */}
         <div className="absolute inset-0 overflow-hidden">
-            <img 
-              src="/pagesPhotos/galle/hero.png" 
-              alt="Galle Fort" 
-              className="w-full h-full object-cover scale-105 animate-slow-pan"
-            />
-            {/* Cinematic Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90 mix-blend-multiply"></div>
-            <div className="absolute inset-0 bg-black/20"></div>
-        </div>
+  <img
+    src="/pagesPhotos/galle/hero.jpg"
+    alt="Sigiriya Rock Fortress"
+    loading="eager"
+    decoding="async"
+    className="
+      w-full h-full
+      object-cover
+      object-center
+      animate-slow-pan
+      will-change-transform
+    "
+    style={{
+      transform: 'translateZ(0)',        // GPU sharpen
+      backfaceVisibility: 'hidden',
+      imageRendering: 'auto',
+      filter: 'contrast(1.05) saturate(1.05) brightness(1.02)', // subtle clarity boost
+    }}
+  />
+
+  {/* HIGH-QUALITY CINEMATIC OVERLAYS */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-stone-900/70"></div>
+  <div className="absolute inset-0 bg-black/5"></div>
+</div>
+
         
         {/* Navigation / Header Area (Simulated) */}
         <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-30 text-white/90">
