@@ -10,6 +10,9 @@ import GallePage from "./Pages/gallerysection/galle"
 import SigiriyaPage from "./Pages/gallerysection/sigiriyafortress"
 import LoginPage from "./Pages/loginPage"
 import RegisterPage from "./Pages/registerPage"
+import Contact from "./Pages/Contact"
+import PackagesPage from "./Pages/customer/PackagesPage"
+
 
 export default function App() {
   return (
@@ -25,7 +28,8 @@ export default function App() {
         <Route path="/admin/*" element={<AdminPage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/register" element={<RegisterPage/>}/>
-
+        <Route path="/contact" element={<Contact/>}/>
+        <Route path="/packages" element={<PackagesPage/>}/>
 
       </Routes>
       <Footer/>
