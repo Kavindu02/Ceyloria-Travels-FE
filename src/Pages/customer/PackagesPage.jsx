@@ -39,22 +39,7 @@ const PackagesPage = () => {
       {/* --- HERO SECTION --- */}
       <header className="relative h-[60vh] min-h-[400px]">
         {/* Navbar Overlay */}
-        <nav className="absolute top-0 w-full z-20 border-b border-white/10 bg-gradient-to-b from-black/50 to-transparent text-white px-6 py-6">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="text-2xl font-black tracking-widest flex items-center gap-2">
-              <span className="text-cyan-400">LOVE</span>TRAVEL
-            </div>
-            {/* Desktop Menu */}
-            <div className="hidden md:flex gap-8 text-sm font-bold uppercase tracking-widest">
-              {['Home', 'Travel', 'Pages', 'Shop', 'Blog', 'Contact'].map(item => (
-                <a key={item} href="#" className="hover:text-cyan-400 transition-colors duration-300">{item}</a>
-              ))}
-            </div>
-            <button className="hidden md:block bg-cyan-500 hover:bg-cyan-600 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-cyan-500/30">
-              Book Now
-            </button>
-          </div>
-        </nav>
+        
 
         {/* Hero Background */}
         <div className="absolute inset-0">
