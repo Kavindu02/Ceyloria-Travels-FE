@@ -198,13 +198,13 @@ const AnuradhapuraPage = () => {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
              <ExperienceCard 
-                img="/pagesPhotos/anuradhapura/Sri Maha Bodhiya.png"
+                img="/pagesPhotos/anuradhapura/SriMahaBodhiya.png"
                 title="Sri Maha Bodhiya"
                 subtitle="The Sacred Fig Tree"
                 desc="The oldest living human-planted tree in the world, a direct sapling from the Bodhi tree under which the Buddha attained enlightenment."
              />
              <ExperienceCard 
-                img="/pagesPhotos/anuradhapura/Ruwanweli Maha Seya.png"
+                img="/pagesPhotos/anuradhapura/RuwanweliMahaSeya.png"
                 title="Ruwanweli Seya"
                 subtitle="The Great Stupa"
                 desc="A marvel of ancient engineering, this bubble-shaped stupa enshrines the largest collection of relics of the Buddha."

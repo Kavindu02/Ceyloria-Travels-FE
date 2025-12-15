@@ -47,15 +47,31 @@ const EllaPage = () => {
         
         {/* Background Image with Slow Parallax Scale */}
         <div className="absolute inset-0 overflow-hidden">
-            <img 
-              src="/pagesPhotos/ella/hero.jpg" 
-              alt="Ella Mountain View" 
-              className="w-full h-full object-cover scale-105 animate-slow-pan"
-            />
-            {/* Cinematic Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90 mix-blend-multiply"></div>
-            <div className="absolute inset-0 bg-black/20"></div>
-        </div>
+  <img
+    src="/pagesPhotos/ella/hero.png"
+    alt="Sigiriya Rock Fortress"
+    loading="eager"
+    decoding="async"
+    className="
+      w-full h-full
+      object-cover
+      object-center
+      animate-slow-pan
+      will-change-transform
+    "
+    style={{
+      transform: 'translateZ(0)',        // GPU sharpen
+      backfaceVisibility: 'hidden',
+      imageRendering: 'auto',
+      filter: 'contrast(1.05) saturate(1.05) brightness(1.02)', // subtle clarity boost
+    }}
+  />
+
+  {/* HIGH-QUALITY CINEMATIC OVERLAYS */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-stone-900/70"></div>
+  <div className="absolute inset-0 bg-black/5"></div>
+</div>
+
         
         {/* Navigation / Header Area (Simulated) */}
         <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-30 text-white/90">
@@ -132,10 +148,10 @@ const EllaPage = () => {
                          <img 
                             src="/srilanka-map.png" 
                             alt="Map of Sri Lanka" 
-                            className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                            className="w-full h-auto object-cover transition-all duration-1000"
                          />
                          {/* Animated Pin */}
-                         <div className="absolute top-[52%] left-[58%] translate-x-[-50%] translate-y-[-50%]">
+                         <div className="absolute top-[75%] left-[48%] translate-x-[-50%] translate-y-[-50%]">
                             <span className="relative flex h-8 w-8">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-8 w-8 bg-yellow-500 border-4 border-white shadow-lg"></span>
@@ -189,28 +205,28 @@ const EllaPage = () => {
                  <span className="text-yellow-600 font-bold uppercase tracking-widest text-xs mb-3 block">Adventure Awaits</span>
                  <h2 className="text-4xl md:text-6xl font-serif text-stone-900">Natural Wonders</h2>
             </div>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
                 <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight className="rotate-180" size={18}/></button>
                 <button className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center hover:bg-stone-900 hover:text-white transition-all"><ArrowRight size={18}/></button>
-            </div>
+            </div> */}
           </div>
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
              <ExperienceCard 
-                img="/pagesPhotos/ella/nine-arch.jpg"
+                img="/pagesPhotos/ella/ninearch.png"
                 title="Nine Arch Bridge"
                 subtitle="Colonial Marvel"
                 desc="An architectural masterpiece built entirely of stone and brick during British colonial times, surrounded by verdant forest and tea plantations."
              />
              <ExperienceCard 
-                img="/pagesPhotos/ella/little-adams-peak.jpg"
+                img="/pagesPhotos/ella/littleadamspeak.png"
                 title="Little Adam's Peak"
                 subtitle="Scenic Hike"
                 desc="An easy yet rewarding trek offering panoramic views of Ella Gap and the surrounding mountains, perfect for sunrise or sunset."
              />
              <ExperienceCard 
-                img="/pagesPhotos/ella/ravana-falls.jpg"
+                img="/pagesPhotos/ella/ravanafalls.png"
                 title="Ravana Falls"
                 subtitle="Cascading Beauty"
                 desc="A stunning waterfall that flows year-round, named after the legendary King Ravana from the ancient Indian epic Ramayana."
@@ -232,7 +248,7 @@ const EllaPage = () => {
             <div className="group cursor-pointer">
                 <div className="overflow-hidden h-[400px] mb-8 relative">
                     <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/ella/tea-plantation.jpg" alt="Tea Plantation" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
+                    <img src="/pagesPhotos/ella/teaplantation.png" alt="Tea Plantation" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
                 </div>
                 <div className="flex flex-col gap-4 pr-10">
                     <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Tea Culture & Heritage</span>
@@ -242,9 +258,9 @@ const EllaPage = () => {
                     <p className="text-stone-500 font-light leading-relaxed">
                         Walk through emerald tea estates where pickers still harvest leaves by hand, and discover how Ceylon tea became the world's finest brew.
                     </p>
-                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
+                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
                         Read Story <ChevronRight size={14} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
@@ -252,7 +268,7 @@ const EllaPage = () => {
             <div className="group cursor-pointer mt-12 lg:mt-0">
                 <div className="overflow-hidden h-[400px] mb-8 relative">
                     <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/ella/train-ride.jpg" alt="Train Journey" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
+                    <img src="/pagesPhotos/ella/trainride.png" alt="Train Journey" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
                 </div>
                 <div className="flex flex-col gap-4 pr-10">
                     <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Epic Journeys</span>
@@ -262,9 +278,9 @@ const EllaPage = () => {
                     <p className="text-stone-500 font-light leading-relaxed">
                         Experience the legendary Kandy to Ella train journey, where every window frames a postcard-perfect view of Sri Lanka's stunning highlands.
                     </p>
-                    <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
+                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
                         Read Story <ChevronRight size={14} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
          </div>
@@ -281,16 +297,16 @@ const EllaPage = () => {
                    <h2 className="text-4xl md:text-6xl font-serif mb-2">Mountain Retreats</h2>
                    <p className="text-stone-400 font-light">Curated experiences for nature lovers.</p>
                 </div>
-                <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
+                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
                     View All Offers
-                </button>
+                </button> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Offer 1 */}
                 <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
                     <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/ella/eco-lodge.jpg" alt="Eco Lodge" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                        <img src="/pagesPhotos/ella/ecolodge.png" alt="Eco Lodge" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
                         <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
                             Eco-Friendly
                         </div>
@@ -303,9 +319,9 @@ const EllaPage = () => {
                                 <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
                                 <p className="text-xl font-serif text-yellow-500">$950</p>
                             </div>
-                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
+                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
                                 <ArrowRight size={16} />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -313,7 +329,7 @@ const EllaPage = () => {
                 {/* Offer 2 */}
                 <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
                     <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/ella/adventure-pack.jpg" alt="Adventure Package" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                        <img src="/pagesPhotos/ella/adventurepack.png" alt="Adventure Package" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
                     </div>
                     <div className="px-4 pb-4">
                         <h3 className="text-2xl font-serif mb-2">Ultimate Adventure Pack</h3>
@@ -323,9 +339,9 @@ const EllaPage = () => {
                                 <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
                                 <p className="text-xl font-serif text-yellow-500">$675</p>
                             </div>
-                            <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
+                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
                                 <ArrowRight size={16} />
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 </div>
@@ -374,10 +390,10 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
+                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
                     <div className="h-[1px] w-8 bg-current"></div>
                     <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
