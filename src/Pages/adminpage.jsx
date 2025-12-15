@@ -16,10 +16,12 @@ import AdminAdminPage from "./admin/adminAdminPage";
 import PackageAdminPage from "./admin/packageAdminPage"; 
 import UpdatePackage from "./admin/updatePackage";// ✅ real packages page
 import AddPackageAdminPage from "./admin/addPackageAdminPage";
+import AccommodationsAdminPage from "./admin/accommodationsAdminPage"; // ✅ Real Hotels Page
+import AddAccommodationAdminPage from "./admin/addAccommodationsAdminPage";
+import UpdateAccommodation from "./admin/updateAccommodations";
 
 // Placeholder pages
 const UsersPage = () => <div className="p-10 text-white">Users Page (Coming Soon)</div>;
-const HotelsPage = () => <div className="p-10 text-white">Hotels Page (Coming Soon)</div>;
 
 /* ================= Sidebar Link ================= */
 function SidebarLink({ to, icon: Icon, label, onClick }) {
@@ -184,9 +186,11 @@ export default function AdminPage() {
             <Route path="admins" element={<AdminAdminPage />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="packages" element={<PackageAdminPage />} /> {/* ✅ Real PackagesPage */}
-            <Route path="hotels" element={<HotelsPage />} />
+            <Route path="hotels" element={<AccommodationsAdminPage />} /> {/* ✅ Real Hotels Page */}
             <Route path="package-admin/:id" element={<UpdatePackage />} />
-            <Route path="add-package" element={<AddPackageAdminPage />} /> {/* Edit single package */}
+            <Route path="add-package" element={<AddPackageAdminPage />} />
+            <Route path="add-accommodation" element={<AddAccommodationAdminPage />} />
+            <Route path="update-accommodation/:id" element={<UpdateAccommodation />} />
           </Routes>
         </main>
       </div>

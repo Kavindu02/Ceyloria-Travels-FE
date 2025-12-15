@@ -95,6 +95,8 @@ export default function HomePage() {
   const [current, setCurrent] = useState(0);
   const [activeCategory, setActiveCategory] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [latestPackages, setLatestPackages] = useState([]);
+  const [pkgError, setPkgError] = useState(null);
 
   // Hero Logic
   const nextSlide = () => { setCurrent(current === heroSlides.length - 1 ? 0 : current + 1); setProgress(0); };
@@ -109,6 +111,29 @@ export default function HomePage() {
     }, 30);
     return () => clearInterval(timer);
   }, [current]);
+
+  // Fetch latest packages and show the 3 most recent ones
+  useEffect(() => {
+    let cancelled = false;
+    const fetchPackages = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`);
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const data = await res.json();
+        if (!Array.isArray(data)) throw new Error('Invalid packages data');
+        const sorted = data.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        if (!cancelled) setLatestPackages(sorted.slice(0, 3));
+      } catch (err) {
+        if (!cancelled) {
+          setPkgError(err.message);
+          if (import.meta.env.DEV) console.warn('[HomePage] failed to fetch packages:', err);
+        }
+      }
+    };
+
+    fetchPackages();
+    return () => { cancelled = true; };
+  }, []);
 
   return (
     <div className={`bg-neutral-50 text-neutral-900 ${fontBody} selection:bg-orange-200 selection:text-orange-900`}>
@@ -355,11 +380,12 @@ export default function HomePage() {
           </Reveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {packages.map((pkg, idx) => (
+            {((latestPackages && latestPackages.length) ? latestPackages : packages).map((pkg, idx) => (
               <Reveal key={idx} delay={idx * 150}>
                 <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
                   <div className="relative h-80 overflow-hidden">
-                    <img src={pkg.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
+                    {/* support both sample pkg.image and backend pkg.images array */}
+                    <img src={pkg.image || (Array.isArray(pkg.images) && pkg.images[0]) || "/gallery/img1.jpg"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
                       Best Seller
                     </div>
