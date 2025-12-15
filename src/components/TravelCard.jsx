@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MapPin, Clock, ArrowRight, ImageOff } from 'lucide-react';
 
 // 1. Get Supabase URL from your Environment Variables
@@ -11,21 +11,35 @@ const BUCKET_NAME = "images";
 const getImageUrl = (imagePath) => {
   if (!imagePath) return null;
 
-  let targetImage = imagePath;
+  // Pick first useful value if an array was passed
+  let targetImage = Array.isArray(imagePath) ? imagePath.find(Boolean) : imagePath;
 
-  // A. Handle MongoDB Array: If DB sends ["img1.jpg", "img2.jpg"], grab the first one
-  if (Array.isArray(imagePath)) {
-    if (imagePath.length === 0) return null;
-    targetImage = imagePath[0]; 
+  // If it's an object, try a set of common properties
+  if (typeof targetImage === 'object' && targetImage !== null) {
+    targetImage = targetImage.url || targetImage.src || targetImage.path || targetImage.name || targetImage.key || targetImage.filename || targetImage.fileName || null;
   }
 
-  // B. Handle External Links: If it starts with http, use it as is
-  if (targetImage.startsWith('http')) {
+  if (!targetImage || typeof targetImage !== 'string') return null;
+
+  // Normalize Windows backslashes to forward slashes
+  targetImage = targetImage.replace(/\\/g, '/');
+
+  // External absolute URLs (including data: and blob:)
+  if (/^(https?:|data:|blob:)/i.test(targetImage)) return targetImage;
+
+  // If the path is already absolute (starts with /) or contains storage path, return as-is
+  if (targetImage.startsWith('/') || targetImage.includes('/storage/')) return targetImage;
+
+  // If SUPABASE_URL is missing, return the filename as-is (may resolve from public folder)
+  if (!SUPABASE_URL) {
+    if (import.meta.env.DEV) console.warn('[TravelCard] VITE_SUPABASE_URL not set; using image value as-is:', targetImage);
     return targetImage;
   }
 
-  // C. Handle Supabase Path: Construct the full public URL
-  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${targetImage}`;
+  // Normalize slashes and construct Supabase public storage URL
+  const base = SUPABASE_URL.replace(/\/$/, '');
+  const imgPath = String(targetImage).replace(/^\//, '');
+  return `${base}/storage/v1/object/public/${BUCKET_NAME}/${imgPath}`;
 };
 
 const TravelCard = ({ 
@@ -40,8 +54,29 @@ const TravelCard = ({
   onDetailsClick 
 }) => {
   
-  // Generate the final source URL
-  const finalImageSrc = getImageUrl(image);
+  // Support multiple candidate images: try each until one loads
+  const images = Array.isArray(image) ? image : [image];
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [imgError, setImgError] = useState(false);
+  const finalImageSrc = getImageUrl(images[currentIdx]);
+
+  // Reset index when `image` prop changes
+  React.useEffect(() => {
+    setCurrentIdx(0);
+    setImgError(false);
+  }, [image]);
+
+  // If current candidate yields no URL, advance to next available
+  React.useEffect(() => {
+    if (Array.isArray(images) && currentIdx < images.length && !getImageUrl(images[currentIdx])) {
+      if (currentIdx < images.length - 1) {
+        setCurrentIdx((i) => i + 1);
+      } else {
+        setImgError(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, image]);
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col h-full">
@@ -50,29 +85,30 @@ const TravelCard = ({
       <div className="relative h-64 overflow-hidden bg-gray-100">
         
         {/* 1. The Image Tag */}
-        {finalImageSrc ? (
+        {finalImageSrc && !imgError ? (
           <img 
             src={finalImageSrc} 
             alt={title} 
             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             onError={(e) => {
-              // If image fails to load, hide the image tag and show the placeholder div next to it
-              e.target.style.display = 'none'; 
-              e.target.nextSibling.style.display = 'flex'; 
+              if (import.meta.env.DEV) console.warn('[TravelCard] image failed to load:', { image, finalImageSrc, currentIdx, errorEvent: e });
+              // Try the next candidate if available
+              if (currentIdx < images.length - 1) {
+                setCurrentIdx((i) => i + 1);
+                setImgError(false);
+              } else {
+                setImgError(true);
+              }
             }}
           />
-        ) : null}
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-200">
+            <ImageOff size={48} />
+            <span className="text-xs mt-2 font-medium">No Image Available</span>
+          </div>
+        )}
 
-        {/* 2. The Fallback Placeholder (Hidden by default, shown if Error or No URL) */}
-        <div 
-          className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-gray-200"
-          style={{ display: finalImageSrc ? 'none' : 'flex' }}
-        >
-          <ImageOff size={48} />
-          <span className="text-xs mt-2 font-medium">No Image Available</span>
-        </div>
-
-        {/* --- Badges --- */}
+       
         
         {/* Sale Badge */}
         {isSale && (
