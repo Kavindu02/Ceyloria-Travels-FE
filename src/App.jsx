@@ -12,6 +12,7 @@ import LoginPage from "./Pages/loginPage"
 import RegisterPage from "./Pages/registerPage"
 import Contact from "./Pages/Contact"
 import PackagesPage from "./Pages/customer/PackagesPage"
+import About from "./Pages/about"
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage/>}/>
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/packages" element={<PackagesPage/>}/>
+        <Route path="/about" element={<About/>}/>
 
       </Routes>
       <Footer/>
