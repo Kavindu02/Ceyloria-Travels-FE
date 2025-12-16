@@ -16,13 +16,11 @@ const About = () => {
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 flex flex-col justify-center items-center text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg tracking-wide">
-            Discover Sri Lanka
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4">
+          <span className="text-cyan-400 font-bold tracking-[0.2em] mb-4 uppercase text-sm animate-fade-in-up">Discover Sri Lanka</span>
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight drop-shadow-2xl mb-6">
+            About Us
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 font-light max-w-2xl">
-            Your trusted partner in creating unforgettable island memories.
-          </p>
         </div>
       </div>
 

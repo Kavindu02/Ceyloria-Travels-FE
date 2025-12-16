@@ -53,7 +53,7 @@ const PackagesPage = () => {
 
         {/* Hero Title */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4">
-          <span className="text-cyan-400 font-bold tracking-[0.2em] mb-4 uppercase text-sm animate-fade-in-up">Discover the World</span>
+          <span className="text-cyan-400 font-bold tracking-[0.2em] mb-4 uppercase text-sm animate-fade-in-up">Discover Sri Lanka</span>
           <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight drop-shadow-2xl mb-6">
             Our Packages
           </h1>
