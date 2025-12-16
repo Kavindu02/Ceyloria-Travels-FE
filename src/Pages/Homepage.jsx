@@ -433,10 +433,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER SIMPLE */}
-      <footer className="bg-white py-12 border-t border-neutral-200 text-center">
-        {/* <p className="text-neutral-400 text-sm">© 2024 Sri Lanka Travel. Designed with <span className="text-red-400">♥</span></p> */}
-      </footer>
+      
 
       <style jsx global>{`
         @keyframes slideUp {

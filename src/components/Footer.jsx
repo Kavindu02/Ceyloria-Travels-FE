@@ -17,7 +17,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative mt-24 w-full bg-cover bg-center bg-fixed text-gray-200"
+      className="relative mt-0 w-full bg-cover bg-center bg-fixed text-gray-200"
       style={{
         backgroundImage: "url('/gallery/ninearch.png')",
       }}
