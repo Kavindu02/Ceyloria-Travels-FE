@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Home from "./Pages/Homepage";   
+
+import Home from "./Pages/Homepage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AnuradhapuraPage from "./Pages/gallerysection/anuradhapura";
@@ -15,23 +16,27 @@ import Contact from "./Pages/Contact";
 import PackagesPage from "./Pages/customer/PackagesPage";
 import About from "./Pages/about";
 import Loader from "./components/loader";
+import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Loader display duration
-    const timer = setTimeout(() => setLoading(false), 2000); // 2 seconds
+    const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navbar/Footer only show when loading is false */}
+
+      {/* Navbar only after loader */}
       {!loading && <Navbar />}
 
-      {/* Loader overlay */}
+      {/* Loader */}
       {loading && <Loader />}
+
+      {/* Scroll to top instantly on route change */}
+      <ScrollToTop />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -39,7 +44,7 @@ export default function App() {
         <Route path="/colombo" element={<ColomboPage />} />
         <Route path="/ella" element={<EllaPage />} />
         <Route path="/galle" element={<GallePage />} />
-        <Route path="/sigiriyafortress" element={<SigiriyaPage />} /> 
+        <Route path="/sigiriyafortress" element={<SigiriyaPage />} />
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -48,7 +53,9 @@ export default function App() {
         <Route path="/about" element={<About />} />
       </Routes>
 
+      {/* Footer only after loader */}
       {!loading && <Footer />}
+
     </div>
   );
 }
