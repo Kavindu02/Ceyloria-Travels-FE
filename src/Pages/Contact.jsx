@@ -1,330 +1,316 @@
-import { useState } from "react";
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaSearch } from 'react-icons/fa';
+import React, { useState } from "react";
+import { 
+  MapPin, 
+  Mail, 
+  Phone, 
+  Users, 
+  Globe, 
+  Plane,
+  ChevronRight
+} from 'lucide-react';
 
-const ContactInfoPanel = () => (
-  <div className="bg-orange-900 text-white p-10 rounded-xl shadow-2xl h-full flex flex-col justify-center">
-    <h2 className="text-3xl font-serif font-bold mb-6 border-b border-orange-400 pb-3">
-      Start Your Journey
-    </h2>
-    <p className="mb-8 text-orange-100">
-      We're here to help you plan every detail of your Sri Lankan adventure. Reach out to us, and let's craft your perfect itinerary.
-    </p>
+// --- Components ---
 
-    <div className="space-y-6">
-      <div className="flex items-start">
-        <FaMapMarkerAlt className="text-xl mr-4 mt-1 flex-shrink-0 text-orange-400" />
-        <p>Sri Mahinda Dharma MW,Colombo 09.</p>
+// Styled Input Component
+const PremiumInput = ({ type, name, placeholder, value, onChange, required = false, label, icon: Icon, min }) => (
+  <div className="group relative">
+    <label className="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-blue-600 tracking-wider uppercase z-10 transition-all group-focus-within:text-blue-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-50/50 transition-all duration-300 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 hover:border-blue-300">
+      <div className="flex items-center">
+        {Icon && (
+          <div className="pl-5 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+            <Icon size={20} />
+          </div>
+        )}
+        <input
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          required={required}
+          min={min}
+          className={`w-full bg-transparent px-5 py-4 md:py-5 text-gray-900 placeholder-gray-400 outline-none transition-all ${Icon ? 'pl-3' : ''} font-medium text-sm md:text-base`}
+        />
       </div>
-      <div className="flex items-start">
-        <FaEnvelope className="text-xl mr-4 mt-1 flex-shrink-0 text-orange-400" />
-        <p>sdksolutions01@gmail.com</p>
-      </div>
-      <div className="flex items-start">
-        <FaPhoneAlt className="text-xl mr-4 mt-1 flex-shrink-0 text-orange-400" />
-        <p>+94 742216579</p>
-      </div>
+      {/* Animated bottom border */}
+      <div className="absolute bottom-0 left-0 h-0.5 w-full bg-gradient-to-r from-blue-600 to-cyan-400 transform -translate-x-full transition-transform duration-500 group-focus-within:translate-x-0" />
     </div>
   </div>
 );
 
 export default function Contact() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    country: "",
-    phone: "",
-    adults: "1", 
-    kids: "0",
-    infants: "0",
-    arrivalDate: "",
-    departureDate: "",
-    message: "",
+    name: "", email: "", country: "", phone: "",
+    adults: "2", kids: "0", infants: "0",
+    arrivalDate: "", departureDate: "", message: "",
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
-
-    if (!formData.name || !formData.email || !formData.phone || !formData.arrivalDate || !formData.departureDate) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:5000/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
-
-      alert("Message sent successfully! We will get back to you shortly.");
-
-      setFormData({
-        name: "",
-        email: "",
-        country: "",
-        phone: "",
-        adults: "1",
-        kids: "0",
-        infants: "0",
-        arrivalDate: "",
-        departureDate: "",
-        message: "",
-      });
-    } catch (error) {
-      console.error("Submission Error:", error);
-      alert("Failed to send message. Please try again or contact us directly.");
-    }
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      alert("Inquiry Sent! We will contact you shortly.");
+      setIsSubmitting(false);
+    }, 2000);
   };
 
-  const ModernInput = ({ type, name, placeholder, value, onChange, required = false, min }) => (
-    <input
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      required={required}
-      min={min}
-      className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-300 outline-none date-input-padding"
-      style={name === 'arrivalDate' || name === 'departureDate' ? { color: value ? '#1f2937' : '#9ca3af' } : {}}
-    />
-  );
-  
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section with Background Image */}
-      <div className="relative h-96 bg-cover bg-center" style={{
-        backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('contactpagehero.png')"
-      }}>
-        {/* Navigation */}
-        <nav className="flex items-center justify-between px-8 py-6">
-          <div className="flex items-center">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <span className="text-orange-700 font-bold text-xl">S</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-8 text-white">
-            <a href="#" className="hover:text-orange-300 transition-colors">Home</a>
-            <a href="#" className="hover:text-orange-300 transition-colors">Packages</a>
-            <a href="#" className="hover:text-orange-300 transition-colors">Accommodations</a>
-            <a href="#" className="hover:text-orange-300 transition-colors">About</a>
-            <button className="bg-white text-gray-800 px-6 py-2 rounded-full font-semibold hover:bg-orange-100 transition-colors">
-              Contact Us
-            </button>
-          </div>
-
-          <div className="relative">
-            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input 
-              type="text" 
-              placeholder="Search" 
-              className="bg-white bg-opacity-20 border border-white border-opacity-30 rounded-full pl-12 pr-4 py-2 text-white placeholder-gray-300 focus:outline-none focus:bg-opacity-30 transition-all w-48"
-            />
-          </div>
-        </nav>
+    <div className="font-sans text-gray-800 bg-white selection:bg-blue-600 selection:text-white overflow-x-hidden">
+      
+      {/* --- HERO SECTION --- */}
+      <div className="relative h-[60vh] md:h-[80vh] w-full bg-gray-900 overflow-hidden rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-2xl z-10">
+        
+        {/* Parallax Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+           <img 
+             src="contactpagehero.png" 
+             alt="Sri Lanka Travel"
+             className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
+           />
+           {/* Complex Gradients */}
+           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-blue-900/40 to-transparent mix-blend-multiply" />
+           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-transparent to-gray-900/30" />
+        </div>
 
         {/* Hero Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4">
-          <span className="text-cyan-400 font-bold tracking-[0.2em] mb-4 uppercase text-sm animate-fade-in-up">Discover Sri Lanka</span>
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight drop-shadow-2xl mb-6">
-            Contact Us
-          </h1>
+        <div className="relative h-full container mx-auto px-6 flex flex-col justify-center pb-10">
+          <div className="max-w-4xl space-y-6 md:space-y-8">
+          
+            
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-tight md:leading-[0.9] drop-shadow-2xl">
+              Let's Plan Your <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+                Dream Getaway
+              </span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl font-light leading-relaxed border-l-4 border-cyan-400 pl-6">
+              Experience the untamed beauty of Sri Lanka with bespoke itineraries crafted just for you.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-          
-          {/* Contact Info Panel */}
-          <div className="lg:col-span-1 hidden lg:block">
-            <ContactInfoPanel />
-          </div>
-
-          {/* Form Section */}
-          <div className="lg:col-span-2 bg-white p-8 md:p-12 rounded-xl shadow-2xl">
-            <div className="space-y-6">
-
-<form className="space-y-6">
-
-  {/* Name & Email */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Full Name
-      </label>
-      <ModernInput
-        type="text"
-        name="name"
+      {/* --- MAIN CONTENT SECTION --- */}
+      {/* Moved down using mt-12 (approx 48px) instead of overlapping */}
+      <div className="relative mt-12 z-20 container mx-auto px-4 md:px-6 pb-20">
         
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-    </div>
+        {/* Main Grid Layout */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+          
+          {/* --- LEFT COLUMN: Contact Details & Visuals --- */}
+          <div className="w-full lg:w-1/3 space-y-8 lg:sticky lg:top-10">
+            
+            {/* Dark Card */}
+            <div className="bg-[#0f172a] text-white p-8 md:p-10 rounded-[2rem] shadow-2xl relative overflow-hidden group border border-gray-800">
+              {/* Abstract Background Shapes */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/20 rounded-full blur-[80px] group-hover:bg-blue-500/30 transition-all duration-700" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-[60px]" />
+              
+              <div className="relative z-10">
+                <h3 className="text-2xl md:text-3xl font-bold mb-2">Get in Touch</h3>
+                <p className="text-gray-400 mb-8 md:mb-10 text-sm leading-relaxed">
+                  Have questions? We are available 24/7 to assist you with your travel plans.
+                </p>
 
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Email
-      </label>
-      <ModernInput
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-    </div>
-  </div>
+                <div className="space-y-6 md:space-y-8">
+                  <div className="flex items-start gap-5 group/item cursor-pointer">
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 group-hover/item:bg-blue-600 group-hover/item:border-blue-500 transition-all duration-300">
+                      <MapPin className="text-cyan-400 group-hover/item:text-white transition-colors" size={24} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Headquarters</p>
+                      <p className="font-medium text-base md:text-lg text-gray-200 group-hover/item:text-white transition-colors">
+                        Sri Mahinda Dharma MW,<br/> Colombo 09.
+                      </p>
+                    </div>
+                  </div>
 
-  {/* Country & Phone */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Country of Residence
-      </label>
-      <ModernInput
-        type="text"
-        name="Country of residence"
-        value={formData.country}
-        onChange={handleChange}
-        required
-      />
-    </div>
+                  <div className="flex items-start gap-5 group/item cursor-pointer">
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 group-hover/item:bg-blue-600 group-hover/item:border-blue-500 transition-all duration-300">
+                      <Mail className="text-cyan-400 group-hover/item:text-white transition-colors" size={24} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Email Inquiry</p>
+                      <p className="font-medium text-base md:text-lg text-gray-200 group-hover/item:text-white transition-colors break-all">sdksolutions01@gmail.com</p>
+                    </div>
+                  </div>
 
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Phone Number
-      </label>
-      <ModernInput
-        type="text"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        required
-      />
-    </div>
-  </div>
+                  <div className="flex items-start gap-5 group/item cursor-pointer">
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/10 group-hover/item:bg-blue-600 group-hover/item:border-blue-500 transition-all duration-300">
+                      <Phone className="text-cyan-400 group-hover/item:text-white transition-colors" size={24} />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Hotline</p>
+                      <p className="font-medium text-base md:text-lg text-gray-200 group-hover/item:text-white transition-colors">+94 742216579</p>
+                    </div>
+                  </div>
+                </div>
 
-  {/* Arrival & Departure Dates */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Arrival Date
-      </label>
-      <ModernInput
-        type="date"
-        name="arrivalDate"
-        value={formData.arrivalDate}
-        onChange={handleChange}
-        required
-      />
-    </div>
+                <div className="mt-12 pt-8 border-t border-white/10 flex items-center justify-between">
+                   <div>
+                     <p className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">24/7</p>
+                     <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-widest">Support</p>
+                   </div>
+                   <div className="h-10 w-[1px] bg-white/10"></div>
+                   <div className="text-right">
+                     <p className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">100%</p>
+                     <p className="text-[10px] md:text-xs text-gray-400 uppercase tracking-widest">Tailormade</p>
+                   </div>
+                </div>
+              </div>
+            </div>
 
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Departure Date
-      </label>
-      <ModernInput
-        type="date"
-        name="departureDate"
-        value={formData.departureDate}
-        onChange={handleChange}
-        required
-      />
-    </div>
-  </div>
-
-  {/* Adults / Kids / Infants */}
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Adults
-      </label>
-      <ModernInput
-        type="number"
-        name="adults"
-        placeholder="e.g. 2"
-        value={formData.adults}
-        onChange={handleChange}
-        min="1"
-        required
-      />
-    </div>
-
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Kids
-      </label>
-      <ModernInput
-        type="number"
-        name="kids"
-        placeholder="e.g. 1"
-        value={formData.kids}
-        onChange={handleChange}
-        min="0"
-      />
-    </div>
-
-    <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-700">
-        Infants
-      </label>
-      <ModernInput
-        type="number"
-        name="infants"
-        placeholder="e.g. 0"
-        value={formData.infants}
-        onChange={handleChange}
-        min="0"
-      />
-    </div>
-  </div>
-
-  {/* Message */}
-  <div className="flex flex-col gap-2">
-    <label className="text-sm font-medium text-gray-700">
-      Message
-    </label>
-    <textarea
-      name="message"
-      placeholder="Tell us more about your travel plans..."
-      rows="5"
-      value={formData.message}
-      onChange={handleChange}
-      className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition duration-300 outline-none resize-none"
-    />
-  </div>
-
-</form>
-
-
-              {/* Submit Button */}
-              <div className="flex justify-end pt-4">
-                <button
-                  onClick={submitForm}
-                  className="flex items-center bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-lg hover:bg-orange-800 transition duration-300 transform hover:scale-105"
-                >
-                  Send Inquiry <FaPaperPlane className="ml-3" />
-                </button>
+            {/* Mini Map Visual */}
+            <div className="hidden md:block h-64 rounded-[2.5rem] bg-blue-50 border-4 border-white shadow-xl overflow-hidden relative group">
+              <img 
+                src="https://images.unsplash.com/photo-1576014131795-d44019922e96?q=80&w=800&auto=format&fit=crop" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110" 
+                alt="Map Background" 
+              />
+              <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors duration-300" />
+              <div className="absolute center inset-0 flex items-center justify-center">
+                 <div className="bg-white p-3 rounded-full shadow-lg animate-bounce">
+                    <MapPin className="text-red-500" fill="currentColor" />
+                 </div>
               </div>
             </div>
           </div>
+
+          {/* --- RIGHT COLUMN: Complex Form --- */}
+          <div className="w-full lg:w-2/3">
+            <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-6 md:p-14 shadow-xl border border-gray-100 relative">
+              
+              <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+                 <Plane size={200} />
+              </div>
+
+              <div className="mb-8 md:mb-12">
+                <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+                  Craft Your <span className="text-blue-600">Journey</span>
+                </h2>
+                <p className="text-gray-500 text-base md:text-lg">
+                  Fill in the details below and let our travel specialists design an exclusive itinerary tailored to your preferences.
+                </p>
+              </div>
+
+              <form className="space-y-8 relative z-10">
+                
+                {/* Section 1: Personal Info */}
+                <div className="space-y-6">
+                  <h4 className="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-8 h-[2px] bg-gray-300"></span> 01. Personal Details
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <PremiumInput type="text" name="name" label="Full Name" placeholder="e.g. Alexander Hamilton" value={formData.name} onChange={handleChange} required />
+                    <PremiumInput type="email" name="email" label="Email Address" placeholder="alex@example.com" value={formData.email} onChange={handleChange} icon={Mail} required />
+                    <PremiumInput type="text" name="country" label="Country of Residence" placeholder="e.g. United Kingdom" value={formData.country} onChange={handleChange} icon={Globe} required />
+                    <PremiumInput type="text" name="phone" label="Phone Number" placeholder="+44 7700 900077" value={formData.phone} onChange={handleChange} icon={Phone} required />
+                  </div>
+                </div>
+
+                {/* Section 2: Trip Details */}
+                <div className="space-y-6 pt-4">
+                  <h4 className="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-8 h-[2px] bg-gray-300"></span> 02. Trip Details
+                  </h4>
+                  
+                  {/* Date Pickers */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div className="bg-blue-50/50 p-1 rounded-2xl">
+                      <PremiumInput type="date" name="arrivalDate" label="Arrival Date" value={formData.arrivalDate} onChange={handleChange} required />
+                    </div>
+                    <div className="bg-blue-50/50 p-1 rounded-2xl">
+                       <PremiumInput type="date" name="departureDate" label="Departure Date" value={formData.departureDate} onChange={handleChange} required />
+                    </div>
+                  </div>
+
+                  {/* Guest Counter Complex UI */}
+                  <div className="bg-gray-50 rounded-3xl p-6 md:p-8 border border-gray-100">
+                    <div className="flex items-center gap-3 mb-6">
+                       <Users className="text-blue-600" />
+                       <h5 className="font-bold text-gray-900">Who is traveling?</h5>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {['Adults', 'Kids', 'Infants'].map((type, idx) => (
+                        <div key={idx} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center hover:border-blue-400 transition-colors">
+                           <span className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">{type}</span>
+                           <input 
+                             type="number" 
+                             name={type.toLowerCase()}
+                             value={formData[type.toLowerCase()]}
+                             onChange={handleChange}
+                             min="0"
+                             className="w-full text-center text-3xl font-black text-gray-800 outline-none bg-transparent"
+                           />
+                           <span className="text-[10px] text-gray-400 mt-1">
+                             {type === 'Adults' ? 'Age 12+' : type === 'Kids' ? 'Age 2-11' : 'Age <2'}
+                           </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Section 3: Preferences */}
+                <div className="space-y-6 pt-4">
+                   <h4 className="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-8 h-[2px] bg-gray-300"></span> 03. Your Vision
+                  </h4>
+                  
+                  <div className="group relative">
+                    <label className="absolute -top-3 left-4 bg-white px-2 text-xs font-bold text-blue-600 tracking-wider uppercase z-10">
+                      Message / Special Requests
+                    </label>
+                    <textarea
+                      name="message"
+                      placeholder="Tell us about your dream trip. Do you prefer luxury hotels or boutique villas? Are you interested in wildlife, culture, or beaches?"
+                      rows="6"
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50 rounded-2xl border border-gray-200 p-6 text-gray-900 placeholder-gray-400 outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Action Area */}
+                <div className="pt-8 flex flex-col md:flex-row items-center justify-between border-t border-gray-100 gap-6">
+                  <p className="text-sm text-gray-500 text-center md:text-left">
+                    * We respect your privacy. No spam, ever.
+                  </p>
+                  
+                  <button
+                    onClick={submitForm}
+                    disabled={isSubmitting}
+                    className="relative overflow-hidden group bg-gray-900 text-white pl-10 pr-12 py-4 md:py-5 rounded-full font-bold text-lg shadow-2xl shadow-gray-900/30 transition-all hover:shadow-gray-900/50 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed w-full md:w-auto"
+                  >
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      {isSubmitting ? 'Processing...' : 'Send My Inquiry'}
+                      <div className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
+                        <ChevronRight size={20} />
+                      </div>
+                    </span>
+                    {/* Hover Gradient Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                  </button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

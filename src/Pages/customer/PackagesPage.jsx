@@ -1,181 +1,318 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import TravelCard from '../../components/TravelCard';
-import { Search, Filter, X } from 'lucide-react';
+import {
+  Search, 
+  Filter, 
+  X, 
+  Calendar,
+  SlidersHorizontal,
+  MapPin,
+  DollarSign,
+  Globe
+} from 'lucide-react';
 
 const PackagesPage = () => {
+
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Mobile filter toggle
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState('All');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [priceRange, setPriceRange] = useState(5000);
+
+  const [maxPriceLimit, setMaxPriceLimit] = useState(5000);
+  const [availableLocations, setAvailableLocations] = useState([]);
 
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        // Backend URL
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`);
-        
-        if (!response.ok) {
-          throw new Error(`Server Error: ${response.statusText}`);
-        }
-        
-        const data = await response.json();
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`);
+        if (!res.ok) throw new Error('Failed to load packages');
+        const data = await res.json();
+
         setPackages(data);
+
+        const locations = new Set();
+        let highestPrice = 0;
+
+        data.forEach(pkg => {
+          pkg.citiesCovered?.forEach(c => locations.add(c));
+          if (pkg.price > highestPrice) highestPrice = pkg.price;
+        });
+
+        setAvailableLocations([...locations]);
+        setMaxPriceLimit(highestPrice + 500);
+        setPriceRange(highestPrice + 500);
         setLoading(false);
       } catch (err) {
-        console.error("Fetch error:", err);
-        setError(err.message);
+        setError(err.message || 'Something went wrong');
         setLoading(false);
       }
     };
-
     fetchPackages();
   }, []);
 
+  const filteredPackages = useMemo(() => {
+    return packages.filter(pkg => {
+      const matchesSearch =
+        pkg.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pkg.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesDestination =
+        selectedDestination === 'All' ||
+        pkg.citiesCovered?.includes(selectedDestination);
+
+      const matchesPrice = pkg.price <= priceRange;
+
+      const matchesDate =
+        !selectedDate || new Date(pkg.startDate) >= new Date(selectedDate);
+
+      return matchesSearch && matchesDestination && matchesPrice && matchesDate;
+    });
+  }, [packages, searchTerm, selectedDestination, priceRange, selectedDate]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedDestination('All');
+    setSelectedDate('');
+    setPriceRange(maxPriceLimit);
+  };
+
   return (
-    <div className="font-sans text-gray-700 bg-gray-50 min-h-screen">
-      
+    <div className="font-sans text-gray-800 bg-white selection:bg-blue-600 selection:text-white min-h-screen pb-20 overflow-x-hidden">
+
       {/* --- HERO SECTION --- */}
-      <header className="relative h-[60vh] min-h-[400px]">
-        {/* Navbar Overlay */}
+      <div className="relative h-[60vh] lg:h-[70vh] w-full bg-gray-900 overflow-hidden rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-2xl z-10">
         
-
-        {/* Hero Background */}
-        <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1559586616-361e18714958?q=80&w=2070&auto=format&fit=crop" 
-            className="w-full h-full object-cover" 
-            alt="Hero Ocean"
-          />
-          <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply"></div>
+        {/* Parallax Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+           <img 
+             src="/gallery/Ella.png" 
+             alt="Sri Lanka Landscape" 
+             className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
+           />
+           {/* Complex Gradients */}
+           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-blue-900/40 to-transparent mix-blend-multiply" />
+           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-transparent to-gray-900/30" />
         </div>
 
-        {/* Hero Title */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-4">
-          <span className="text-cyan-400 font-bold tracking-[0.2em] mb-4 uppercase text-sm animate-fade-in-up">Discover Sri Lanka</span>
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight drop-shadow-2xl mb-6">
-            Our Packages
-          </h1>
+        {/* Hero Content */}
+        <div className="relative h-full container mx-auto px-6 flex flex-col justify-center pb-20 items-center text-center">
+            
+            
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-tight drop-shadow-2xl mb-6">
+              Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">Paradise</span>
+            </h1>
+            
+            <p className="text-lg md:text-xl text-gray-300 max-w-2xl font-light leading-relaxed">
+              Discover bespoke travel packages designed to showcase the untamed beauty of Sri Lanka.
+            </p>
         </div>
-      </header>
+      </div>
 
-      {/* --- CONTENT AREA --- */}
-      <div className="max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-4 gap-12 relative">
+      {/* --- FLOATING SEARCH BAR --- */}
+      <div className="container mx-auto px-4 relative z-30 -mt-24 mb-16">
+        <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/40 p-3 md:p-4">
+          <div className="flex flex-col md:flex-row gap-4 items-center">
+            
+            {/* Search Input */}
+            <div className="flex-1 w-full relative group">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <Search size={22} />
+              </div>
+              <input
+                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 placeholder-gray-400"
+                placeholder="Where do you want to go?"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            {/* Date Input */}
+            <div className="flex-1 w-full relative group">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
+                <Calendar size={22} />
+              </div>
+              <input
+                type="date"
+                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700"
+                value={selectedDate}
+                onChange={e => setSelectedDate(e.target.value)}
+                style={{ color: selectedDate ? '#374151' : '#9ca3af' }}
+              />
+            </div>
+
+            {/* Search Button */}
+            <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-600/30 transition-all transform hover:scale-105 active:scale-95">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* --- MAIN CONTENT --- */}
+      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-20">
         
+        {/* Background Decor */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[100px] -z-10 opacity-60" />
+
         {/* Mobile Filter Toggle */}
-        <div className="lg:hidden mb-4">
-          <button 
-            onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="w-full flex items-center justify-center gap-2 bg-white border border-gray-200 p-3 rounded-lg font-bold text-gray-700 shadow-sm"
+        <div className="lg:hidden mb-8 flex justify-end">
+          <button
+            onClick={() => setShowMobileFilters(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full font-bold shadow-sm text-blue-900"
           >
-            <Filter size={18} /> Filters
+            <SlidersHorizontal size={18} className="text-blue-600" /> Filters
           </button>
         </div>
 
-        {/* --- SIDEBAR (FILTERS) --- */}
-        <aside className={`
-          fixed inset-0 z-40 bg-white p-6 transition-transform transform lg:translate-x-0 lg:static lg:bg-transparent lg:p-0 lg:z-auto lg:block
-          ${showMobileFilters ? 'translate-x-0' : '-translate-x-full'}
-        `}>
-          <div className="flex justify-between items-center lg:hidden mb-6">
-            <h2 className="text-xl font-bold">Filters</h2>
-            <button onClick={() => setShowMobileFilters(false)}><X /></button>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          <div className="space-y-10">
-            {/* Search Box */}
-            <div className="relative">
-              <input type="text" placeholder="Search destination..." className="w-full pl-10 pr-4 py-3 bg-white border-2 border-transparent focus:border-cyan-500 rounded-xl shadow-sm outline-none transition-all" />
-              <Search className="absolute left-3 top-3.5 text-gray-400" size={18} />
-            </div>
-
-            {/* Destination Dropdown */}
-            <div>
-              <h4 className="font-extrabold text-gray-900 mb-4 text-sm uppercase tracking-wider">Destination</h4>
-              <select className="w-full p-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <option>All Destinations</option>
-                <option>Thailand</option>
-                <option>Japan</option>
-                <option>Europe</option>
-              </select>
-            </div>
-
-            {/* Date Picker */}
-            <div>
-              <h4 className="font-extrabold text-gray-900 mb-4 text-sm uppercase tracking-wider">Date</h4>
-              <input type="date" className="w-full p-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-400 outline-none focus:ring-2 focus:ring-cyan-500" />
-            </div>
-
-            {/* Price Range Slider */}
-            <div>
-              <div className="flex justify-between mb-4">
-                <h4 className="font-extrabold text-gray-900 text-sm uppercase tracking-wider">Max Price</h4>
-                <span className="font-bold text-cyan-600">$5,000</span>
+          {/* --- FILTER SIDEBAR --- */}
+          <aside
+            className={`lg:col-span-3 fixed lg:static inset-0 bg-white/95 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out
+            ${showMobileFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
+          >
+            <div className="h-full overflow-y-auto lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24">
+              
+              {/* Mobile Header */}
+              <div className="flex justify-between items-center lg:hidden mb-8">
+                <h3 className="font-black text-2xl text-gray-900">Filters</h3>
+                <button onClick={() => setShowMobileFilters(false)} className="p-2 bg-gray-100 rounded-full text-gray-600">
+                  <X size={24} />
+                </button>
               </div>
-              <input type="range" min="0" max="5000" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-cyan-500" />
-            </div>
-          </div>
-        </aside>
 
-        {/* --- MAIN GRID --- */}
-        <main className="lg:col-span-3">
-          
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900">Recommended</h2>
-              <div className="h-1 w-20 bg-cyan-500 mt-2 rounded-full"></div>
-            </div>
-            <span className="text-gray-400 text-sm hidden sm:block">Showing {packages.length} packages</span>
-          </div>
+              {/* Filter Card */}
+              <div className="bg-white rounded-[2rem] p-6 shadow-xl border border-gray-100 relative overflow-hidden">
+                {/* Decorative blob inside card */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-50" />
 
-          {/* Loading State */}
-          {loading && (
-            <div className="flex flex-col items-center justify-center h-64 space-y-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-cyan-100 border-t-cyan-500"></div>
-              <p className="text-gray-400 animate-pulse">Loading amazing trips...</p>
-            </div>
-          )}
+                <div className="flex justify-between items-center mb-8 relative z-10">
+                  <h3 className="font-bold text-gray-900 flex items-center gap-2 text-lg">
+                    <Filter size={18} className="text-blue-600" /> Filter By
+                  </h3>
+                  <button
+                    onClick={clearFilters}
+                    className="text-xs font-bold text-blue-500 hover:text-blue-700 uppercase tracking-wider"
+                  >
+                    Reset All
+                  </button>
+                </div>
 
-          {/* Error State */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 p-6 rounded-xl flex items-center gap-4">
-              <div className="bg-red-100 p-2 rounded-full">!</div>
-              <div>
-                <h3 className="font-bold">Oops! Something went wrong.</h3>
-                <p className="text-sm opacity-80">{error}</p>
-                <p className="text-xs mt-2 text-gray-500">Check if your backend is running on port 5000.</p>
+                <div className="space-y-8 relative z-10">
+                  
+                  {/* Destination Select */}
+                  <div className="space-y-3">
+                    <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
+                       <MapPin size={14} /> Destination
+                    </label>
+                    <div className="relative">
+                      <select
+                        className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer"
+                        value={selectedDestination}
+                        onChange={e => setSelectedDestination(e.target.value)}
+                      >
+                        <option value="All">All Destinations</option>
+                        {availableLocations.map(loc => (
+                          <option key={loc}>{loc}</option>
+                        ))}
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Price Range */}
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-end">
+                       <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
+                         <DollarSign size={14} /> Max Budget
+                       </label>
+                       <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+                         ${priceRange}
+                       </span>
+                    </div>
+
+                    <input
+                      type="range"
+                      min="0"
+                      max={maxPriceLimit}
+                      value={priceRange}
+                      onChange={e => setPriceRange(+e.target.value)}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    />
+                    
+                    <div className="flex justify-between text-[10px] text-gray-400 font-bold uppercase">
+                      <span>$0</span>
+                      <span>${maxPriceLimit}</span>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
-          )}
+          </aside>
 
-          {/* Empty State */}
-          {!loading && !error && packages.length === 0 && (
-            <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
-              <p className="text-gray-400 text-lg">No packages found at this moment.</p>
-            </div>
-          )}
+          {/* --- RESULTS GRID --- */}
+          <main className="lg:col-span-9">
 
-          {/* Product Grid */}
-          {!loading && !error && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {packages.map((pkg) => (
-                <TravelCard
-                  key={pkg._id} 
-                  // Pass the whole array. TravelCard will handle picking the first one.
-                  image={pkg.images} 
-                  title={pkg.title}
-                  location={pkg.citiesCovered && pkg.citiesCovered.length > 0 ? pkg.citiesCovered.join(", ") : "Multiple Cities"}
-                  duration={pkg.duration}
-                  description={pkg.shortDescription} 
-                  price={pkg.price}
-                  isSale={false} 
-                  onDetailsClick={() => console.log(`Clicked ${pkg._id}`)}
-                />
-              ))}
-            </div>
-          )}
-        </main>
+            {loading && (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <p className="font-bold text-gray-400">Curating the best packages for you...</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-100 text-red-600 p-8 rounded-[2rem] text-center font-bold shadow-sm">
+                <p>{error}</p>
+              </div>
+            )}
+
+            {!loading && !error && filteredPackages.length === 0 && (
+               <div className="bg-gray-50 border border-gray-100 p-12 rounded-[2rem] text-center">
+                  <div className="bg-gray-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
+                     <Search size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">No Packages Found</h3>
+                  <p className="text-gray-500">Try adjusting your search or filters to find what you're looking for.</p>
+                  <button onClick={clearFilters} className="mt-6 text-blue-600 font-bold hover:underline">Clear all filters</button>
+               </div>
+            )}
+
+            {!loading && !error && filteredPackages.length > 0 && (
+              <div className="space-y-6">
+                <p className="text-sm font-bold text-gray-400 uppercase tracking-widest pl-2">
+                  Showing {filteredPackages.length} Experiences
+                </p>
+                
+                {/* Use grid for cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {filteredPackages.map(pkg => (
+                    <div key={pkg._id} className="transform transition-all duration-300 hover:-translate-y-2">
+                         {/* Wraps TravelCard to ensure it gets correct grid sizing if TravelCard has fixed width */}
+                         <TravelCard
+                          image={pkg.images}
+                          title={pkg.title}
+                          location={pkg.citiesCovered?.join(', ')}
+                          duration={pkg.duration}
+                          description={pkg.shortDescription}
+                          price={pkg.price}
+                          id={pkg._id}
+                        />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </main>
+
+        </div>
       </div>
     </div>
   );
