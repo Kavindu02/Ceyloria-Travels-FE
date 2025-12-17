@@ -288,7 +288,7 @@ export default function Contact() {
                 {/* Action Area */}
                 <div className="pt-8 flex flex-col md:flex-row items-center justify-between border-t border-gray-100 gap-6">
                   <p className="text-sm text-gray-500 text-center md:text-left">
-                    * We respect your privacy. No spam, ever.
+                    We respect your privacy. No spam ever.
                   </p>
                   
                   <button

@@ -22,7 +22,7 @@ const About = () => {
         {/* Parallax Background Image */}
         <div className="absolute inset-0 w-full h-full">
            <img 
-             src="/about/lessertraveled.png" 
+             src="abouthero.png" 
              alt="Sri Lanka Landscape" 
              className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
            />
@@ -59,12 +59,12 @@ const About = () => {
              <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-cyan-400 rounded-[2.5rem] blur-xl opacity-20"></div>
             <div className="grid grid-cols-2 gap-4 relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1588258524675-55d656396b8a?q=80&w=800&auto=format&fit=crop" 
+                src="/gallery/ninearch.png" 
                 alt="Nine Arch Bridge" 
                 className="rounded-[2rem] shadow-2xl w-full h-64 md:h-80 object-cover transform translate-y-8 hover:scale-105 transition-transform duration-700"
               />
               <img 
-                src="https://images.unsplash.com/photo-1534960680480-add9224c6536?q=80&w=800&auto=format&fit=crop" 
+                src="elephant.png" 
                 alt="Sri Lankan Elephant" 
                 className="rounded-[2rem] shadow-2xl w-full h-64 md:h-80 object-cover hover:scale-105 transition-transform duration-700"
               />
@@ -103,12 +103,14 @@ const About = () => {
               From carefully curated tour packages to reliable accommodation, transportation, and guided services, we ensure every journey is smooth, safe, and memorable.
             </p>
             
+            <Link to="/packages">
             <div className="pt-4">
                <button className="group flex items-center bg-gray-900 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl shadow-gray-900/20 hover:bg-blue-900 transition-all duration-300 transform hover:-translate-y-1">
                  Plan Your Trip
                  <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                </button>
             </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -242,7 +244,7 @@ const About = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-blue-600 rounded-[2.5rem] rotate-6 opacity-20 transform scale-105"></div>
                 <img 
-                  src="https://images.unsplash.com/photo-1546708773-e57416a96432?q=80&w=600&auto=format&fit=crop" 
+                  src="sltrain.png" 
                   alt="Sri Lankan Train" 
                   className="rounded-[2.5rem] shadow-2xl relative z-10 rotate-3 hover:rotate-0 transition-transform duration-500 w-72 h-72 object-cover"
                 />
