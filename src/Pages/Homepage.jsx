@@ -101,7 +101,7 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [progress, setProgress] = useState(0);
   const [latestPackages, setLatestPackages] = useState([]);
-  const [pkgError, setPkgError] = useState(null);
+  const [_pkgError, _setPkgError] = useState(null);
 
   // 2. Effect to handle Loader Timing
   useEffect(() => {
@@ -121,12 +121,15 @@ export default function HomePage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((old) => {
-        if (old >= 100) { nextSlide(); return 0; }
+        if (old >= 100) { 
+          setCurrent((prev) => prev === heroSlides.length - 1 ? 0 : prev + 1);
+          return 0; 
+        }
         return old + 0.5;
       });
     }, 30);
     return () => clearInterval(timer);
-  }, [current]);
+  }, []);
 
   // Fetch latest packages
   useEffect(() => {
@@ -141,7 +144,7 @@ export default function HomePage() {
         if (!cancelled) setLatestPackages(sorted.slice(0, 3));
       } catch (err) {
         if (!cancelled) {
-          setPkgError(err.message);
+          _setPkgError(err.message);
           if (import.meta.env.DEV) console.warn('[HomePage] failed to fetch packages:', err);
         }
       }
@@ -158,7 +161,7 @@ export default function HomePage() {
 
   // 4. Main Page Content (Only shows after loader finishes)
   return (
-    <div className={`bg-neutral-50 text-neutral-900 ${fontBody} selection:bg-orange-200 selection:text-orange-900`}>
+    <div className={`bg-white text-gray-900 ${fontBody} selection:bg-blue-600 selection:text-white`}>
       
       {/* ---------------------- 1. HERO SECTION ---------------------- */}
       <div className="relative w-full h-screen overflow-hidden">
@@ -180,7 +183,7 @@ export default function HomePage() {
           <div className="max-w-5xl pointer-events-auto">
             <div className="flex items-center gap-3 mb-6 overflow-hidden">
               <div className={`flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full border border-white/10 animate-fade-in-up`}>
-                <MapPin className="w-3.5 h-3.5 text-orange-200" />
+                <MapPin className="w-3.5 h-3.5 text-cyan-300" />
                 <span className="text-white text-xs font-bold tracking-widest uppercase">{heroSlides[current].location}</span>
               </div>
             </div>
@@ -194,7 +197,7 @@ export default function HomePage() {
             </h1>
 
             <div className="flex flex-col md:flex-row md:items-end gap-8 md:gap-16">
-              <p className="text-lg md:text-xl text-white/90 font-light max-w-lg leading-relaxed border-l-2 border-orange-400 pl-6">
+              <p className="text-lg md:text-xl text-white/90 font-light max-w-lg leading-relaxed border-l-2 border-cyan-400 pl-6">
                 {heroSlides[current].subtitle}
               </p>
               
@@ -211,7 +214,7 @@ export default function HomePage() {
            <div className="flex gap-3">
              {heroSlides.map((_, idx) => (
                <div key={idx} onClick={() => { setCurrent(idx); setProgress(0); }} className="group relative h-1 w-12 bg-white/20 cursor-pointer overflow-hidden rounded-full">
-                 <div className={`absolute top-0 left-0 h-full bg-orange-400 transition-all duration-100 ease-linear ${idx === current ? "opacity-100" : "opacity-0"}`} style={{ width: idx === current ? `${progress}%` : "0%" }} />
+                 <div className={`absolute top-0 left-0 h-full bg-cyan-400 transition-all duration-100 ease-linear ${idx === current ? "opacity-100" : "opacity-0"}`} style={{ width: idx === current ? `${progress}%` : "0%" }} />
                </div>
              ))}
            </div>
@@ -226,14 +229,14 @@ export default function HomePage() {
       {/* ---------------------- 2. INTERACTIVE MAP ---------------------- */}
       <section className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-white relative overflow-hidden">
         {/* Decorative Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-tr from-orange-50/80 via-purple-50/50 to-blue-50/50 rounded-full blur-3xl pointer-events-none -z-0 opacity-80"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-gradient-to-tr from-blue-50/80 via-cyan-50/50 to-blue-50/50 rounded-full blur-3xl pointer-events-none -z-0 opacity-80"></div>
 
         <div className="max-w-[1400px] mx-auto relative z-10">
           <Reveal>
             <div className="text-center mb-16 md:mb-24">
-              <span className="text-orange-600 font-bold tracking-widest uppercase text-sm mb-3 block">Discover Sri Lanka</span>
-              <h2 className={`${fontHead} text-4xl md:text-6xl text-neutral-900 mb-6`}>Find Your Perfect Escape</h2>
-              <div className="w-24 h-1 bg-neutral-200 mx-auto rounded-full"></div>
+              <span className="text-blue-600 font-bold tracking-widest uppercase text-sm mb-3 block">Discover Sri Lanka</span>
+              <h2 className={`${fontHead} text-4xl md:text-6xl text-gray-900 mb-6`}>Find Your Perfect Escape</h2>
+              <div className="w-24 h-1 bg-blue-200 mx-auto rounded-full"></div>
             </div>
           </Reveal>
 
@@ -251,8 +254,8 @@ export default function HomePage() {
                <div className="relative w-full max-w-[550px] aspect-[3/4] flex items-center justify-center">
                  
                  {/* Concentric Circles */}
-                 <div className="absolute inset-0 border border-neutral-200/50 rounded-full scale-125 pointer-events-none"></div>
-                 <div className="absolute inset-0 border border-neutral-200/50 rounded-full scale-110 pointer-events-none"></div>
+                 <div className="absolute inset-0 border border-gray-200/50 rounded-full scale-125 pointer-events-none"></div>
+                 <div className="absolute inset-0 border border-gray-200/50 rounded-full scale-110 pointer-events-none"></div>
                  
                  <img 
                    src="/srilanka-map.png" 
@@ -268,8 +271,8 @@ export default function HomePage() {
                      style={{ left: `${loc.x}%`, top: `${loc.y}%` }}
                    >
                      <div className="relative transform -translate-x-1/2 -translate-y-1/2 animate-scale-in">
-                        <div className="absolute inset-0 -m-3 bg-orange-500/30 rounded-full animate-ping"></div>
-                        <div className="relative w-5 h-5 bg-orange-500 rounded-full border-[3px] border-white shadow-lg"></div>
+                        <div className="absolute inset-0 -m-3 bg-blue-600/30 rounded-full animate-ping"></div>
+                        <div className="relative w-5 h-5 bg-blue-600 rounded-full border-[3px] border-white shadow-lg"></div>
                         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 z-30">
                           <div className="relative bg-white/80 backdrop-blur-xl text-neutral-900 text-sm font-bold px-5 py-2.5 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/60 whitespace-nowrap transform transition-all hover:scale-105">
                             {loc.label}
@@ -281,7 +284,7 @@ export default function HomePage() {
                  ))}
 
                  {!activeCategory && (
-                   <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md px-6 py-3 rounded-full text-sm font-medium text-neutral-500 border border-white/50 shadow-sm pointer-events-none whitespace-nowrap">
+                   <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md px-6 py-3 rounded-full text-sm font-medium text-gray-500 border border-white/50 shadow-sm pointer-events-none whitespace-nowrap">
                      Hover a category to explore
                    </div>
                  )}
@@ -299,10 +302,10 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------- 3. GALLERY ---------------------- */}
-      <section className="py-20 bg-neutral-50 border-t border-neutral-200">
+      <section className="py-20 bg-gray-50 border-t border-gray-200">
         <div className="px-6 md:px-12 lg:px-24">
           <Reveal>
-              <h2 className={`${fontHead} text-4xl md:text-5xl text-center mb-16`}>Captured Moments</h2>
+              <h2 className={`${fontHead} text-4xl md:text-5xl text-center text-gray-900 mb-16`}>Captured Moments</h2>
               <div className="w-full">
                 <Gallery images={galleryList} />
               </div>
@@ -312,7 +315,7 @@ export default function HomePage() {
 
       {/* ---------------------- 4. FEATURED: SIGIRIYA ---------------------- */}
       <section className="py-24 md:py-32 px-6 md:px-16 lg:px-24 bg-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-orange-50/50 -skew-x-12 translate-x-1/4 z-0"></div>
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-blue-50/50 -skew-x-12 translate-x-1/4 z-0"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
@@ -323,12 +326,12 @@ export default function HomePage() {
                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
                    
                    <div className="absolute top-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/50 max-w-[140px]">
-                     <span className="block text-4xl font-light text-orange-500 mb-1">5th</span>
-                     <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest">Century AD</span>
+                     <span className="block text-4xl font-light text-blue-600 mb-1">5th</span>
+                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Century AD</span>
                    </div>
                    <div className="absolute bottom-8 left-8 bg-neutral-900/90 backdrop-blur-md p-6 rounded-xl shadow-lg border border-white/10">
                       <div className="flex items-center gap-3 mb-1">
-                        <Compass className="w-5 h-5 text-orange-400" />
+                        <Compass className="w-5 h-5 text-cyan-400" />
                         <span className="text-white text-lg font-medium">200m High</span>
                       </div>
                       <span className="text-xs text-neutral-400 uppercase tracking-wider pl-8">Elevation</span>
@@ -339,29 +342,29 @@ export default function HomePage() {
 
             <div className="w-full lg:w-1/2">
                <Reveal direction="right" delay={200}>
-                 <div className="inline-block px-4 py-1 rounded-full bg-orange-100 text-orange-800 text-xs font-bold uppercase tracking-widest mb-6">UNESCO World Heritage</div>
-                 <h2 className={`${fontHead} text-5xl md:text-7xl text-neutral-900 mb-8 leading-tight`}>
-                   The Lion Rock <br/> <span className="italic text-neutral-400">Fortress</span>
+                 <div className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest mb-6">UNESCO World Heritage</div>
+                 <h2 className={`${fontHead} text-5xl md:text-7xl text-gray-900 mb-8 leading-tight`}>
+                   The Lion Rock <br/> <span className="italic text-gray-400">Fortress</span>
                  </h2>
-                 <p className="text-lg text-neutral-600 mb-6 leading-relaxed">
+                 <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                    Sigiriya is one of the most valuable historical monuments of Sri Lanka. Referred by locals as the Eighth Wonder of the World, this ancient palace and fortress complex has significant archaeological importance and attracts thousands of tourists every year.
                  </p>
-                 <div className="grid grid-cols-2 gap-8 my-10 border-y border-neutral-100 py-8">
+                 <div className="grid grid-cols-2 gap-8 my-10 border-y border-gray-100 py-8">
                    <div>
-                     <h4 className="text-3xl font-light text-neutral-900 mb-1">1,200</h4>
-                     <p className="text-sm text-neutral-500 uppercase tracking-wider">Steps to Top</p>
+                     <h4 className="text-3xl font-light text-gray-900 mb-1">1,200</h4>
+                     <p className="text-sm text-gray-500 uppercase tracking-wider">Steps to Top</p>
                    </div>
                    <div>
-                     <h4 className="text-3xl font-light text-neutral-900 mb-1">1982</h4>
-                     <p className="text-sm text-neutral-500 uppercase tracking-wider">Inscribed Year</p>
+                     <h4 className="text-3xl font-light text-gray-900 mb-1">1982</h4>
+                     <p className="text-sm text-gray-500 uppercase tracking-wider">Inscribed Year</p>
                    </div>
                  </div>
                  <Link 
                   to="/sigiriyafortress"
-                  className="flex items-center gap-4 text-neutral-900 font-medium hover:gap-6 transition-all group"
+                  className="flex items-center gap-4 text-gray-900 font-medium hover:gap-6 transition-all group"
                  >
                    Read More
-                   <div className="w-12 h-[1px] bg-neutral-900 group-hover:bg-orange-500 transition-colors"></div>
+                   <div className="w-12 h-[1px] bg-gray-900 group-hover:bg-blue-600 transition-colors"></div>
                  </Link>
                </Reveal>
             </div>
@@ -370,8 +373,8 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------- 5. PARALLAX STACK ---------------------- */}
-      <div className="bg-neutral-900 py-24 px-6 text-center">
-         <p className="text-neutral-400 text-sm uppercase tracking-[0.3em] mb-4">The Journey</p>
+      <div className="bg-gray-900 py-24 px-6 text-center">
+         <p className="text-gray-400 text-sm uppercase tracking-[0.3em] mb-4">The Journey</p>
          <h3 className={`${fontHead} text-white text-3xl md:text-5xl italic`}>"Sri Lanka is not just a place,<br/>it's a feeling."</h3>
       </div>
 
@@ -388,15 +391,15 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------- 6. PACKAGES ---------------------- */}
-      <section className="py-32 px-6 md:px-16 lg:px-24 bg-neutral-50 relative z-50 rounded-t-[3rem] -mt-20">
+      <section className="py-32 px-6 md:px-16 lg:px-24 bg-gray-50 relative z-50 rounded-t-[3rem] -mt-20">
         <div className="max-w-7xl mx-auto">
           <Reveal>
             <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
               <div>
-                <h2 className={`${fontHead} text-5xl md:text-6xl text-neutral-900 mb-4`}>Curated Packages</h2>
-                <p className="text-neutral-500 max-w-md">Handpicked experiences designed to show you the soul of the island.</p>
+                <h2 className={`${fontHead} text-5xl md:text-6xl text-gray-900 mb-4`}>Curated Packages</h2>
+                <p className="text-gray-500 max-w-md">Handpicked experiences designed to show you the soul of the island.</p>
               </div>
-              <button className="px-8 py-3 border border-neutral-300 rounded-full hover:bg-neutral-900 hover:text-white transition-colors">View All Offers</button>
+              <button className="px-8 py-3 border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition-colors">View All Offers</button>
             </div>
           </Reveal>
 
@@ -412,16 +415,16 @@ export default function HomePage() {
                     </div>
                   </div>
                   <div className="p-8">
-                    <div className="flex items-center gap-4 text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4">
+                    <div className="flex items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
                       <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {pkg.days}</span>
-                      <span className="w-1 h-1 bg-neutral-300 rounded-full"></span>
+                      <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {pkg.people} Pax</span>
                     </div>
-                    <h3 className={`${fontHead} text-2xl text-neutral-900 mb-3 group-hover:text-orange-600 transition-colors`}>{pkg.title}</h3>
-                    <p className="text-neutral-500 text-sm leading-relaxed mb-6 border-b border-neutral-100 pb-6">{pkg.desc}</p>
+                    <h3 className={`${fontHead} text-2xl text-gray-900 mb-3 group-hover:text-blue-600 transition-colors`}>{pkg.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-6 border-b border-gray-100 pb-6">{pkg.desc}</p>
                     <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium underline decoration-neutral-300 underline-offset-4 group-hover:decoration-orange-400 transition-all">View Itinerary</span>
-                        <div className="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-orange-500 group-hover:text-white transition-all">
+                        <span className="text-sm font-medium underline decoration-gray-300 underline-offset-4 group-hover:decoration-blue-600 transition-all">View Itinerary</span>
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
                           <ArrowRight className="w-4 h-4" />
                         </div>
                     </div>
@@ -474,28 +477,28 @@ const CategoryCard = ({ cat, active, setActive, align, delay }) => {
         className={`
           relative flex items-center gap-6 p-5 rounded-2xl cursor-pointer transition-all duration-300 border backdrop-blur-sm
           ${isActive 
-            ? "bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border-orange-100 scale-105 z-20" 
+            ? "bg-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] border-blue-100 scale-105 z-20" 
             : "bg-white/40 border-white/50 hover:bg-white hover:shadow-lg hover:border-transparent"
           }
         `}
       >
         <img 
           src={cat.image} 
-          className={`w-20 h-20 rounded-xl object-cover shadow-md transition-transform duration-300 ${isActive ? "scale-105 ring-2 ring-orange-200" : ""}`} 
+          className={`w-20 h-20 rounded-xl object-cover shadow-md transition-transform duration-300 ${isActive ? "scale-105 ring-2 ring-blue-200" : ""}`} 
           alt={cat.name} 
         />
         
         <div className="flex-1">
-           <h4 className={`text-lg font-bold transition-colors mb-1 ${isActive ? "text-orange-600" : "text-neutral-800"}`}>{cat.name}</h4>
+           <h4 className={`text-lg font-bold transition-colors mb-1 ${isActive ? "text-blue-600" : "text-gray-800"}`}>{cat.name}</h4>
            <div className="flex items-center gap-2">
-             <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-orange-500" : "bg-neutral-300"}`}></span>
+             <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-blue-600" : "bg-gray-300"}`}></span>
              <p className="text-sm text-neutral-500 font-medium">{cat.locations.length} Locations</p>
            </div>
         </div>
         
         <div className={`
            w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
-           ${isActive ? "bg-orange-100 text-orange-600 rotate-0 opacity-100" : "bg-transparent text-neutral-300 -rotate-45 opacity-0"}
+           ${isActive ? "bg-blue-100 text-blue-600 rotate-0 opacity-100" : "bg-transparent text-gray-300 -rotate-45 opacity-0"}
         `}>
           <ArrowRight className="w-4 h-4" />
         </div>

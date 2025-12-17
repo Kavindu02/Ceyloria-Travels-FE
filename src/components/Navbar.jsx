@@ -30,7 +30,7 @@ export default function Navbar() {
         <ul className="hidden md:flex items-center gap-10 text-white font-medium text-base">
           <li><Link to="/" className="hover:text-blue-400 transition">Home</Link></li>
           <li><Link to="/packages" className="hover:text-blue-400 transition">Packages</Link></li>
-          <li><Link to="/tc" className="hover:text-blue-400 transition">Accommodations</Link></li>
+          <li><Link to="/accommodations" className="hover:text-blue-400 transition">Accommodations</Link></li>
           
           {/* Moved About here so Contact is last */}
           <li><Link to="/about" className="hover:text-blue-400 transition">About</Link></li>
@@ -77,7 +77,7 @@ export default function Navbar() {
         <ul className="flex flex-col items-center gap-5 text-lg font-medium">
           <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
           <li><Link to="/packages" onClick={() => setMenuOpen(false)}>Packages</Link></li>
-          <li><Link to="/tc" onClick={() => setMenuOpen(false)}>Accommodations</Link></li>
+          <li><Link to="/accommodations" onClick={() => setMenuOpen(false)}>Accommodations</Link></li>
           <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
           {/* Highlighted Contact Button for Mobile as well */}
           <li>

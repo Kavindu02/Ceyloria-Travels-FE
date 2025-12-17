@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Clock, ArrowRight, ImageOff, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // 1. Get Supabase URL from your Environment Variables
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -51,7 +52,8 @@ const TravelCard = ({
   price, 
   oldPrice, 
   isSale,
-  onDetailsClick 
+  onDetailsClick,
+  id
 }) => {
   
   // Support multiple candidate images: try each until one loads
@@ -59,6 +61,15 @@ const TravelCard = ({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [imgError, setImgError] = useState(false);
   const finalImageSrc = getImageUrl(images[currentIdx]);
+  const navigate = useNavigate();
+
+  const handleExplore = () => {
+    if (onDetailsClick) {
+      onDetailsClick();
+    } else if (id) {
+      navigate(`/package-overview/${id}`);
+    }
+  };
 
   // Reset index when `image` prop changes
   React.useEffect(() => {
@@ -168,7 +179,7 @@ const TravelCard = ({
 
           {/* Premium Button */}
           <button 
-            onClick={onDetailsClick}
+            onClick={handleExplore}
             className="relative overflow-hidden group/btn bg-gray-900 text-white pl-6 pr-5 py-3 rounded-full font-bold text-sm shadow-lg shadow-gray-900/20 transition-all hover:shadow-gray-900/40 hover:-translate-y-1"
           >
             <span className="relative z-10 flex items-center gap-2">

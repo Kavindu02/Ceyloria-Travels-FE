@@ -14,6 +14,9 @@ import LoginPage from "./Pages/loginPage";
 import RegisterPage from "./Pages/registerPage";
 import Contact from "./Pages/Contact";
 import PackagesPage from "./Pages/customer/PackagesPage";
+import PackageOverviewPage from "./Pages/customer/packageOverviewPage";
+import AccommodationsPage from "./Pages/customer/accommodationsPage";
+import AccommodationOverviewPage from "./Pages/customer/accommodationsOverviewPage";
 import About from "./Pages/about";
 import Loader from "./components/loader";
 import ScrollToTop from "./components/ScrollToTop";
@@ -50,6 +53,9 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/packages" element={<PackagesPage />} />
+        <Route path="/package-overview/:id" element={<PackageOverviewPage />} />
+        <Route path="/accommodations" element={<AccommodationsPage />} />
+        <Route path="/accommodation-overview/:id" element={<AccommodationOverviewPage />} />
         <Route path="/about" element={<About />} />
       </Routes>
 
