@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import AccommodationsCard from '../../components/AccommodationsCard';
+import AccommodationsCard from '../../components/AccommodationsCard'; // Ensure path is correct
 import {
   Search, 
   Filter, 
@@ -7,28 +7,30 @@ import {
   MapPin,
   SlidersHorizontal,
   DollarSign,
-  Star,
-  Wifi,
-  UtensilsCrossed,
-  Bed
+  Bed,
+  Frown
 } from 'lucide-react';
 
 const AccommodationsPage = () => {
 
+  // --- State ---
   const [accommodations, setAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // --- Filter State ---
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
-  const [priceRange, setPriceRange] = useState(5000);
+  const [priceRange, setPriceRange] = useState(1000); // Default placeholder
+  const [maxPriceLimit, setMaxPriceLimit] = useState(1000);
 
-  const [maxPriceLimit, setMaxPriceLimit] = useState(5000);
+  // --- Derived Data Lists ---
   const [availableLocations, setAvailableLocations] = useState([]);
   const [accommodationTypes, setAccommodationTypes] = useState([]);
 
+  // --- Fetch Data ---
   useEffect(() => {
     const fetchAccommodations = async () => {
       try {
@@ -38,6 +40,7 @@ const AccommodationsPage = () => {
 
         setAccommodations(data);
 
+        // Extract unique filters from data
         const locations = new Set();
         const types = new Set();
         let highestPrice = 0;
@@ -45,15 +48,23 @@ const AccommodationsPage = () => {
         data.forEach(acc => {
           if (acc.location) locations.add(acc.location);
           if (acc.type) types.add(acc.type);
-          if (acc.pricePerNight > highestPrice) highestPrice = acc.pricePerNight;
+          
+          // Handle price variations (price vs pricePerNight)
+          const price = acc.price || acc.pricePerNight || 0;
+          if (price > highestPrice) highestPrice = price;
         });
 
-        setAvailableLocations([...locations]);
-        setAccommodationTypes([...types]);
-        setMaxPriceLimit(highestPrice + 500);
-        setPriceRange(highestPrice + 500);
+        setAvailableLocations([...locations].sort());
+        setAccommodationTypes([...types].sort());
+        
+        // Set dynamic max price (add buffer)
+        const calculatedMax = highestPrice > 0 ? highestPrice + 100 : 1000;
+        setMaxPriceLimit(calculatedMax);
+        setPriceRange(calculatedMax);
+        
         setLoading(false);
       } catch (err) {
+        console.error("Error fetching accommodations:", err);
         setError(err.message || 'Something went wrong');
         setLoading(false);
       }
@@ -61,11 +72,15 @@ const AccommodationsPage = () => {
     fetchAccommodations();
   }, []);
 
+  // --- Filtering Logic ---
   const filteredAccommodations = useMemo(() => {
     return accommodations.filter(acc => {
+      const price = acc.price || acc.pricePerNight || 0;
+
       const matchesSearch =
-        acc.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        acc.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        (acc.name && acc.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (acc.description && acc.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (acc.location && acc.location.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesLocation =
         selectedLocation === 'All' ||
@@ -75,7 +90,7 @@ const AccommodationsPage = () => {
         selectedType === 'All' ||
         acc.type === selectedType;
 
-      const matchesPrice = acc.pricePerNight <= priceRange;
+      const matchesPrice = price <= priceRange;
 
       return matchesSearch && matchesLocation && matchesType && matchesPrice;
     });
@@ -92,36 +107,34 @@ const AccommodationsPage = () => {
     <div className="font-sans text-gray-800 bg-white selection:bg-blue-600 selection:text-white min-h-screen pb-20 overflow-x-hidden">
 
       {/* --- HERO SECTION --- */}
-      <div className="relative h-[60vh] lg:h-[70vh] w-full bg-gray-900 overflow-hidden rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-2xl z-10">
+      <div className="relative h-[50vh] lg:h-[60vh] w-full bg-gray-900 overflow-hidden rounded-b-[2.5rem] md:rounded-b-[4rem] shadow-2xl z-10">
         
-        {/* Parallax Background Image */}
+        {/* Background Image */}
         <div className="absolute inset-0 w-full h-full">
            <img 
-             src="/gallery/Colombo.png" 
+             src="https://images.unsplash.com/photo-1546708773-e529a691902d?q=80&w=2070&auto=format&fit=crop" 
              alt="Sri Lanka Accommodations" 
-             className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
+             className="w-full h-full object-cover opacity-60"
            />
-           {/* Complex Gradients */}
+           {/* Gradient Overlays */}
            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-blue-900/40 to-transparent mix-blend-multiply" />
-           <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-transparent to-gray-900/30" />
+           <div className="absolute inset-0 bg-gradient-to-b from-gray-900/30 via-transparent to-gray-900/90" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative h-full container mx-auto px-6 flex flex-col justify-center pb-20 items-center text-center">
-            
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-tight drop-shadow-2xl mb-6">
+        <div className="relative h-full container mx-auto px-6 flex flex-col justify-center items-center text-center pb-12">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-tight drop-shadow-2xl mb-4">
               Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">Perfect Stay</span>
             </h1>
-            
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl font-light leading-relaxed">
-              Discover premium accommodations across Sri Lanka, from luxury resorts to cozy boutique hotels.
+            <p className="text-base md:text-xl text-gray-300 max-w-2xl font-light leading-relaxed">
+              Discover premium villas, hotels, and resorts across Sri Lanka.
             </p>
         </div>
       </div>
 
       {/* --- FLOATING SEARCH BAR --- */}
-      <div className="container mx-auto px-4 relative z-30 -mt-24 mb-16">
-        <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/40 p-3 md:p-4">
+      <div className="container mx-auto px-4 relative z-30 -mt-16 mb-16">
+        <div className="max-w-5xl mx-auto bg-white/90 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/40 p-4">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             
             {/* Search Input */}
@@ -130,62 +143,57 @@ const AccommodationsPage = () => {
                 <Search size={22} />
               </div>
               <input
-                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 placeholder-gray-400"
-                placeholder="Search accommodations..."
+                className="w-full bg-gray-50/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 placeholder-gray-400"
+                placeholder="Search villas, locations..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {/* Location Input */}
-            <div className="flex-1 w-full relative group">
+            {/* Quick Location Filter */}
+            <div className="flex-1 w-full relative group hidden md:block">
               <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
                 <MapPin size={22} />
               </div>
               <select
-                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700"
+                className="w-full bg-gray-50/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer appearance-none"
                 value={selectedLocation}
                 onChange={e => setSelectedLocation(e.target.value)}
               >
                 <option value="All">All Locations</option>
                 {availableLocations.map(loc => (
-                  <option key={loc}>{loc}</option>
+                  <option key={loc} value={loc}>{loc}</option>
                 ))}
               </select>
             </div>
-
-            {/* Search Button */}
-            <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-600/30 transition-all transform hover:scale-105 active:scale-95">
-              Search
-            </button>
           </div>
         </div>
       </div>
 
-      {/* --- MAIN CONTENT --- */}
+      {/* --- MAIN CONTENT LAYOUT --- */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-20">
         
-        {/* Background Decor */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[100px] -z-10 opacity-60" />
-
         {/* Mobile Filter Toggle */}
-        <div className="lg:hidden mb-8 flex justify-end">
-          <button
-            onClick={() => setShowMobileFilters(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full font-bold shadow-sm text-blue-900"
-          >
-            <SlidersHorizontal size={18} className="text-blue-600" /> Filters
-          </button>
+        <div className="lg:hidden mb-6 flex justify-between items-center">
+            <span className="font-bold text-gray-500 text-sm uppercase tracking-wider">
+                {filteredAccommodations.length} Properties Found
+            </span>
+            <button
+                onClick={() => setShowMobileFilters(true)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-full font-bold shadow-sm text-blue-900 active:scale-95 transition-transform"
+            >
+                <SlidersHorizontal size={18} className="text-blue-600" /> Filters
+            </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-          {/* --- FILTER SIDEBAR --- */}
+          {/* --- SIDEBAR FILTERS --- */}
           <aside
             className={`lg:col-span-3 fixed lg:static inset-0 bg-white/95 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out
             ${showMobileFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
           >
-            <div className="h-full overflow-y-auto lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24">
+            <div className="h-full overflow-y-auto lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24 scrollbar-hide">
               
               {/* Mobile Header */}
               <div className="flex justify-between items-center lg:hidden mb-8">
@@ -197,63 +205,60 @@ const AccommodationsPage = () => {
 
               {/* Filter Card */}
               <div className="bg-white rounded-[2rem] p-6 shadow-xl border border-gray-100 relative overflow-hidden">
-                {/* Decorative blob inside card */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl -mr-10 -mt-10 opacity-50" />
-
                 <div className="flex justify-between items-center mb-8 relative z-10">
                   <h3 className="font-bold text-gray-900 flex items-center gap-2 text-lg">
                     <Filter size={18} className="text-blue-600" /> Filter By
                   </h3>
                   <button
                     onClick={clearFilters}
-                    className="text-xs font-bold text-blue-500 hover:text-blue-700 uppercase tracking-wider"
+                    className="text-xs font-bold text-blue-500 hover:text-blue-700 uppercase tracking-wider transition-colors"
                   >
-                    Reset All
+                    Reset
                   </button>
                 </div>
 
                 <div className="space-y-8 relative z-10">
                   
-                  {/* Location Select */}
+                  {/* Location (Sidebar) */}
                   <div className="space-y-3">
                     <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
                        <MapPin size={14} /> Location
                     </label>
                     <div className="relative">
                       <select
-                        className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer"
+                        className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer text-sm"
                         value={selectedLocation}
                         onChange={e => setSelectedLocation(e.target.value)}
                       >
                         <option value="All">All Locations</option>
                         {availableLocations.map(loc => (
-                          <option key={loc}>{loc}</option>
+                          <option key={loc} value={loc}>{loc}</option>
                         ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                         <MapPin size={14} />
                       </div>
                     </div>
                   </div>
 
-                  {/* Accommodation Type Select */}
+                  {/* Type */}
                   <div className="space-y-3">
                     <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
                        <Bed size={14} /> Type
                     </label>
                     <div className="relative">
                       <select
-                        className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer"
+                        className="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer text-sm"
                         value={selectedType}
                         onChange={e => setSelectedType(e.target.value)}
                       >
                         <option value="All">All Types</option>
                         {accommodationTypes.map(type => (
-                          <option key={type}>{type}</option>
+                          <option key={type} value={type}>{type}</option>
                         ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
-                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                         <Filter size={14} />
                       </div>
                     </div>
                   </div>
@@ -262,7 +267,7 @@ const AccommodationsPage = () => {
                   <div className="space-y-4">
                     <div className="flex justify-between items-end">
                        <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
-                         <DollarSign size={14} /> Max Price/Night
+                         <DollarSign size={14} /> Max Price
                        </label>
                        <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
                          ${priceRange}
@@ -292,10 +297,18 @@ const AccommodationsPage = () => {
           {/* --- RESULTS GRID --- */}
           <main className="lg:col-span-9">
 
+            {/* Desktop Count */}
+            <div className="hidden lg:flex items-center justify-between mb-6">
+                 <h2 className="text-2xl font-black text-gray-900">Available Properties</h2>
+                 <span className="text-sm font-bold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                    {filteredAccommodations.length} results
+                 </span>
+            </div>
+
             {loading && (
               <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                <p className="font-bold text-gray-400">Finding the perfect accommodation for you...</p>
+                <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                <p className="font-bold text-gray-400 animate-pulse">Loading accommodations...</p>
               </div>
             )}
 
@@ -306,41 +319,40 @@ const AccommodationsPage = () => {
             )}
 
             {!loading && !error && filteredAccommodations.length === 0 && (
-               <div className="bg-gray-50 border border-gray-100 p-12 rounded-[2rem] text-center">
-                  <div className="bg-gray-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
-                     <Search size={32} />
+               <div className="bg-gray-50 border border-gray-100 p-12 rounded-[2rem] text-center flex flex-col items-center">
+                  <div className="bg-gray-200 w-20 h-20 rounded-full flex items-center justify-center mb-6 text-gray-400">
+                     <Frown size={32} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">No Accommodations Found</h3>
-                  <p className="text-gray-500">Try adjusting your search or filters to find what you're looking for.</p>
-                  <button onClick={clearFilters} className="mt-6 text-blue-600 font-bold hover:underline">Clear all filters</button>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">No Matches Found</h3>
+                  <p className="text-gray-500 max-w-md mx-auto mb-6">We couldn't find any properties matching your current filters. Try adjusting your search criteria.</p>
+                  <button onClick={clearFilters} className="px-6 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-all">
+                      Clear All Filters
+                  </button>
                </div>
             )}
 
             {!loading && !error && filteredAccommodations.length > 0 && (
-              <div className="space-y-6">
-                <p className="text-sm font-bold text-gray-400 uppercase tracking-widest pl-2">
-                  Showing {filteredAccommodations.length} Properties
-                </p>
-                
-                {/* Use grid for cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredAccommodations.map(acc => (
-                    <div key={acc._id || acc.id} className="transform transition-all duration-300 hover:-translate-y-2">
+                    <div key={acc._id} className="h-full">
                          <AccommodationsCard
-                          image={acc.images || acc.image || acc.photos || acc.photosList}
-                          name={acc.name || acc.title || acc.propertyName}
-                          location={acc.location || acc.city || acc.address}
-                          type={acc.type || acc.category || acc.propertyType}
-                          description={acc.description || acc.shortDescription || acc.details}
-                          pricePerNight={acc.pricePerNight || acc.price || acc.costPerNight}
-                          rating={acc.rating || acc.stars}
-                          amenities={acc.amenities || acc.facilities || acc.features}
-                          id={acc._id || acc.id}
+                          id={acc._id}
+                          // Pass array directly, let component handle logic
+                          image={acc.images} 
+                          name={acc.name}
+                          location={acc.location}
+                          type={acc.type}
+                          description={acc.description}
+                          // Handle price naming differences
+                          pricePerNight={acc.price || acc.pricePerNight} 
+                          // Pass boolean directly
+                          isAvailable={acc.isAvailable} 
+                          rating={acc.rating}
+                          amenities={acc.amenities}
                         />
                     </div>
                   ))}
                 </div>
-              </div>
             )}
           </main>
 
@@ -349,5 +361,7 @@ const AccommodationsPage = () => {
     </div>
   );
 };
+
+
 
 export default AccommodationsPage;
