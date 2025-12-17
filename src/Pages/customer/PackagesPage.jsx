@@ -90,7 +90,7 @@ const PackagesPage = () => {
         {/* Parallax Background Image */}
         <div className="absolute inset-0 w-full h-full">
            <img 
-             src="/gallery/Ella.png" 
+             src="packagehero.png" 
              alt="Sri Lanka Landscape" 
              className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
            />

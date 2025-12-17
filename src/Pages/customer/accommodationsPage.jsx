@@ -97,7 +97,7 @@ const AccommodationsPage = () => {
         {/* Parallax Background Image */}
         <div className="absolute inset-0 w-full h-full">
            <img 
-             src="/gallery/Colombo.png" 
+             src="accommodationshero.png" 
              alt="Sri Lanka Accommodations" 
              className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
            />
