@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Calendar, Users, ArrowRight, Compass } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Gallery from "../components/Gallery";
 
 // IMPORT YOUR CUSTOM LOADER HERE
@@ -102,6 +102,9 @@ export default function HomePage() {
   const [progress, setProgress] = useState(0);
   const [latestPackages, setLatestPackages] = useState([]);
   const [_pkgError, _setPkgError] = useState(null);
+
+  // Router Navigation
+  const navigate = useNavigate();
 
   // Ref for Captured Moments section
   const capturedMomentsRef = useRef(null);
@@ -413,7 +416,9 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {((latestPackages && latestPackages.length) ? latestPackages : packages).map((pkg, idx) => (
               <Reveal key={idx} delay={idx * 150}>
-                <div className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+                <div 
+                  onClick={() => pkg._id && navigate(`/package-overview/${pkg._id}`)}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer">
                   <div className="relative h-80 overflow-hidden">
                     {/* support both sample pkg.image and backend pkg.images array */}
                     <img src={pkg.image || (Array.isArray(pkg.images) && pkg.images[0]) || "/gallery/img1.jpg"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
