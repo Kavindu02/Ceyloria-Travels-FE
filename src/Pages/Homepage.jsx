@@ -103,6 +103,9 @@ export default function HomePage() {
   const [latestPackages, setLatestPackages] = useState([]);
   const [_pkgError, _setPkgError] = useState(null);
 
+  // Ref for Captured Moments section
+  const capturedMomentsRef = useRef(null);
+
   // 2. Effect to handle Loader Timing
   useEffect(() => {
     // Set a timeout to ensure the loader is visible for at least 3 seconds
@@ -117,6 +120,10 @@ export default function HomePage() {
   // Hero Logic
   const nextSlide = () => { setCurrent(current === heroSlides.length - 1 ? 0 : current + 1); setProgress(0); };
   const prevSlide = () => { setCurrent(current === 0 ? heroSlides.length - 1 : current - 1); setProgress(0); };
+
+  const scrollToCapturedMoments = () => {
+    capturedMomentsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -201,7 +208,7 @@ export default function HomePage() {
                 {heroSlides[current].subtitle}
               </p>
               
-              <button className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
+              <button onClick={scrollToCapturedMoments} className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
                 <span className="relative z-10 flex items-center gap-3">
                   Explore Destinations <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
@@ -302,7 +309,7 @@ export default function HomePage() {
       </section>
 
       {/* ---------------------- 3. GALLERY ---------------------- */}
-      <section className="py-20 bg-gray-50 border-t border-gray-200">
+      <section ref={capturedMomentsRef} className="py-20 bg-gray-50 border-t border-gray-200">
         <div className="px-6 md:px-12 lg:px-24">
           <Reveal>
               <h2 className={`${fontHead} text-4xl md:text-5xl text-center text-gray-900 mb-16`}>Captured Moments</h2>

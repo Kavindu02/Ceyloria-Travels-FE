@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 import Home from "./Pages/Homepage";
 import Navbar from "./components/Navbar";
@@ -20,6 +21,7 @@ import AccommodationOverviewPage from "./Pages/customer/accommodationsOverviewPa
 import About from "./Pages/about";
 import Loader from "./components/loader";
 import ScrollToTop from "./components/ScrollToTop";
+import SearchResults from "./Pages/SearchResults";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
+
+      {/* Toast Notifications */}
+      <Toaster />
 
       {/* Navbar only after loader */}
       {!loading && <Navbar />}
@@ -57,6 +62,7 @@ export default function App() {
         <Route path="/accommodations" element={<AccommodationsPage />} />
         <Route path="/accommodation-overview/:id" element={<AccommodationOverviewPage />} />
         <Route path="/about" element={<About />} />
+        <Route path="/search" element={<SearchResults />} />
       </Routes>
 
       {/* Footer only after loader */}

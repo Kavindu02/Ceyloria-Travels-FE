@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { 
   MapPin, 
   Mail, 
@@ -49,6 +50,7 @@ export default function Contact() {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,11 +60,96 @@ export default function Contact() {
   const submitForm = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      alert("Inquiry Sent! We will contact you shortly.");
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Success toast
+        toast.success("✅ Inquiry Sent Successfully!", {
+          duration: 4000,
+          position: "top-center",
+          style: {
+            background: "#10b981",
+            color: "#fff",
+            fontWeight: "600",
+            borderRadius: "0.75rem",
+            padding: "16px 24px",
+          },
+        });
+
+        setSubmitStatus({
+          type: "success",
+          message: "Inquiry Sent Successfully! We will contact you shortly.",
+        });
+        
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          country: "",
+          phone: "",
+          adults: "2",
+          kids: "0",
+          infants: "0",
+          arrivalDate: "",
+          departureDate: "",
+          message: "",
+        });
+      } else {
+        const errorData = await response.json();
+        const errorMessage = errorData.message || "Failed to send inquiry. Please try again.";
+        
+        // Error toast
+        toast.error(`❌ ${errorMessage}`, {
+          duration: 4000,
+          position: "top-center",
+          style: {
+            background: "#ef4444",
+            color: "#fff",
+            fontWeight: "600",
+            borderRadius: "0.75rem",
+            padding: "16px 24px",
+          },
+        });
+
+        setSubmitStatus({
+          type: "error",
+          message: errorMessage,
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      
+      // Connection error toast
+      toast.error("❌ Connection Error. Please try again.", {
+        duration: 4000,
+        position: "top-center",
+        style: {
+          background: "#ef4444",
+          color: "#fff",
+          fontWeight: "600",
+          borderRadius: "0.75rem",
+          padding: "16px 24px",
+        },
+      });
+
+      setSubmitStatus({
+        type: "error",
+        message: "Error sending inquiry. Please check your connection and try again.",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -215,6 +302,16 @@ export default function Contact() {
                   Fill in the details below and let our travel specialists design an exclusive itinerary tailored to your preferences.
                 </p>
               </div>
+
+              {submitStatus && (
+                <div className={`mb-6 p-4 rounded-xl border-2 ${
+                  submitStatus.type === 'success'
+                    ? 'bg-green-50 border-green-300 text-green-800'
+                    : 'bg-red-50 border-red-300 text-red-800'
+                }`}>
+                  <p className="font-semibold text-sm md:text-base">{submitStatus.message}</p>
+                </div>
+              )}
 
               <form className="space-y-8 relative z-10">
                 
