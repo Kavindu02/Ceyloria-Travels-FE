@@ -159,6 +159,14 @@ const PackagesPage = () => {
         {/* Background Decor */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[100px] -z-10 opacity-60" />
 
+        {/* Mobile Filter Overlay Backdrop */}
+        {showMobileFilters && (
+          <div 
+            className="fixed inset-0 bg-black/50 lg:hidden z-40 transition-opacity duration-300"
+            onClick={() => setShowMobileFilters(false)}
+          />
+        )}
+
         {/* Mobile Filter Toggle */}
         <div className="lg:hidden mb-8 flex justify-end">
           <button
@@ -173,16 +181,19 @@ const PackagesPage = () => {
 
           {/* --- FILTER SIDEBAR --- */}
           <aside
-            className={`lg:col-span-3 fixed lg:static inset-0 bg-white/95 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out
+            className={`lg:col-span-3 fixed lg:static inset-0 bg-white lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out overflow-y-auto
             ${showMobileFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
           >
-            <div className="h-full overflow-y-auto lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24">
+            <div className="h-full lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24 pt-20 lg:pt-0">
               
-              {/* Mobile Header */}
-              <div className="flex justify-between items-center lg:hidden mb-8">
-                <h3 className="font-black text-2xl text-gray-900">Filters</h3>
-                <button onClick={() => setShowMobileFilters(false)} className="p-2 bg-gray-100 rounded-full text-gray-600">
-                  <X size={24} />
+              {/* Mobile Close Button - Positioned below navbar */}
+              <div className="lg:hidden flex justify-end mb-6">
+                <button 
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition-colors bg-gray-50"
+                  aria-label="Close filters"
+                >
+                  <X size={28} />
                 </button>
               </div>
 

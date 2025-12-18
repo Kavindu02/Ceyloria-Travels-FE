@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import AccommodationsCard from '../../components/AccommodationsCard';
+// ✅ FIX: Correct path to reach the components folder
+import AccommodationCard from '../../components/AccommodationsCard'; 
 import {
   Search, 
   Filter, 
@@ -7,10 +8,7 @@ import {
   MapPin,
   SlidersHorizontal,
   DollarSign,
-  Star,
-  Wifi,
-  UtensilsCrossed,
-  Bed
+  Home
 } from 'lucide-react';
 
 const AccommodationsPage = () => {
@@ -20,11 +18,13 @@ const AccommodationsPage = () => {
   const [error, setError] = useState(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Filter States
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('All');
   const [selectedType, setSelectedType] = useState('All');
   const [priceRange, setPriceRange] = useState(5000);
 
+  // Derived Data States
   const [maxPriceLimit, setMaxPriceLimit] = useState(5000);
   const [availableLocations, setAvailableLocations] = useState([]);
   const [accommodationTypes, setAccommodationTypes] = useState([]);
@@ -32,7 +32,8 @@ const AccommodationsPage = () => {
   useEffect(() => {
     const fetchAccommodations = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/accommodations`);
+        // Ensure VITE_BACKEND_URL is set in your .env file
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'}/accommodations`);
         if (!res.ok) throw new Error('Failed to load accommodations');
         const data = await res.json();
 
@@ -45,15 +46,25 @@ const AccommodationsPage = () => {
         data.forEach(acc => {
           if (acc.location) locations.add(acc.location);
           if (acc.type) types.add(acc.type);
-          if (acc.pricePerNight > highestPrice) highestPrice = acc.pricePerNight;
+          
+          // Calculate lowest price for this accommodation from its packages
+          if (acc.packages && acc.packages.length > 0) {
+            const minPackagePrice = Math.min(...acc.packages.map(p => p.pricePerNight));
+            if (minPackagePrice > highestPrice) highestPrice = minPackagePrice;
+          }
         });
 
         setAvailableLocations([...locations]);
         setAccommodationTypes([...types]);
-        setMaxPriceLimit(highestPrice + 500);
-        setPriceRange(highestPrice + 500);
+        
+        // Set max slider to slightly above highest price found
+        const safeMax = highestPrice > 0 ? highestPrice + 500 : 1000;
+        setMaxPriceLimit(safeMax);
+        setPriceRange(safeMax);
+        
         setLoading(false);
       } catch (err) {
+        console.error(err);
         setError(err.message || 'Something went wrong');
         setLoading(false);
       }
@@ -63,19 +74,29 @@ const AccommodationsPage = () => {
 
   const filteredAccommodations = useMemo(() => {
     return accommodations.filter(acc => {
+      // 1. Search (Name or Description)
       const matchesSearch =
         acc.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         acc.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
+      // 2. Location
       const matchesLocation =
         selectedLocation === 'All' ||
         acc.location === selectedLocation;
 
+      // 3. Type (Hotel, Villa, etc.)
       const matchesType =
         selectedType === 'All' ||
         acc.type === selectedType;
 
-      const matchesPrice = acc.pricePerNight <= priceRange;
+      // 4. Price (Check if ANY package is within budget)
+      let matchesPrice = false;
+      if (acc.packages && acc.packages.length > 0) {
+        const lowestPrice = Math.min(...acc.packages.map(p => p.pricePerNight));
+        matchesPrice = lowestPrice <= priceRange;
+      } else {
+        matchesPrice = true; // Show items with no price/packages yet
+      }
 
       return matchesSearch && matchesLocation && matchesType && matchesPrice;
     });
@@ -97,8 +118,8 @@ const AccommodationsPage = () => {
         {/* Parallax Background Image */}
         <div className="absolute inset-0 w-full h-full">
            <img 
-             src="accommodationshero.png" 
-             alt="Sri Lanka Accommodations" 
+             src="https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop" 
+             alt="Luxury Stay" 
              className="w-full h-full object-cover scale-105 animate-subtle-zoom opacity-60"
            />
            {/* Complex Gradients */}
@@ -131,25 +152,25 @@ const AccommodationsPage = () => {
               </div>
               <input
                 className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 placeholder-gray-400"
-                placeholder="Search accommodations..."
+                placeholder="Resort name or keyword..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
               />
             </div>
 
-            {/* Location Input */}
+            {/* Location Input (Short Version for Bar) */}
             <div className="flex-1 w-full relative group">
               <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
                 <MapPin size={22} />
               </div>
               <select
-                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700"
+                className="w-full bg-white/50 border border-gray-200 rounded-2xl pl-14 pr-4 py-4 outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 cursor-pointer appearance-none"
                 value={selectedLocation}
                 onChange={e => setSelectedLocation(e.target.value)}
               >
                 <option value="All">All Locations</option>
                 {availableLocations.map(loc => (
-                  <option key={loc}>{loc}</option>
+                  <option key={loc} value={loc}>{loc}</option>
                 ))}
               </select>
             </div>
@@ -168,6 +189,14 @@ const AccommodationsPage = () => {
         {/* Background Decor */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[100px] -z-10 opacity-60" />
 
+        {/* Mobile Filter Overlay Backdrop */}
+        {showMobileFilters && (
+          <div 
+            className="fixed inset-0 bg-black/50 lg:hidden z-40 transition-opacity duration-300"
+            onClick={() => setShowMobileFilters(false)}
+          />
+        )}
+
         {/* Mobile Filter Toggle */}
         <div className="lg:hidden mb-8 flex justify-end">
           <button
@@ -182,16 +211,19 @@ const AccommodationsPage = () => {
 
           {/* --- FILTER SIDEBAR --- */}
           <aside
-            className={`lg:col-span-3 fixed lg:static inset-0 bg-white/95 lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out
+            className={`lg:col-span-3 fixed lg:static inset-0 bg-white lg:bg-transparent backdrop-blur-xl lg:backdrop-blur-none z-50 lg:z-auto transition-transform duration-300 ease-in-out overflow-y-auto
             ${showMobileFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
           >
-            <div className="h-full overflow-y-auto lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24">
+            <div className="h-full lg:overflow-visible p-6 lg:p-0 lg:sticky lg:top-24 pt-20 lg:pt-0">
               
-              {/* Mobile Header */}
-              <div className="flex justify-between items-center lg:hidden mb-8">
-                <h3 className="font-black text-2xl text-gray-900">Filters</h3>
-                <button onClick={() => setShowMobileFilters(false)} className="p-2 bg-gray-100 rounded-full text-gray-600">
-                  <X size={24} />
+              {/* Mobile Close Button - Positioned below navbar */}
+              <div className="lg:hidden flex justify-end mb-6">
+                <button 
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full text-gray-600 transition-colors bg-gray-50"
+                  aria-label="Close filters"
+                >
+                  <X size={28} />
                 </button>
               </div>
 
@@ -227,7 +259,7 @@ const AccommodationsPage = () => {
                       >
                         <option value="All">All Locations</option>
                         {availableLocations.map(loc => (
-                          <option key={loc}>{loc}</option>
+                          <option key={loc} value={loc}>{loc}</option>
                         ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -239,7 +271,7 @@ const AccommodationsPage = () => {
                   {/* Accommodation Type Select */}
                   <div className="space-y-3">
                     <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
-                       <Bed size={14} /> Type
+                       <Home size={14} /> Property Type
                     </label>
                     <div className="relative">
                       <select
@@ -249,7 +281,7 @@ const AccommodationsPage = () => {
                       >
                         <option value="All">All Types</option>
                         {accommodationTypes.map(type => (
-                          <option key={type}>{type}</option>
+                          <option key={type} value={type}>{type}</option>
                         ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
@@ -261,12 +293,12 @@ const AccommodationsPage = () => {
                   {/* Price Range */}
                   <div className="space-y-4">
                     <div className="flex justify-between items-end">
-                       <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
-                         <DollarSign size={14} /> Max Price/Night
-                       </label>
-                       <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
-                         ${priceRange}
-                       </span>
+                        <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
+                          <DollarSign size={14} /> Max Price/Night
+                        </label>
+                        <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+                          ${priceRange}
+                        </span>
                     </div>
 
                     <input
@@ -325,18 +357,8 @@ const AccommodationsPage = () => {
                 {/* Use grid for cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {filteredAccommodations.map(acc => (
-                    <div key={acc._id || acc.id} className="transform transition-all duration-300 hover:-translate-y-2">
-                         <AccommodationsCard
-                          image={acc.images || acc.image || acc.photos || acc.photosList}
-                          name={acc.name || acc.title || acc.propertyName}
-                          location={acc.location || acc.city || acc.address}
-                          type={acc.type || acc.category || acc.propertyType}
-                          description={acc.description || acc.shortDescription || acc.details}
-                          pricePerNight={acc.pricePerNight || acc.price || acc.costPerNight}
-                          rating={acc.rating || acc.stars}
-                          amenities={acc.amenities || acc.facilities || acc.features}
-                          id={acc._id || acc.id}
-                        />
+                    <div key={acc._id} className="transform transition-all duration-300 hover:-translate-y-2">
+                         <AccommodationCard accommodation={acc} />
                     </div>
                   ))}
                 </div>

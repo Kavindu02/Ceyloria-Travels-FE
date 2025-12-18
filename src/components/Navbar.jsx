@@ -1,247 +1,277 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Search, ArrowRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, X, Search, ArrowRight, MapPin, Package } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchRef = useRef(null);
 
-  const handleSearch = async (e) => {
+  // Handle Scroll Effect
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setMenuOpen(false);
+    setShowResults(false);
+  }, [location]);
+
+  // Handle Click Outside to close search
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Debounced Search Logic
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.trim().length > 0) {
+        setIsSearching(true);
+        try {
+          const [packagesRes, accommodationsRes] = await Promise.all([
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`),
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/accommodations`)
+          ]);
+
+          const packagesData = await packagesRes.json();
+          const accommodationsData = await accommodationsRes.json();
+
+          const filteredPackages = Array.isArray(packagesData)
+            ? packagesData.filter(pkg =>
+                pkg.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                pkg.description?.toLowerCase().includes(searchQuery.toLowerCase())
+              ).slice(0, 3)
+            : [];
+
+          const filteredAccommodations = Array.isArray(accommodationsData)
+            ? accommodationsData.filter(acc =>
+                acc.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                acc.description?.toLowerCase().includes(searchQuery.toLowerCase())
+              ).slice(0, 3)
+            : [];
+
+          setSearchResults([
+            ...filteredPackages.map(item => ({ ...item, type: 'package' })),
+            ...filteredAccommodations.map(item => ({ ...item, type: 'accommodation' }))
+          ]);
+          setShowResults(true);
+        } catch (error) {
+          console.error("Search error:", error);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowResults(false);
+      }
+    }, 300); // Wait 300ms after user stops typing
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  const handleSearchSubmit = (e) => {
     if (e.key === "Enter" && searchQuery.trim()) {
       navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-      setMenuOpen(false);
-      setShowResults(false);
-    }
-  };
-
-  const handleSearchInput = async (value) => {
-    setSearchQuery(value);
-    
-    if (value.trim().length > 0) {
-      try {
-        // Search packages
-        const packagesRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`);
-        const packagesData = await packagesRes.json();
-        
-        // Search accommodations
-        const accommodationsRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/accommodations`);
-        const accommodationsData = await accommodationsRes.json();
-        
-        // Filter results
-        const filteredPackages = Array.isArray(packagesData) 
-          ? packagesData.filter(pkg => 
-              pkg.title?.toLowerCase().includes(value.toLowerCase()) ||
-              pkg.description?.toLowerCase().includes(value.toLowerCase())
-            ).slice(0, 3)
-          : [];
-        
-        const filteredAccommodations = Array.isArray(accommodationsData)
-          ? accommodationsData.filter(acc =>
-              acc.name?.toLowerCase().includes(value.toLowerCase()) ||
-              acc.description?.toLowerCase().includes(value.toLowerCase())
-            ).slice(0, 3)
-          : [];
-        
-        const results = [
-          ...filteredPackages.map(item => ({ ...item, type: 'package' })),
-          ...filteredAccommodations.map(item => ({ ...item, type: 'accommodation' }))
-        ];
-        
-        setSearchResults(results);
-        setShowResults(true);
-      } catch (error) {
-        console.error('Search error:', error);
-      }
-    } else {
-      setSearchResults([]);
       setShowResults(false);
     }
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50">
-      <header className="flex items-center justify-between px-6 md:px-16 h-20 backdrop-blur-md bg-black/60 transition-all duration-300">
-
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled || menuOpen
+          ? "bg-black/80 backdrop-blur-lg border-b border-white/10 shadow-lg"
+          : "bg-transparent py-4"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
+        
         {/* Logo */}
-        <div className="flex-shrink-0">
-          <Link to="/">
-            <img src="/logo.jpg" alt="Logo" className="h-12 w-auto" />
+        <Link to="/" className="relative z-50 flex items-center gap-2 group">
+          <div className="relative overflow-hidden rounded-lg">
+             {/* Replace with your logo image */}
+             <img src="/logo.jpg" alt="Logo" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
+          </div>
+          <span className="text-white font-bold text-xl tracking-tight hidden lg:block">
+            SDK<span className="text-blue-500">Travel</span>
+          </span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex items-center gap-8 text-white/90 font-medium text-sm lg:text-base">
+          {['Home', 'Packages', 'Accommodations', 'About'].map((item) => (
+            <li key={item}>
+              <Link
+                to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                className="relative hover:text-white transition-colors py-2 group"
+              >
+                {item}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        {/* Right Section: Search & CTA */}
+        <div className="hidden md:flex items-center gap-6">
+          {/* Search Bar */}
+          <div className="relative" ref={searchRef}>
+            <div className={`flex items-center transition-all duration-300 ${
+              showResults || searchQuery ? "w-64 bg-white/10" : "w-48 bg-white/5 hover:bg-white/10"
+            } rounded-full border border-white/10 focus-within:border-blue-500 focus-within:bg-black/40`}>
+              <Search className="ml-3 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchSubmit}
+                onFocus={() => searchQuery.trim() && setShowResults(true)}
+                className="w-full bg-transparent border-none text-white text-sm px-3 py-2 focus:ring-0 focus:outline-none placeholder-gray-400"
+              />
+              {isSearching && (
+                 <div className="mr-3 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              )}
+            </div>
+
+            {/* Desktop Search Results Dropdown */}
+            <AnimatePresence>
+              {showResults && searchResults.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full right-0 mt-3 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-white/20"
+                >
+                  <div className="max-h-[60vh] overflow-y-auto">
+                    {searchResults.map((result, idx) => (
+                      <Link
+                        key={idx}
+                        to={result.type === 'package' ? '/packages' : '/accommodations'}
+                        className="flex items-start gap-3 p-3 hover:bg-blue-50 transition border-b border-gray-100 last:border-0"
+                      >
+                        <div className={`p-2 rounded-lg ${result.type === 'package' ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-blue-600'}`}>
+                          {result.type === 'package' ? <Package size={16} /> : <MapPin size={16} />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-sm font-semibold text-gray-900 truncate">{result.title || result.name}</h4>
+                          <p className="text-xs text-gray-500 truncate">{result.type === 'package' ? 'Travel Package' : 'Accommodation'}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => navigate(`/search?query=${encodeURIComponent(searchQuery)}`)}
+                    className="w-full py-3 bg-gray-50 text-blue-600 text-xs font-bold uppercase tracking-wide hover:bg-gray-100 transition"
+                  >
+                    View All Results
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Link
+            to="/contact"
+            className="px-5 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-blue-500 hover:text-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-blue-500/50"
+          >
+            Contact Us
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
-        {/* Changed gap-6 to gap-10 for better spacing */}
-        <ul className="hidden md:flex items-center gap-10 text-white font-medium text-base">
-          <li><Link to="/" className="hover:text-blue-400 transition">Home</Link></li>
-          <li><Link to="/packages" className="hover:text-blue-400 transition">Packages</Link></li>
-          <li><Link to="/accommodations" className="hover:text-blue-400 transition">Accommodations</Link></li>
-          
-          {/* Moved About here so Contact is last */}
-          <li><Link to="/about" className="hover:text-blue-400 transition">About</Link></li>
-
-          {/* Contact Us - Highlighted as a White Button */}
-          <li>
-            <Link 
-              to="/contact" 
-              className="bg-white text-black px-6 py-2.5 rounded-full font-bold hover:bg-gray-200 hover:scale-105 transition-all duration-300 shadow-lg"
-            >
-              Contact Us
-            </Link>
-          </li>
-        </ul>
-
-        {/* Desktop Search */}
-        <div className="relative hidden md:block">
-          <input
-            type="text"
-            placeholder="Search packages, accommodations..."
-            value={searchQuery}
-            onChange={(e) => handleSearchInput(e.target.value)}
-            onKeyDown={handleSearch}
-            onFocus={() => searchQuery.trim().length > 0 && setShowResults(true)}
-            onBlur={() => setTimeout(() => setShowResults(false), 200)}
-            className="w-44 lg:w-56 px-10 py-2 rounded-full border border-white bg-transparent text-white placeholder-white/60 focus:w-64 focus:outline-none focus:border-blue-500 transition-all duration-300"
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white cursor-pointer" size={20} />
-          
-          {/* Search Results Dropdown */}
-          {showResults && searchResults.length > 0 && (
-            <div className="absolute top-full mt-2 w-96 bg-white rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
-              {searchResults.map((result, idx) => (
-                <Link
-                  key={idx}
-                  to={result.type === 'package' ? '/packages' : '/accommodations'}
-                  onClick={() => {
-                    setShowResults(false);
-                    setSearchQuery("");
-                  }}
-                  className="block p-3 hover:bg-gray-100 border-b border-gray-200 last:border-b-0 transition"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h4 className="text-gray-900 font-semibold text-sm">
-                        {result.title || result.name}
-                      </h4>
-                      <p className="text-gray-600 text-xs mt-1 line-clamp-2">
-                        {result.description || result.desc}
-                      </p>
-                      <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium">
-                        {result.type === 'package' ? '📦 Package' : '🏨 Accommodation'}
-                      </span>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
-                  </div>
-                </Link>
-              ))}
-              {searchResults.length > 0 && (
-                <button
-                  onClick={() => {
-                    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-                    setShowResults(false);
-                  }}
-                  className="w-full p-3 text-blue-600 font-semibold text-sm hover:bg-blue-50 transition"
-                >
-                  View All Results
-                </button>
-              )}
-            </div>
-          )}
-          {showResults && searchResults.length === 0 && searchQuery.trim() && (
-            <div className="absolute top-full mt-2 w-96 bg-white rounded-lg shadow-xl z-50 p-4">
-              <p className="text-gray-500 text-sm">No results found. Press Enter to search.</p>
-            </div>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
+        {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white"
+          className="md:hidden z-50 relative p-2 text-white"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
-      </header>
+      </div>
 
-      {/* Mobile Menu Dropdown */}
-      <div
-        className={`md:hidden bg-black/90 backdrop-blur-lg text-white overflow-hidden transition-all duration-300 ${
-          menuOpen ? "max-h-96 py-4" : "max-h-0 py-0"
-        }`}
-      >
-        <ul className="flex flex-col items-center gap-5 text-lg font-medium">
-          <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-          <li><Link to="/packages" onClick={() => setMenuOpen(false)}>Packages</Link></li>
-          <li><Link to="/accommodations" onClick={() => setMenuOpen(false)}>Accommodations</Link></li>
-          <li><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></li>
-          {/* Highlighted Contact Button for Mobile as well */}
-          <li>
-            <Link 
-              to="/contact" 
-              onClick={() => setMenuOpen(false)}
-              className="bg-white text-black px-6 py-2 rounded-full font-bold"
-            >
-              Contact Us
-            </Link>
-          </li>
-        </ul>
-
-        {/* Mobile Search Bar */}
-        <div className="mt-6 px-6 relative">
-          <input
-            type="text"
-            placeholder="Search packages, accommodations..."
-            value={searchQuery}
-            onChange={(e) => handleSearchInput(e.target.value)}
-            onKeyDown={handleSearch}
-            onFocus={() => searchQuery.trim().length > 0 && setShowResults(true)}
-            onBlur={() => setTimeout(() => setShowResults(false), 200)}
-            className="w-full px-10 py-2 rounded-full border border-white bg-transparent text-white placeholder-white/60 focus:outline-none focus:border-blue-500 transition-all"
-          />
-          <Search className="absolute left-10 top-1/2 -translate-y-1/2 text-white cursor-pointer" size={20} />
-          
-          {/* Mobile Search Results */}
-          {showResults && searchResults.length > 0 && (
-            <div className="absolute top-full mt-2 left-6 right-6 bg-white rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
-              {searchResults.map((result, idx) => (
-                <Link
-                  key={idx}
-                  to={result.type === 'package' ? '/packages' : '/accommodations'}
-                  onClick={() => {
-                    setShowResults(false);
-                    setSearchQuery("");
-                    setMenuOpen(false);
-                  }}
-                  className="block p-3 hover:bg-gray-100 border-b border-gray-200 last:border-b-0 transition"
-                >
-                  <h4 className="text-gray-900 font-semibold text-sm">
-                    {result.title || result.name}
-                  </h4>
-                  <p className="text-gray-600 text-xs mt-1 line-clamp-2">
-                    {result.description || result.desc}
-                  </p>
-                  <span className="inline-block mt-2 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium">
-                    {result.type === 'package' ? '📦 Package' : '🏨 Accommodation'}
-                  </span>
-                </Link>
-              ))}
-              {searchResults.length > 0 && (
-                <button
-                  onClick={() => {
-                    navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
-                    setShowResults(false);
-                    setMenuOpen(false);
-                  }}
-                  className="w-full p-3 text-blue-600 font-semibold text-sm hover:bg-blue-50 transition"
-                >
-                  View All Results
-                </button>
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "100vh" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="fixed inset-0 top-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col pt-24 px-6 md:hidden overflow-y-auto"
+          >
+            {/* Mobile Search */}
+            <div className="mb-8 relative">
+              <input
+                type="text"
+                placeholder="Search packages..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white/10 border border-white/20 text-white rounded-xl px-12 py-4 text-lg focus:outline-none focus:border-blue-500"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              
+              {/* Mobile Results */}
+              {showResults && searchResults.length > 0 && (
+                <div className="mt-4 bg-white rounded-xl overflow-hidden">
+                  {searchResults.slice(0, 3).map((result, idx) => (
+                    <Link
+                      key={idx}
+                      to={result.type === 'package' ? '/packages' : '/accommodations'}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-center gap-3 p-4 border-b border-gray-100 last:border-0 text-black"
+                    >
+                       <span className="text-lg">
+                         {result.type === 'package' ? '📦' : '🏨'}
+                       </span>
+                       <div className="flex-1">
+                          <div className="font-semibold">{result.title || result.name}</div>
+                          <div className="text-xs text-gray-500 uppercase">{result.type}</div>
+                       </div>
+                    </Link>
+                  ))}
+                </div>
               )}
             </div>
-          )}
-        </div>
-      </div>
+
+            {/* Mobile Links */}
+            <nav className="flex flex-col gap-6">
+              {['Home', 'Packages', 'Accommodations', 'About', 'Contact'].map((item, idx) => (
+                <motion.div
+                  key={item}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                >
+                  <Link
+                    to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                    onClick={() => setMenuOpen(false)}
+                    className={`text-3xl font-bold ${
+                      item === 'Contact' ? 'text-blue-500' : 'text-white'
+                    }`}
+                  >
+                    {item}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
-  );}
+  );
+}

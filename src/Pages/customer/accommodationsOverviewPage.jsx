@@ -6,25 +6,25 @@ import {
   Heart,
   Share2,
   Check,
-  ChevronLeft,
   ChevronRight,
-  AlertCircle,
-  Wifi,
-  UtensilsCrossed,
-  Bed,
-  Users,
-  DollarSign,
+  ShieldCheck,
+  Home,
   Calendar,
-  Waves,
-  Mountain,
-  Camera,
+  Info,
+  ArrowRight,
+  Users,
+  Bed,
+  Wifi,
+  Wind,
   Coffee,
-  Wind
+  Minus,
+  Plus
 } from 'lucide-react';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const BUCKET_NAME = "images";
 
+// --- Helper for images ---
 const getImageUrl = (imagePath) => {
   if (!imagePath) return null;
   let targetImage = Array.isArray(imagePath) ? imagePath.find(Boolean) : imagePath;
@@ -44,11 +44,14 @@ const getImageUrl = (imagePath) => {
 const AccommodationOverviewPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  
+  // State
   const [accommodation, setAccommodation] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  // Booking Calculation State
   const [selectedDays, setSelectedDays] = useState(1);
   const [selectedRooms, setSelectedRooms] = useState(1);
 
@@ -61,385 +64,293 @@ const AccommodationOverviewPage = () => {
         setAccommodation(data);
         setLoading(false);
       } catch (err) {
-        setError(err.message || 'Something went wrong');
+        console.error(err);
         setLoading(false);
       }
     };
     if (id) fetchAccommodation();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-32 text-center">
-        <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-        <p className="font-bold text-gray-400">Loading accommodation details...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  );
 
-  if (error || !accommodation) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="bg-red-50 border border-red-100 text-red-600 p-12 rounded-[2rem] text-center font-bold shadow-sm max-w-md w-full">
-          <AlertCircle className="mx-auto mb-4" size={48} />
-          <p className="mb-6">{error || 'Accommodation not found'}</p>
-          <button 
-            onClick={() => navigate('/accommodations')}
-            className="text-blue-600 hover:underline"
-          >
-            Back to Accommodations
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (!accommodation) return <div className="p-8 text-center">Accommodation not found</div>;
 
-  const images = Array.isArray(accommodation.images) ? accommodation.images : [accommodation.images];
-  const currentImage = getImageUrl(images[currentImageIndex]);
+  // Image Logic
+  const images = Array.isArray(accommodation.images) ? accommodation.images : [accommodation.images].filter(Boolean);
+  const mainImage = getImageUrl(images[selectedImageIndex]);
 
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const totalPrice = accommodation.pricePerNight * selectedDays * selectedRooms;
+  // Price Calculation
+  const pricePerNight = accommodation.pricePerNight || 0;
+  const totalPrice = pricePerNight * selectedDays * selectedRooms;
 
   return (
-    <div className="font-sans text-gray-800 bg-white selection:bg-blue-600 selection:text-white overflow-x-hidden">
+    <div className="bg-white min-h-screen font-sans text-gray-800 pb-16">
       
-      {/* --- BACK BUTTON --- */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
-        <div className="container mx-auto px-4 py-4">
-          <button 
-            onClick={() => navigate('/accommodations')}
-            className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors group"
-          >
-            <ChevronLeft className="group-hover:-translate-x-1 transition-transform" size={20} />
-            Back to Accommodations
-          </button>
+      {/* --- BREADCRUMBS --- */}
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500 flex items-center gap-2">
+          <span className="cursor-pointer hover:text-blue-600" onClick={() => navigate('/')}>Home</span>
+          <ChevronRight size={14} />
+          <span className="cursor-pointer hover:text-blue-600" onClick={() => navigate('/accommodations')}>Accommodations</span>
+          <ChevronRight size={14} />
+          <span className="text-gray-900 font-medium truncate">{accommodation.name}</span>
         </div>
       </div>
 
-      {/* --- HERO IMAGE SECTION --- */}
-      <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-gray-900 rounded-b-[2.5rem] md:rounded-b-[4rem]">
-        
-        {/* Image Gallery */}
-        <div className="relative w-full h-full">
-          {currentImage ? (
-            <img 
-              src={currentImage} 
-              alt={accommodation.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-400">Image unavailable</span>
-            </div>
-          )}
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
-        </div>
-
-        {/* Image Navigation */}
-        {images.length > 1 && (
-          <div className="absolute bottom-8 left-0 right-0 z-30 flex items-center justify-center gap-4">
-            <button 
-              onClick={handlePrevImage}
-              className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-all border border-white/30"
-            >
-              <ChevronLeft size={24} />
-            </button>
-            
-            <div className="flex gap-2">
-              {images.map((_, idx) => (
-                <div 
-                  key={idx}
-                  onClick={() => setCurrentImageIndex(idx)}
-                  className={`h-2 rounded-full cursor-pointer transition-all ${
-                    idx === currentImageIndex 
-                      ? 'w-8 bg-cyan-400' 
-                      : 'w-2 bg-white/50 hover:bg-white/70'
-                  }`}
+          {/* --- LEFT COLUMN: IMAGE GALLERY --- */}
+          <div className="lg:col-span-7 space-y-4">
+            {/* Main Image */}
+            <div className="aspect-[4/3] w-full bg-gray-100 rounded-2xl overflow-hidden border border-gray-100 relative group">
+              {mainImage ? (
+                <img 
+                  src={mainImage} 
+                  alt={accommodation.name} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-              ))}
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
+              )}
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-gray-800 shadow-sm">
+                Top Rated
+              </div>
             </div>
 
-            <button 
-              onClick={handleNextImage}
-              className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-all border border-white/30"
-            >
-              <ChevronRight size={24} />
-            </button>
+            {/* Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                {images.map((img, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === idx ? 'border-blue-600 ring-2 ring-blue-100' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                  >
+                    <img src={getImageUrl(img)} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
 
-        {/* Top Action Buttons */}
-        <div className="absolute top-8 right-8 z-30 flex gap-3">
-          <button 
-            onClick={() => setIsFavorite(!isFavorite)}
-            className={`p-3 rounded-full backdrop-blur-md transition-all ${
-              isFavorite 
-                ? 'bg-red-500 text-white' 
-                : 'bg-white/20 text-white hover:bg-white/40'
-            } border border-white/30`}
-          >
-            <Heart size={20} fill={isFavorite ? 'currentColor' : 'none'} />
-          </button>
-          <button className="p-3 rounded-full bg-white/20 backdrop-blur-md text-white hover:bg-white/40 transition-all border border-white/30">
-            <Share2 size={20} />
-          </button>
-        </div>
-
-        {/* Floating Info Cards */}
-        <div className="absolute bottom-8 left-8 z-20 flex flex-col gap-4">
-          <div className="bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-white/50">
-            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Type</span>
-            <span className="text-2xl font-black text-gray-900">{accommodation.type}</span>
-          </div>
-          <div className="bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-white/50">
-            <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block mb-1">Price Per Night</span>
-            <span className="text-2xl font-black text-blue-600">${accommodation.pricePerNight}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* --- MAIN CONTENT --- */}
-      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 bg-white">
-        <div className="max-w-7xl mx-auto">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-            
-            {/* --- LEFT COLUMN: DETAILS --- */}
-            <div className="lg:col-span-2 space-y-12">
+          {/* --- RIGHT COLUMN: PRODUCT DETAILS (BUY BOX) --- */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-8">
               
-              {/* Title & Location */}
-              <div className="space-y-4">
-                <div className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-bold uppercase tracking-widest">
-                  {accommodation.type}
+              {/* Header Info */}
+              <div className="mb-6 border-b border-gray-100 pb-6">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+                    <MapPin size={16} />
+                    {accommodation.location || "Sri Lanka"}
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-red-500 transition-colors">
+                      <Heart size={20} />
+                    </button>
+                    <button className="p-2 rounded-full hover:bg-gray-100 text-gray-400 hover:text-blue-600 transition-colors">
+                      <Share2 size={20} />
+                    </button>
+                  </div>
                 </div>
-                <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight">
+
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 leading-tight">
                   {accommodation.name}
                 </h1>
-                <div className="flex flex-wrap items-center gap-4 text-lg">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <MapPin className="text-blue-600" size={20} />
-                    {accommodation.location}
+
+                <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-1 text-yellow-500 font-bold">
+                    <Star size={16} fill="currentColor" />
+                    <span>{accommodation.rating || "4.8"}</span>
                   </div>
-                  {accommodation.rating && (
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Star className="text-yellow-400" size={20} fill="currentColor" />
-                      <span className="font-bold">{accommodation.rating}</span> (87 reviews)
+                  <span className="text-gray-300">|</span>
+                  <span className="text-gray-500">Very Popular</span>
+                </div>
+              </div>
+
+              {/* Price & Actions */}
+              <div className="space-y-6">
+                
+                {/* Price Display */}
+                <div>
+                   <p className="text-gray-500 text-sm mb-1">Price per night</p>
+                   <div className="flex items-baseline gap-2">
+                     <span className="text-4xl font-black text-gray-900">
+                       ${pricePerNight.toLocaleString()}
+                     </span>
+                     <span className="text-sm text-green-600 font-medium bg-green-50 px-2 py-1 rounded">
+                       Available
+                     </span>
+                   </div>
+                </div>
+
+                {/* Quick Specs Grid */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50 p-3 rounded-lg flex items-center gap-3">
+                    <Home className="text-blue-600" size={20} />
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase">Type</p>
+                      <p className="font-semibold text-gray-900 capitalize">{accommodation.type}</p>
                     </div>
+                  </div>
+                  <div className="bg-gray-50 p-3 rounded-lg flex items-center gap-3">
+                    <Users className="text-blue-600" size={20} />
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase">Max Guests</p>
+                      <p className="font-semibold text-gray-900">{accommodation.maxGuests || 2}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Selection Controls (Days & Rooms) */}
+                <div className="grid grid-cols-2 gap-3">
+                    {/* Days Selector */}
+                    <div className="bg-white border border-gray-200 p-3 rounded-xl flex flex-col gap-1">
+                        <label className="text-xs font-bold text-gray-400 uppercase">Nights</label>
+                        <div className="flex items-center justify-between">
+                            <button onClick={() => setSelectedDays(Math.max(1, selectedDays - 1))} className="p-1 hover:bg-gray-100 rounded">
+                                <Minus size={16} />
+                            </button>
+                            <span className="font-bold text-lg">{selectedDays}</span>
+                            <button onClick={() => setSelectedDays(selectedDays + 1)} className="p-1 hover:bg-gray-100 rounded">
+                                <Plus size={16} />
+                            </button>
+                        </div>
+                    </div>
+                    {/* Rooms Selector */}
+                    <div className="bg-white border border-gray-200 p-3 rounded-xl flex flex-col gap-1">
+                        <label className="text-xs font-bold text-gray-400 uppercase">Rooms</label>
+                        <div className="flex items-center justify-between">
+                            <button onClick={() => setSelectedRooms(Math.max(1, selectedRooms - 1))} className="p-1 hover:bg-gray-100 rounded">
+                                <Minus size={16} />
+                            </button>
+                            <span className="font-bold text-lg">{selectedRooms}</span>
+                            <button onClick={() => setSelectedRooms(selectedRooms + 1)} className="p-1 hover:bg-gray-100 rounded">
+                                <Plus size={16} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Total Price Calculation */}
+                <div className="flex justify-between items-center py-2 px-1">
+                    <span className="font-medium text-gray-500">Total ({selectedDays} nights, {selectedRooms} rooms)</span>
+                    <span className="text-xl font-bold text-blue-600">${totalPrice.toLocaleString()}</span>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col gap-3">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    Book Now <ArrowRight size={20}/>
+                  </button>
+                  <button className="w-full bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-xl transition-colors">
+                    Contact Host
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                  <ShieldCheck size={14} className="text-green-600" />
+                  <span>Secure booking confirmation</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        {/* --- BOTTOM SECTION: TABS --- */}
+        <div className="mt-16 md:mt-24 border-t border-gray-100 pt-8">
+          
+          {/* Tabs Header */}
+          <div className="flex border-b border-gray-200 mb-8 overflow-x-auto">
+            {['Overview', 'Amenities', 'Details', 'Reviews'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab.toLowerCase())}
+                className={`px-6 py-4 font-bold text-sm uppercase tracking-wide border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === tab.toLowerCase()
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-800'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="max-w-4xl">
+            
+            {activeTab === 'overview' && (
+              <div className="space-y-6 animate-fadeIn">
+                <h3 className="text-2xl font-bold text-gray-900">About this Property</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  {accommodation.description || "Experience comfort and luxury at its finest."}
+                </p>
+                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                  <h4 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                    <Info size={18} /> Highlight Features
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-blue-900/80">
+                    <div className="flex items-center gap-2"><Wifi size={16}/> High-Speed Wifi</div>
+                    <div className="flex items-center gap-2"><Wind size={16}/> Air Conditioning</div>
+                    <div className="flex items-center gap-2"><Coffee size={16}/> Breakfast Included</div>
+                    <div className="flex items-center gap-2"><ShieldCheck size={16}/> 24/7 Security</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'amenities' && (
+              <div className="animate-fadeIn">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Property Amenities</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {accommodation.amenities?.length > 0 ? (
+                      accommodation.amenities.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                          <Check className="text-green-500 shrink-0" size={20} />
+                          <span className="text-gray-700 font-medium">{item}</span>
+                        </div>
+                      ))
+                  ) : (
+                      <p className="text-gray-500">No specific amenities listed.</p>
                   )}
                 </div>
               </div>
+            )}
 
-              {/* Description */}
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-gray-900">About This Property</h2>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  {accommodation.description}
-                </p>
+            {activeTab === 'details' && (
+              <div className="animate-fadeIn space-y-8">
+                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Room Information</h3>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-gray-50 p-6 rounded-xl">
+                        <p className="text-sm text-gray-500 uppercase font-bold mb-1">Room Type</p>
+                        <p className="text-xl font-bold text-gray-900">{accommodation.roomType || "Standard Deluxe"}</p>
+                    </div>
+                    <div className="bg-gray-50 p-6 rounded-xl">
+                        <p className="text-sm text-gray-500 uppercase font-bold mb-1">Rooms Available</p>
+                        <p className="text-xl font-bold text-gray-900">{accommodation.roomsAvailable || 5}</p>
+                    </div>
+                 </div>
               </div>
-
-              {/* Amenities */}
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-gray-900">Amenities</h2>
-                {accommodation.amenities && accommodation.amenities.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {accommodation.amenities.map((amenity, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <Check className="text-blue-600 flex-shrink-0" size={20} />
-                        <span className="text-gray-700 font-medium">{amenity}</span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">Free WiFi</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">Air Conditioning</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">24/7 Room Service</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">Swimming Pool</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">Restaurant & Bar</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="text-blue-600 flex-shrink-0" size={20} />
-                      <span className="text-gray-700 font-medium">Parking Available</span>
-                    </div>
-                  </div>
-                )}
+            )}
+            
+            {activeTab === 'reviews' && (
+              <div className="animate-fadeIn text-center py-12 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
+                <Star size={48} className="mx-auto text-gray-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900">No reviews yet</h3>
+                <p className="text-gray-500">Be the first to stay and review this property!</p>
               </div>
-
-              {/* Room Details */}
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-gray-900">Room Details</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 bg-gradient-to-r from-blue-50 to-cyan-50 p-8 rounded-2xl border border-blue-100">
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Rooms Available</p>
-                    <p className="text-3xl font-black text-gray-900">{accommodation.roomsAvailable || 12}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Max Guests</p>
-                    <p className="text-3xl font-black text-gray-900">{accommodation.maxGuests || 4}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-2">Room Type</p>
-                    <p className="text-xl font-bold text-gray-900">{accommodation.roomType || 'Deluxe'}</p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* --- RIGHT COLUMN: BOOKING CARD --- */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-24 bg-white rounded-[2rem] shadow-2xl border border-gray-100 p-8 space-y-6">
-                
-                {/* Price Summary */}
-                <div className="space-y-4 pb-6 border-b border-gray-100">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Price per night</span>
-                    <span className="text-2xl font-black text-gray-900">${accommodation.pricePerNight}</span>
-                  </div>
-                </div>
-
-                {/* Days Selection */}
-                <div className="space-y-4">
-                  <label className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                    <Calendar size={16} /> Number of Days
-                  </label>
-                  <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl">
-                    <button 
-                      onClick={() => setSelectedDays(Math.max(1, selectedDays - 1))}
-                      className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 font-bold text-gray-900"
-                    >
-                      −
-                    </button>
-                    <span className="flex-1 text-center font-black text-2xl text-gray-900">
-                      {selectedDays}
-                    </span>
-                    <button 
-                      onClick={() => setSelectedDays(selectedDays + 1)}
-                      className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 font-bold text-gray-900"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                {/* Rooms Selection */}
-                <div className="space-y-4">
-                  <label className="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                    <Bed size={16} /> Number of Rooms
-                  </label>
-                  <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl">
-                    <button 
-                      onClick={() => setSelectedRooms(Math.max(1, selectedRooms - 1))}
-                      className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 font-bold text-gray-900"
-                    >
-                      −
-                    </button>
-                    <span className="flex-1 text-center font-black text-2xl text-gray-900">
-                      {selectedRooms}
-                    </span>
-                    <button 
-                      onClick={() => setSelectedRooms(selectedRooms + 1)}
-                      className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center hover:bg-gray-100 font-bold text-gray-900"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-
-                {/* Total Price */}
-                <div className="space-y-2 bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                  <span className="text-xs text-gray-400 font-bold uppercase tracking-wider block">Total Price</span>
-                  <span className="text-4xl font-black text-blue-600">${totalPrice}</span>
-                  <span className="text-xs text-gray-500">{selectedDays} day{selectedDays > 1 ? 's' : ''} × {selectedRooms} room{selectedRooms > 1 ? 's' : ''}</span>
-                </div>
-
-                {/* CTA Buttons */}
-                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-blue-600/30 transition-all transform hover:scale-105 active:scale-95">
-                  Book Now
-                </button>
-                
-                <button className="w-full bg-white border-2 border-gray-200 text-gray-900 font-bold py-4 px-6 rounded-2xl hover:bg-gray-50 transition-all">
-                  Contact Us
-                </button>
-
-                {/* Info Cards */}
-                <div className="space-y-3 pt-6 border-t border-gray-100">
-                  <div className="flex gap-3">
-                    <Calendar className="text-blue-600 flex-shrink-0" size={20} />
-                    <div className="text-sm">
-                      <span className="font-bold text-gray-900 block">Flexible Booking</span>
-                      <span className="text-gray-600">Free cancellation up to 7 days</span>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Users className="text-blue-600 flex-shrink-0" size={20} />
-                    <div className="text-sm">
-                      <span className="font-bold text-gray-900 block">Group Rates</span>
-                      <span className="text-gray-600">Special discounts for groups</span>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <DollarSign className="text-blue-600 flex-shrink-0" size={20} />
-                    <div className="text-sm">
-                      <span className="font-bold text-gray-900 block">Best Price Guarantee</span>
-                      <span className="text-gray-600">Lowest rates guaranteed</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            )}
           </div>
-        </div>
-      </section>
 
-      {/* --- FEATURES GRID --- */}
-      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-black text-gray-900 text-center mb-16">Why Stay With Us?</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: Wifi, title: 'High-Speed WiFi', desc: 'Stay connected everywhere' },
-              { icon: Wind, title: 'Climate Control', desc: 'Perfect temperature control' },
-              { icon: Coffee, title: 'Continental Breakfast', desc: 'Complimentary morning meals' },
-              { icon: Camera, title: 'Scenic Views', desc: 'Beautiful property views' }
-            ].map((feature, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all text-center">
-                <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <feature.icon size={28} />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
-      </section>
-
+      </div>
     </div>
   );
 };
