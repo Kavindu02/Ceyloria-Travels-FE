@@ -75,17 +75,7 @@ const SigiriyaPage = () => {
 
         
         {/* Navigation / Header Area (Simulated) */}
-        <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-30 text-white/90">
-             <div className="text-xs font-bold tracking-[0.3em] uppercase border-b border-transparent hover:border-yellow-500 transition-colors cursor-pointer">
-                SDK Travel
-             </div>
-             <div className="hidden md:flex gap-8 text-xs font-bold tracking-widest uppercase">
-                <span className="hover:text-yellow-400 cursor-pointer transition-colors">Ancient</span>
-                <span className="hover:text-yellow-400 cursor-pointer transition-colors">Destinations</span>
-                <span className="hover:text-yellow-400 cursor-pointer transition-colors">Luxury</span>
-             </div>
-        </div>
-
+       
         {/* Hero Content - Bottom Aligned & Modern */}
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-16 z-20">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
