@@ -122,5 +122,4 @@ export default function AccommodationsAdminPage() {
         </table>
       )}
     </div>
-  );
-}
+  );}

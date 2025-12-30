@@ -1,3 +1,4 @@
+import { Routes, Route } from "react-router-dom";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
@@ -41,6 +42,8 @@ export default function App() {
       {/* Toast Notifications */}
       <Toaster />
 
+      {/* Navbar only after loader */}
+      {!loading && <Navbar />}
       {/* Navbar only after loader and not in admin panel */}
       {!loading && !isAdminRoute && <Navbar />}
 
@@ -69,6 +72,8 @@ export default function App() {
         <Route path="/search" element={<SearchResults />} />
       </Routes>
 
+      {/* Footer only after loader */}
+      {!loading && <Footer />}
       {/* Footer only after loader and not in admin panel */}
       {!loading && !isAdminRoute && <Footer />}
 
