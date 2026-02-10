@@ -140,8 +140,8 @@ const AccommodationsPage = () => {
         </div>
       </div>
 
-      {/* --- FLOATING SEARCH BAR --- */}
-      <div className="container mx-auto px-4 relative z-30 -mt-24 mb-16">
+      {/* --- FLOATING SEARCH BAR (hidden on mobile) --- */}
+      <div className="container mx-auto px-4 relative z-30 -mt-24 mb-16 hidden lg:block">
         <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/40 p-3 md:p-4">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             
@@ -184,7 +184,7 @@ const AccommodationsPage = () => {
       </div>
 
       {/* --- MAIN CONTENT --- */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-20 mt-6 lg:mt-0">
         
         {/* Background Decor */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-50 rounded-full blur-[100px] -z-10 opacity-60" />
@@ -197,13 +197,15 @@ const AccommodationsPage = () => {
           />
         )}
 
-        {/* Mobile Filter Toggle */}
-        <div className="lg:hidden mb-8 flex justify-end">
+        {/* Mobile Filter Toggle - Search bar style */}
+        <div className="lg:hidden mb-8">
           <button
             onClick={() => setShowMobileFilters(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full font-bold shadow-sm text-blue-900"
+            className="w-full flex items-center gap-3 px-5 py-4 bg-white border border-gray-200 rounded-2xl font-medium shadow-lg text-gray-400"
           >
-            <SlidersHorizontal size={18} className="text-blue-600" /> Filters
+            <Search size={20} className="text-gray-400" />
+            <span className="flex-1 text-left">Search & Filter...</span>
+            <SlidersHorizontal size={18} className="text-blue-600" />
           </button>
         </div>
 
@@ -245,6 +247,19 @@ const AccommodationsPage = () => {
                 </div>
 
                 <div className="space-y-8 relative z-10">
+
+                  {/* Mobile-only: Search */}
+                  <div className="lg:hidden space-y-3">
+                    <label className="text-xs font-bold uppercase text-gray-400 tracking-wider flex items-center gap-2">
+                      <Search size={14} /> Search
+                    </label>
+                    <input
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium text-gray-700 placeholder-gray-400"
+                      placeholder="Resort name or keyword..."
+                      value={searchTerm}
+                      onChange={e => setSearchTerm(e.target.value)}
+                    />
+                  </div>
                   
                   {/* Location Select */}
                   <div className="space-y-3">
