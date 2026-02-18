@@ -122,7 +122,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex items-center gap-8 text-white/90 font-medium text-sm lg:text-base">
-          {['Home', 'Packages', 'Accommodations', 'About'].map((item) => (
+          {['Home','About', 'Packages', 'Accommodations'].map((item) => (
             <li key={item}>
               <Link
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
