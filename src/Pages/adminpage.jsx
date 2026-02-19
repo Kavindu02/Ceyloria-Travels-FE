@@ -10,15 +10,19 @@ import { MdDashboard } from "react-icons/md";
 import { FaUsers, FaHotel, FaMapMarkedAlt } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
+import { RiArticleLine } from "react-icons/ri";
 
 // Pages
 import AdminAdminPage from "./admin/adminAdminPage";
-import PackageAdminPage from "./admin/packageAdminPage"; 
+import PackageAdminPage from "./admin/packageAdminPage";
 import UpdatePackage from "./admin/updatePackage";// ✅ real packages page
 import AddPackageAdminPage from "./admin/addPackageAdminPage";
 import AccommodationsAdminPage from "./admin/accommodationsAdminPage"; // ✅ Real Hotels Page
 import AddAccommodationAdminPage from "./admin/addAccommodationsAdminPage";
 import UpdateAccommodation from "./admin/updateAccommodations";
+import BlogAdminPage from "./admin/blogAdminPage";
+import AddBlogAdminPage from "./admin/addBlogAdminPage";
+import UpdateBlog from "./admin/updateBlog";
 
 // Placeholder pages
 const UsersPage = () => <div className="p-10 text-white">Users Page (Coming Soon)</div>;
@@ -51,6 +55,7 @@ function DashboardHero() {
     { label: "Users", to: "/admin/users", icon: FaUsers },
     { label: "Packages", to: "/admin/packages", icon: FaMapMarkedAlt },
     { label: "Hotels", to: "/admin/hotels", icon: FaHotel },
+    { label: "Blogs", to: "/admin/blogs", icon: RiArticleLine },
   ];
 
   return (
@@ -168,7 +173,8 @@ export default function AdminPage() {
             {/* <SidebarLink to="/admin/users" icon={FaUsers} label="Users" /> */}
             <SidebarLink to="/admin/packages" icon={FaMapMarkedAlt} label="Packages" />
             <SidebarLink to="/admin/hotels" icon={FaHotel} label="Hotels" />
-            
+            <SidebarLink to="/admin/blogs" icon={RiArticleLine} label="Blogs" />
+
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-red-600/20"
@@ -191,6 +197,9 @@ export default function AdminPage() {
             <Route path="add-package" element={<AddPackageAdminPage />} />
             <Route path="add-accommodation" element={<AddAccommodationAdminPage />} />
             <Route path="update-accommodation/:id" element={<UpdateAccommodation />} />
+            <Route path="blogs" element={<BlogAdminPage />} />
+            <Route path="add-blog" element={<AddBlogAdminPage />} />
+            <Route path="update-blog/:id" element={<UpdateBlog />} />
           </Routes>
         </main>
       </div>

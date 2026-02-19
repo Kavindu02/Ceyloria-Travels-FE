@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import Home from "./Pages/Homepage";
+import Blog from "./Pages/blog";
+import BlogDetail from "./Pages/blogDetail";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AnuradhapuraPage from "./Pages/gallerysection/anuradhapura";
@@ -67,6 +69,8 @@ export default function App() {
         <Route path="/accommodation-overview/:id" element={<AccommodationOverviewPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
       </Routes>
 
       {/* Footer only after loader and not in admin panel */}

@@ -122,7 +122,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex items-center gap-8 text-white/90 font-medium text-sm lg:text-base">
-          {['Home','About', 'Packages', 'Accommodations'].map((item) => (
+          {['Home','About', 'Packages', 'Accommodations', 'Blogs'].map((item) => (
             <li key={item}>
               <Link
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
@@ -256,7 +256,7 @@ export default function Navbar() {
 
             {/* Mobile Links */}
             <nav className="flex flex-col gap-6">
-              {['Home', 'Packages', 'Accommodations', 'About', 'Contact'].map((item, idx) => (
+              {['Home', 'Packages', 'Accommodations', 'About', 'Blog', 'Contact'].map((item, idx) => (
                 <motion.div
                   key={item}
                   initial={{ opacity: 0, x: -20 }}
