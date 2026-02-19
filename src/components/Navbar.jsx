@@ -10,7 +10,7 @@ export default function Navbar() {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const searchRef = useRef(null);
@@ -55,16 +55,16 @@ export default function Navbar() {
 
           const filteredPackages = Array.isArray(packagesData)
             ? packagesData.filter(pkg =>
-                pkg.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                pkg.description?.toLowerCase().includes(searchQuery.toLowerCase())
-              ).slice(0, 3)
+              pkg.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              pkg.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            ).slice(0, 3)
             : [];
 
           const filteredAccommodations = Array.isArray(accommodationsData)
             ? accommodationsData.filter(acc =>
-                acc.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                acc.description?.toLowerCase().includes(searchQuery.toLowerCase())
-              ).slice(0, 3)
+              acc.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              acc.description?.toLowerCase().includes(searchQuery.toLowerCase())
+            ).slice(0, 3)
             : [];
 
           setSearchResults([
@@ -94,35 +94,35 @@ export default function Navbar() {
   };
 
   // Check if on overview pages (white background pages)
-  const isOverviewPage = location.pathname.includes('/package-overview/') || 
-                         location.pathname.includes('/accommodation-overview/');
+  const isOverviewPage = location.pathname.includes('/package-overview/') ||
+    location.pathname.includes('/accommodation-overview/');
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled || menuOpen
-          ? "bg-black/90 backdrop-blur-lg border-b border-white/10 shadow-lg"
-          : isOverviewPage 
-            ? "bg-black/70 backdrop-blur-md border-b border-white/5 py-4"
-            : "bg-transparent py-4"
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled || menuOpen
+        ? "bg-black/90 backdrop-blur-lg border-b border-white/10 shadow-lg"
+        : isOverviewPage
+          ? "bg-black/70 backdrop-blur-md border-b border-white/5 py-4"
+          : "bg-transparent py-4"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
-        
-        {/* Logo */}
-        <Link to="/" className="relative z-50 flex items-center gap-2 group">
-          <div className="relative overflow-hidden rounded-lg">
-             {/* Replace with your logo image */}
-             <img src="/logo.jpg" alt="Logo" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
+
+        <Link to="/" className="relative z-50 flex flex-col group py-1">
+          <div className="flex items-center">
+            <span className="text-3xl font-serif font-bold tracking-tight" style={{ fontFamily: "'Alice', serif" }}>
+              <span style={{ color: "#FF8C00" }}>Cey</span>
+              <span style={{ color: "#001C57" }}>loria</span>
+            </span>
           </div>
-          <span className="text-white font-bold text-xl tracking-tight hidden lg:block">
-            SDK<span className="text-blue-500">Travel</span>
+          <span className="text-[11px] font-medium tracking-[0.22em] text-gray-300 uppercase -mt-1 group-hover:text-blue-400 transition-colors">
+            Your Travel Partner
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex items-center gap-8 text-white/90 font-medium text-sm lg:text-base">
-          {['Home','About', 'Packages', 'Accommodations', 'Blogs'].map((item) => (
+          {['Home', 'About', 'Packages', 'Accommodations', 'Blogs'].map((item) => (
             <li key={item}>
               <Link
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
@@ -139,9 +139,8 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-6">
           {/* Search Bar */}
           <div className="relative" ref={searchRef}>
-            <div className={`flex items-center transition-all duration-300 ${
-              showResults || searchQuery ? "w-64 bg-white/10" : "w-48 bg-white/5 hover:bg-white/10"
-            } rounded-full border border-white/10 focus-within:border-blue-500 focus-within:bg-black/40`}>
+            <div className={`flex items-center transition-all duration-300 ${showResults || searchQuery ? "w-64 bg-white/10" : "w-48 bg-white/5 hover:bg-white/10"
+              } rounded-full border border-white/10 focus-within:border-blue-500 focus-within:bg-black/40`}>
               <Search className="ml-3 text-gray-400 w-4 h-4" />
               <input
                 type="text"
@@ -153,7 +152,7 @@ export default function Navbar() {
                 className="w-full bg-transparent border-none text-white text-sm px-3 py-2 focus:ring-0 focus:outline-none placeholder-gray-400"
               />
               {isSearching && (
-                 <div className="mr-3 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <div className="mr-3 w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
               )}
             </div>
 
@@ -230,7 +229,7 @@ export default function Navbar() {
                 className="w-full bg-white/10 border border-white/20 text-white rounded-xl px-12 py-4 text-lg focus:outline-none focus:border-blue-500"
               />
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-              
+
               {/* Mobile Results */}
               {showResults && searchResults.length > 0 && (
                 <div className="mt-4 bg-white rounded-xl overflow-hidden">
@@ -241,13 +240,13 @@ export default function Navbar() {
                       onClick={() => setMenuOpen(false)}
                       className="flex items-center gap-3 p-4 border-b border-gray-100 last:border-0 text-black"
                     >
-                       <span className="text-lg">
-                         {result.type === 'package' ? '📦' : '🏨'}
-                       </span>
-                       <div className="flex-1">
-                          <div className="font-semibold">{result.title || result.name}</div>
-                          <div className="text-xs text-gray-500 uppercase">{result.type}</div>
-                       </div>
+                      <span className="text-lg">
+                        {result.type === 'package' ? '📦' : '🏨'}
+                      </span>
+                      <div className="flex-1">
+                        <div className="font-semibold">{result.title || result.name}</div>
+                        <div className="text-xs text-gray-500 uppercase">{result.type}</div>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -256,7 +255,7 @@ export default function Navbar() {
 
             {/* Mobile Links */}
             <nav className="flex flex-col gap-6">
-              {['Home', 'Packages', 'Accommodations', 'About', 'Blog', 'Contact'].map((item, idx) => (
+              {['Home', 'Packages', 'Accommodations', 'About', 'Blogs', 'Contact'].map((item, idx) => (
                 <motion.div
                   key={item}
                   initial={{ opacity: 0, x: -20 }}
@@ -266,9 +265,8 @@ export default function Navbar() {
                   <Link
                     to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                     onClick={() => setMenuOpen(false)}
-                    className={`text-2xl font-bold ${
-                      item === 'Contact' ? 'text-blue-500' : 'text-white'
-                    }`}
+                    className={`text-2xl font-bold ${item === 'Contact' ? 'text-blue-500' : 'text-white'
+                      }`}
                   >
                     {item}
                   </Link>
@@ -277,7 +275,7 @@ export default function Navbar() {
             </nav>
           </motion.div>
         )}
-        
+
       </AnimatePresence>
     </nav>
   );

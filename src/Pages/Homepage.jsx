@@ -5,7 +5,7 @@ import Gallery from "../components/Gallery";
 
 // IMPORT YOUR CUSTOM LOADER HERE
 // Assuming the file is named 'loader.jsx' inside the components folder
-import SDKLoader from "../components/loader";
+import CeyloriaLoader from "../components/loader";
 
 // ---------------------- FONTS & GLOBAL STYLES ----------------------
 const fontHead = "font-['Playfair_Display',_serif]";
@@ -166,7 +166,7 @@ export default function HomePage() {
 
   // 3. Conditional Return: Show Loader if loading
   if (isPageLoading) {
-    return <SDKLoader />;
+    return <CeyloriaLoader />;
   }
 
   // 4. Main Page Content (Only shows after loader finishes)

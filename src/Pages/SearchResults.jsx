@@ -8,7 +8,7 @@ const fontBody = "font-['DM_Sans',_sans-serif]";
 export default function SearchResults() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query") || "";
-  
+
   const [packages, setPackages] = useState([]);
   const [accommodations, setAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,26 +21,26 @@ export default function SearchResults() {
         // Fetch packages
         const pkgRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/packages`);
         const pkgData = await pkgRes.json();
-        
+
         // Fetch accommodations
         const accRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/accommodations`);
         const accData = await accRes.json();
-        
+
         // Filter based on query
         const filteredPackages = Array.isArray(pkgData)
           ? pkgData.filter(pkg =>
-              pkg.title?.toLowerCase().includes(query.toLowerCase()) ||
-              pkg.description?.toLowerCase().includes(query.toLowerCase())
-            )
+            pkg.title?.toLowerCase().includes(query.toLowerCase()) ||
+            pkg.description?.toLowerCase().includes(query.toLowerCase())
+          )
           : [];
-        
+
         const filteredAccommodations = Array.isArray(accData)
           ? accData.filter(acc =>
-              acc.name?.toLowerCase().includes(query.toLowerCase()) ||
-              acc.description?.toLowerCase().includes(query.toLowerCase())
-            )
+            acc.name?.toLowerCase().includes(query.toLowerCase()) ||
+            acc.description?.toLowerCase().includes(query.toLowerCase())
+          )
           : [];
-        
+
         setPackages(filteredPackages);
         setAccommodations(filteredAccommodations);
       } catch (err) {
@@ -114,7 +114,7 @@ export default function SearchResults() {
                 </h2>
                 <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {packages.map((pkg, idx) => (
                   <Link
@@ -170,7 +170,7 @@ export default function SearchResults() {
                 </h2>
                 <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {accommodations.map((acc, idx) => (
                   <Link

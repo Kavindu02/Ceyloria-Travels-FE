@@ -6,14 +6,17 @@ const Blog = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchBlogs = async () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs`);
+      if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
-      setBlogPosts(data);
+      setBlogPosts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Failed to fetch blogs:", error);
+      setError("Unable to load blogs. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -32,10 +35,12 @@ const Blog = () => {
     }
   }, []);
 
-  const filteredPosts = blogPosts.filter(post =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredPosts = (blogPosts || []).filter(post => {
+    const title = post?.title || "";
+    const category = post?.category || "";
+    const search = searchTerm.toLowerCase();
+    return title.toLowerCase().includes(search) || category.toLowerCase().includes(search);
+  });
 
   return (
     <div className="font-sans text-gray-800 bg-white selection:bg-blue-600 selection:text-white overflow-x-hidden">
@@ -96,63 +101,76 @@ const Blog = () => {
 
         {/* --- BLOG GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {filteredPosts.map((post) => (
-            <div
-              id={post.anchor}
-              key={post.id}
-              className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full transform hover:-translate-y-2"
-            >
-              {/* Image Container */}
-              <div className="relative h-72 overflow-hidden">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute top-6 left-6">
-                  <span className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg">
-                    {post.category}
-                  </span>
-                </div>
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-
-              {/* Content Container */}
-              <div className="p-8 md:p-10 flex flex-col flex-1">
-
-
-                <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 leading-tight group-hover:text-blue-600 transition-colors">
-                  {post.title}
-                </h3>
-
-                <p className="text-gray-500 leading-relaxed line-clamp-3 mb-8 text-lg font-light">
-                  {post.excerpt}
-                </p>
-
-                <div className="mt-auto pt-8 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-black text-sm">
-                      {post.author.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">{post.author}</p>
-                      <p className="text-[10px] text-gray-400 font-medium">Travel Expert</p>
-                    </div>
-                  </div>
-
-                  <Link
-                    to={`/blog/${post._id}`}
-                    className="relative overflow-hidden group/btn bg-gray-50 text-gray-900 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300"
-                  >
-                    <ArrowRight size={24} className="group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </div>
+          {loading ? (
+            <div className="col-span-full py-20 text-center">
+              <div className="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-500 font-medium">Loading our stories...</p>
             </div>
-          ))}
+          ) : error ? (
+            <div className="col-span-full py-20 text-center">
+              <p className="text-red-500 font-bold text-xl">{error}</p>
+              <button
+                onClick={fetchBlogs}
+                className="mt-4 text-blue-600 hover:underline font-bold"
+              >
+                Try refreshing
+              </button>
+            </div>
+          ) : filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <div
+                id={post.anchor}
+                key={post._id}
+                className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full transform hover:-translate-y-2"
+              >
+                {/* Image Container */}
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  />
+                  <div className="absolute top-6 left-6">
+                    <span className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg">
+                      {post.category}
+                    </span>
+                  </div>
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
 
-          {filteredPosts.length === 0 && (
+                {/* Content Container */}
+                <div className="p-8 md:p-10 flex flex-col flex-1">
+                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 leading-tight group-hover:text-blue-600 transition-colors">
+                    {post.title}
+                  </h3>
+
+                  <p className="text-gray-500 leading-relaxed line-clamp-3 mb-8 text-lg font-light">
+                    {post.excerpt}
+                  </p>
+
+                  <div className="mt-auto pt-8 border-t border-gray-50 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-black text-sm">
+                        {post.author ? post.author.charAt(0) : 'C'}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">{post.author || 'Ceyloria Team'}</p>
+                        <p className="text-[10px] text-gray-400 font-medium">Travel Expert</p>
+                      </div>
+                    </div>
+
+                    <Link
+                      to={`/blog/${post._id}`}
+                      className="relative overflow-hidden group/btn bg-gray-50 text-gray-900 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300"
+                    >
+                      <ArrowRight size={24} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
             <div className="col-span-full py-20 text-center">
               <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
                 <Search size={40} />

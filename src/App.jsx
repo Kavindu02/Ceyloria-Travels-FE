@@ -24,6 +24,7 @@ import About from "./Pages/about";
 import Loader from "./components/loader";
 import ScrollToTop from "./components/ScrollToTop";
 import SearchResults from "./Pages/SearchResults";
+import LanguageSwitcher from "./components/LanguageSwitcher";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,9 @@ export default function App() {
 
       {/* Navbar only after loader and not in admin panel */}
       {!loading && !isAdminRoute && <Navbar />}
+
+      {/* Language Switcher */}
+      {!loading && !isAdminRoute && <LanguageSwitcher />}
 
       {/* Loader */}
       {loading && <Loader />}
@@ -70,6 +74,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blogs" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
       </Routes>
 

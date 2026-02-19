@@ -41,7 +41,7 @@ const BlogDetail = () => {
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950">
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Post not found</h2>
-          <Link to="/blog" className="text-blue-600 hover:underline">Back to Blog</Link>
+          <Link to="/blogs" className="text-blue-600 hover:underline">Back to Blog</Link>
         </div>
       </div>
     );
@@ -51,7 +51,7 @@ const BlogDetail = () => {
     <div className={`min-h-screen bg-white dark:bg-gray-950 ${fontBody} pt-24 pb-20`}>
       <article className="max-w-4xl mx-auto px-6">
         {/* Back Button */}
-        <Link to="/blog" className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors mb-8 group">
+        <Link to="/blogs" className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors mb-8 group">
           <ArrowLeft size={20} className="transform group-hover:-translate-x-1 transition-transform" />
           Back to Blog
         </Link>

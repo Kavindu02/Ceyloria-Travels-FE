@@ -1,67 +1,86 @@
-export default function SDKLoader() {
+import { motion } from "framer-motion";
+
+export default function CeyloriaLoader() {
+  const brandName = "Ceyloria";
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200,
+      },
+    },
+  };
+
   return (
-    // Full-screen container with a modern glass-morphism background
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-slate-900/80 backdrop-blur-md">
-      
-      {/* --- Hide any nav/footer underneath --- */}
-      <style>
-        {`
-          body > nav, 
-          body > footer {
-            display: none !important;
-          }
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white">
+      {/* Background Subtle Mesh */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-orange-100/50 blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-blue-100/50 blur-[120px] animate-pulse delay-700"></div>
+      </div>
 
-          /* Floating animation for the logo */
-          @keyframes float-logo {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-          }
-
-          /* Shimmer animation for the text */
-          @keyframes shimmer-text {
-            0% { background-position: -200%; }
-            100% { background-position: 200%; }
-          }
-
-          /* Progress bar translate animation */
-          @keyframes translateX {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-          }
-        `}
-      </style>
-
-      <div className="relative flex flex-col items-center">
-        {/* Logo Container */}
-        <div 
-          className="relative animate-pulse drop-shadow-2xl"
-          style={{ animation: 'float-logo 3s ease-in-out infinite' }}
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Animated Brand Name */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex mb-8"
         >
-          {/* Glow behind logo */}
-          <div className="absolute -inset-4 rounded-full bg-blue-500/20 blur-xl"></div>
-          
-          {/* Logo Image */}
-          <img
-            src="/load.png"
-            alt="SDK Travels Loading"
-            className="relative h-auto w-48 object-contain md:w-64"
+          {brandName.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              variants={letterVariants}
+              className="text-6xl md:text-8xl"
+              style={{
+                fontFamily: "'Alice', serif",
+                color: index < 3 ? "#FF8C00" : "#001C57", // Exact colors from image
+                letterSpacing: "-0.05em"
+              }}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </motion.div>
+
+        {/* Shimmering Line */}
+        <div className="relative w-64 h-[2px] bg-gray-100 overflow-hidden rounded-full">
+          <motion.div
+            initial={{ left: "-100%" }}
+            animate={{ left: "100%" }}
+            transition={{
+              repeat: Infinity,
+              duration: 2,
+              ease: "easeInOut",
+            }}
+            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-blue-900/20 to-transparent"
           />
         </div>
 
         {/* Loading Text */}
-        <div className="mt-8">
-          <h2 
-            className="bg-gradient-to-r from-blue-400 via-white to-blue-400 bg-[length:200%_auto] bg-clip-text text-xl font-bold tracking-[0.3em] text-transparent uppercase"
-            style={{ animation: 'shimmer-text 3s linear infinite' }}
-          >
-            Loading...
-          </h2>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="mt-4 h-1 w-32 overflow-hidden rounded-full bg-blue-900/30">
-          <div className="h-full w-full animate-[translateX_1.5s_ease-in-out_infinite] rounded-full bg-blue-500"></div>
-        </div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="mt-8 text-gray-400 text-xs uppercase tracking-[0.6em] font-semibold"
+        >
+          Discovering Paradise
+        </motion.p>
       </div>
     </div>
   );

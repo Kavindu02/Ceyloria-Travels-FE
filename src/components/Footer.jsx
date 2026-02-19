@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Youtube, 
-  ArrowRight, 
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  ArrowRight,
   Send
 } from "lucide-react";
 
@@ -27,17 +27,21 @@ export default function Footer() {
 
       <div className="relative z-10 mx-auto w-11/12 max-w-7xl pt-12 pb-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3 items-start">
-          
+
           {/* Column 1: Brand & Contact */}
           <div className="space-y-6 px-3">
-            <div className="flex items-center gap-3">
-              {/* Added a white glow effect to logo for contrast */}
-              <div className="rounded-lg bg-white/10 p-2 backdrop-blur-md">
-                <img src="/logo.jpg" alt="SDK Travel Logo" className="h-10 w-auto rounded-md" />
+            <Link to="/" className="flex flex-col group">
+              <div className="flex items-center">
+                <span className="text-4xl font-serif font-bold tracking-tight" style={{ fontFamily: "'Alice', serif" }}>
+                  <span style={{ color: "#FF8C00" }}>Cey</span>
+                  <span style={{ color: "#001C57" }}>loria</span>
+                </span>
               </div>
-              <span className="text-2xl font-bold tracking-wide text-white">SDK Travel</span>
-            </div>
-            
+              <span className="text-[12px] font-medium tracking-[0.25em] text-gray-400 uppercase -mt-1 group-hover:text-blue-400 transition-colors">
+                Your Travel Partner
+              </span>
+            </Link>
+
             <p className="text-sm leading-relaxed text-gray-400">
               Discover the beauty of Sri Lanka with curated tours and unforgettable experiences.
             </p>
@@ -66,9 +70,9 @@ export default function Footer() {
             <div className="space-y-6 px-3">
               <p className="mb-4 text-sm text-gray-400">Subscribe for latest tour updates.</p>
               <div className="flex w-full items-center rounded-lg bg-white/10 p-1 backdrop-blur-md ring-1 ring-white/20 focus-within:ring-blue-400 transition-all">
-                <input 
-                  type="email" 
-                  placeholder="Your Email" 
+                <input
+                  type="email"
+                  placeholder="Your Email"
                   className="w-full bg-transparent px-3 py-2 text-sm text-white placeholder-gray-400 outline-none"
                 />
                 <button className="rounded-md bg-blue-600 p-2 text-white hover:bg-blue-500 transition-colors">
@@ -94,10 +98,10 @@ export default function Footer() {
 flex flex-col md:flex-row 
 items-center justify-center 
 gap-4 text-sm text-gray-500 text-center">
-  
-  <p>© {currentYear} <b>SDK Travels.</b> All rights reserved.</p>
 
-</div>
+          <p>© {currentYear} <b>Ceyloria.</b> All rights reserved.</p>
+
+        </div>
 
       </div>
     </footer>
@@ -120,8 +124,8 @@ function ContactItem({ icon: Icon, text }) {
 function FooterLink({ to, label }) {
   return (
     <li>
-      <Link 
-        to={to} 
+      <Link
+        to={to}
         className="group flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
       >
         <ArrowRight size={14} className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-400" />
@@ -133,10 +137,10 @@ function FooterLink({ to, label }) {
 
 function SocialIcon({ Icon, href }) {
   return (
-    <a 
-      href={href} 
+    <a
+      href={href}
       className="text-gray-400 hover:text-white hover:scale-110 transition-all duration-300"
-      target="_blank" 
+      target="_blank"
       rel="noopener noreferrer"
     >
       <Icon size={20} />
