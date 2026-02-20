@@ -58,8 +58,10 @@ export default function Footer() {
             <h3 className="mb-6 text-lg font-semibold text-white text-left md:text-center">Explore</h3>
             <ul className="space-y-3 text-left md:text-center">
               <FooterLink to="/" label="Home" />
-              <FooterLink to="/packages" label="Package" />
+              <FooterLink to="/destinations" label="Destinations" />
+              <FooterLink to="/packages" label="Packages" />
               <FooterLink to="/accommodations" label="Accommodations" />
+              <FooterLink to="/blogs" label="Blogs" />
               <FooterLink to="/about" label="About Us" />
             </ul>
           </div>

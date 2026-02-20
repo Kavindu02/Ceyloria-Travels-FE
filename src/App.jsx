@@ -21,6 +21,7 @@ import PackageOverviewPage from "./Pages/customer/packageOverviewPage";
 import AccommodationsPage from "./Pages/customer/accommodationsPage";
 import AccommodationOverviewPage from "./Pages/customer/accommodationsOverviewPage";
 import About from "./Pages/about";
+import Destinations from "./Pages/Destinations";
 import Loader from "./components/loader";
 import ScrollToTop from "./components/ScrollToTop";
 import SearchResults from "./Pages/SearchResults";
@@ -72,6 +73,7 @@ export default function App() {
         <Route path="/accommodations" element={<AccommodationsPage />} />
         <Route path="/accommodation-overview/:id" element={<AccommodationOverviewPage />} />
         <Route path="/about" element={<About />} />
+        <Route path="/destinations" element={<Destinations />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blogs" element={<Blog />} />

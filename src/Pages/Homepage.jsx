@@ -210,11 +210,11 @@ export default function HomePage() {
                 {heroSlides[current].subtitle}
               </p>
 
-              <button onClick={scrollToCapturedMoments} className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
+              <Link to="/destinations" className="group relative overflow-hidden bg-white text-neutral-900 px-8 py-4 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 w-fit">
                 <span className="relative z-10 flex items-center gap-3">
                   Explore Destinations <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
