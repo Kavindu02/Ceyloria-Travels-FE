@@ -74,6 +74,7 @@ export default function App() {
         <Route path="/accommodation-overview/:id" element={<AccommodationOverviewPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/destinations" element={<Destinations />} />
+        <Route path="/destinations/:category" element={<Destinations />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blogs" element={<Blog />} />
