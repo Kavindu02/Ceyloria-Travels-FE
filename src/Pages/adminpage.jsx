@@ -15,7 +15,7 @@ import { RiArticleLine } from "react-icons/ri";
 // Pages
 import AdminAdminPage from "./admin/adminAdminPage";
 import PackageAdminPage from "./admin/packageAdminPage";
-import UpdatePackage from "./admin/updatePackage";// ✅ real packages page
+import UpdatePackage from "./admin/updatePackage"; // ✅ real packages page
 import AddPackageAdminPage from "./admin/addPackageAdminPage";
 import AccommodationsAdminPage from "./admin/accommodationsAdminPage"; // ✅ Real Hotels Page
 import AddAccommodationAdminPage from "./admin/addAccommodationsAdminPage";
@@ -23,9 +23,14 @@ import UpdateAccommodation from "./admin/updateAccommodations";
 import BlogAdminPage from "./admin/blogAdminPage";
 import AddBlogAdminPage from "./admin/addBlogAdminPage";
 import UpdateBlog from "./admin/updateBlog";
+import DestinationAdminPage from "./admin/destinationAdminPage"; // [NEW]
+import AddDestinationCategory from "./admin/addDestinationCategory";
+import UpdateDestinationCategory from "./admin/updateDestinationCategory"; // [NEW] // [NEW]
 
 // Placeholder pages
-const UsersPage = () => <div className="p-10 text-white">Users Page (Coming Soon)</div>;
+const UsersPage = () => (
+  <div className="p-10 text-white">Users Page (Coming Soon)</div>
+);
 
 /* ================= Sidebar Link ================= */
 function SidebarLink({ to, icon: Icon, label, onClick }) {
@@ -63,7 +68,9 @@ function DashboardHero() {
       <div className="rounded-2xl bg-gradient-to-r from-teal-500 to-blue-600 p-[1px]">
         <div className="rounded-2xl bg-slate-900 p-8 text-white">
           <h1 className="text-3xl font-bold">Travel Admin Dashboard</h1>
-          <p className="text-teal-200 mt-2">Manage destinations, bookings and users</p>
+          <p className="text-teal-200 mt-2">
+            Manage destinations, bookings and users
+          </p>
         </div>
       </div>
 
@@ -113,15 +120,17 @@ export default function AdminPage() {
       .get(import.meta.env.VITE_BACKEND_URL + "/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => setStatus(res.data.role === "admin" ? "admin" : "not-admin"))
+      .then((res) =>
+        setStatus(res.data.role === "admin" ? "admin" : "not-admin"),
+      )
       .catch(() => setStatus("not-admin"));
   }, [status]);
 
   /* 🚫 Redirect non-admin */
   useEffect(() => {
     if (status === "not-admin") {
-      toast.error("You must be an Admin");
-      navigate("/");
+      toast.error("Please login to access the admin panel.");
+      navigate("/login");
     }
   }, [status, navigate]);
 
@@ -132,7 +141,8 @@ export default function AdminPage() {
     navigate("/");
   };
 
-  if (status === "loading") return <div className="p-10 text-white">Checking Admin Access...</div>;
+  if (status === "loading")
+    return <div className="p-10 text-white">Checking Admin Access...</div>;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -156,7 +166,10 @@ export default function AdminPage() {
             >
               <IoMdHome /> Home
             </button>
-            <button onClick={handleLogout} className="px-3 py-1.5 bg-red-600 rounded">
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1.5 bg-red-600 rounded"
+            >
               Logout
             </button>
           </div>
@@ -171,10 +184,19 @@ export default function AdminPage() {
             <SidebarLink to="/admin" icon={MdDashboard} label="Dashboard" />
             <SidebarLink to="/admin/admins" icon={RiAdminFill} label="Admins" />
             {/* <SidebarLink to="/admin/users" icon={FaUsers} label="Users" /> */}
-            <SidebarLink to="/admin/packages" icon={FaMapMarkedAlt} label="Packages" />
+            <SidebarLink
+              to="/admin/packages"
+              icon={FaMapMarkedAlt}
+              label="Packages"
+            />
             <SidebarLink to="/admin/hotels" icon={FaHotel} label="Hotels" />
+            <SidebarLink
+              to="/admin/destinations"
+              icon={FaMapMarkedAlt}
+              label="Destinations"
+            />{" "}
+            {/* [NEW] */}
             <SidebarLink to="/admin/blogs" icon={RiArticleLine} label="Blogs" />
-
             <button
               onClick={handleLogout}
               className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-red-600/20"
@@ -191,15 +213,37 @@ export default function AdminPage() {
             <Route index element={<DashboardHero />} />
             <Route path="admins" element={<AdminAdminPage />} />
             <Route path="users" element={<UsersPage />} />
-            <Route path="packages" element={<PackageAdminPage />} /> {/* ✅ Real PackagesPage */}
-            <Route path="hotels" element={<AccommodationsAdminPage />} /> {/* ✅ Real Hotels Page */}
+            <Route path="packages" element={<PackageAdminPage />} />{" "}
+            {/* ✅ Real PackagesPage */}
+            <Route path="hotels" element={<AccommodationsAdminPage />} />{" "}
+            {/* ✅ Real Hotels Page */}
             <Route path="package-admin/:id" element={<UpdatePackage />} />
             <Route path="add-package" element={<AddPackageAdminPage />} />
-            <Route path="add-accommodation" element={<AddAccommodationAdminPage />} />
-            <Route path="update-accommodation/:id" element={<UpdateAccommodation />} />
+            <Route
+              path="add-accommodation"
+              element={<AddAccommodationAdminPage />}
+            />
+            <Route
+              path="update-accommodation/:id"
+              element={<UpdateAccommodation />}
+            />
             <Route path="blogs" element={<BlogAdminPage />} />
             <Route path="add-blog" element={<AddBlogAdminPage />} />
             <Route path="update-blog/:id" element={<UpdateBlog />} />
+            <Route
+              path="destinations"
+              element={<DestinationAdminPage />}
+            />{" "}
+            {/* [NEW] */}
+            <Route
+              path="add-destination-category"
+              element={<AddDestinationCategory />}
+            />{" "}
+            {/* [NEW] */}
+            <Route
+              path="update-destination-category/:id"
+              element={<UpdateDestinationCategory />}
+            />
           </Routes>
         </main>
       </div>

@@ -204,121 +204,50 @@ const AnuradhapuraPage = () => {
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-         <div className="text-center mb-20">
-            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">The Journal</span>
-            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Unearthing Secrets</h2>
-            <div className="w-[1px] h-16 bg-amber-500 mx-auto"></div>
-         </div>
+      {/* ==================== 5. ANURADHAPURA BLOG CONTENT ==================== */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed">
+            <h2>The Dawn of a Civilization: Exploring Anuradhapura</h2>
+            <p>
+                To walk through <strong>Anuradhapura</strong> is to walk through the very foundations of Sri Lankan history. As the first established capital of ancient Ceylon, this sacred city functioned as the political and religious heartbeat of the island for over a millennium. Today, it stands as a sprawling complex of architectural marvels, ancient hydraulic systems, and towering stupas that whisper tales of a glorious past.
+            </p>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Article 1 */}
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/anuradhapura/spa.png" alt="Spa" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Wellness & Heritage</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-amber-700 transition-colors">
-                        Healing in the Shadow of Giants: Ancient Ayurveda
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Step off the beaten path and discover the hidden gems that lie in the shadow of the great stupas, where ancient healing practices are still alive.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-amber-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
+            <img src="/pagesPhotos/anuradhapura/hero.png" alt="Ruwanwelisaya Stupa at Sunrise" />
 
-            {/* Article 2 */}
-            <div className="group cursor-pointer mt-12 lg:mt-0">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/anuradhapura/wildlife.png" alt="Wildlife" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Culinary Journey</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-amber-700 transition-colors">
-                        A Taste of the Dry Zone: Village Kitchens
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        A culinary journey through the rice paddies and village kitchens of the North Central Province, exploring flavors unchanged for centuries.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-amber-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
-         </div>
-      </section>
+            <h3>A Masterclass in Ancient Engineering</h3>
+            <p>
+                Long before modern machinery, the engineers of Anuradhapura were masters of stone and water. The city is dotted with massive artificial lakes—known as <em>wewas</em>—that irrigate the dry plains even today. The intricate network of canals and bathing pools, such as the exquisite <strong>Kuttam Pokuna (Twin Ponds)</strong>, showcase an understanding of hydrology and aesthetics that remains staggering. 
+            </p>
+            <p>
+                But it is the colossal masonry that truly defines the skyline. The brick stupas (or dagobas) of Anuradhapura were among the tallest structures in the ancient world, rivaled only by the Pyramids of Giza. Standing before the gleaming white dome of the <strong>Ruwanwelisaya</strong>, one cannot help but feel dwarfed by the sheer scale of devotion poured into its construction by King Dutugemunu in 140 BC.
+            </p>
 
-      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
-      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <blockquote>
+                "Anuradhapura is not just ruins in the jungle; it is a living, breathing pilgrimage site where history and faith are inextricably intertwined."
+            </blockquote>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-                <div>
-                   <h2 className="text-4xl md:text-6xl font-serif mb-2">Exclusive Retreats</h2>
-                   <p className="text-stone-400 font-light">Curated packages for the discerning traveler.</p>
-                </div>
-                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
-                    View All Offers
-                </button> */}
-            </div>
+            <h3>The Sacred Fig Tree: Sri Maha Bodhiya</h3>
+            <p>
+                At the spiritual epicenter of the city lies the <strong>Jaya Sri Maha Bodhi</strong>. Planted in 288 BC, it is the oldest living human-planted tree in the world with a documented history. Grown from a cutting of the original Bodhi tree in Bodh Gaya (under which the Buddha attained enlightenment), it was brought to Sri Lanka by Sanghamitta Theri, the daughter of Emperor Ashoka.
+            </p>
+            <p>
+                Surrounded by golden railings and fluttering prayer flags, the tree draws thousands of white-clad pilgrims daily. The scent of lotus flowers and burning incense fills the air, creating an atmosphere of profound tranquility.
+            </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Offer 1 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/anuradhapura/spa.png" alt="Luxury Spa" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
-                            Best Seller
-                        </div>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Royal Wellness Escape</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Experience the healing powers of ancient kings with our specialized Ayurveda treatments.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-amber-500">$2,900</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-amber-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
+            <h3>Essential Tips for Your Visit</h3>
+            <ul>
+                <li><strong>Dress Code:</strong> As a highly sacred city, modest clothing is strictly enforced. Shoulders and knees must be covered, and white attire is preferred.</li>
+                <li><strong>Timing:</strong> The dry zone heat can be intense. Plan to explore the ruins early in the morning or late in the afternoon. Sunsets near the stupas are particularly magical.</li>
+                <li><strong>Getting Around:</strong> The archaeological park is vast. Renting a bicycle is one of the best ways to navigate between the scattered ruins under the shade of ancient trees.</li>
+            </ul>
 
-                {/* Offer 2 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/anuradhapura/hero.png" alt="Heritage Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">The Kingdom Tour</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">A private guided tour through the sacred city with an archaeologist expert.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-amber-500">$3,360</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-amber-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p>
+                Whether you are an archaeology enthusiast, a spiritual seeker, or simply a traveler looking to connect with the soul of Sri Lanka, Anuradhapura offers a journey back in time that is as humbling as it is awe-inspiring.
+            </p>
         </div>
       </section>
 
-      {/* Inline Styles for Custom Animations */}
+      {/* Inline Styles for Custom Animations & Blog Typography */}
       <style>{`
         @keyframes slow-pan {
             0% { transform: scale(1.05) translate(0,0); }
@@ -333,6 +262,49 @@ const AnuradhapuraPage = () => {
         }
         .animate-slide-up {
             animation: slide-up 1s ease-out forwards;
+        }
+        
+        /* Blog Content Elegant Styling */
+        .blog-content h2, .blog-content h3, .blog-content h4 {
+          font-family: 'Playfair Display', serif;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2.5rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.3;
+        }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
+        .blog-content p {
+          margin-bottom: 1.75rem;
+          font-size: 1.125rem;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+        .blog-content blockquote {
+            border-left: 2px solid #d97706; /* amber-600 */
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #44403c; /* stone-700 */
+            margin: 2.5rem 0;
+            background: linear-gradient(to right, #fef3c7, transparent); /* amber-100 */
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.75rem;
+            padding-left: 1.5rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 600;
         }
       `}</style>
 
@@ -359,10 +331,6 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
-                    <div className="h-[1px] w-8 bg-current"></div>
-                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div> */}
             </div>
         </div>
     </div>

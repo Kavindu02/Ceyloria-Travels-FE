@@ -28,7 +28,14 @@ export default function AccommodationsAdminPage() {
         setAccommodations(res.data);
       } catch (err) {
         console.error(err);
-        toast.error("Failed to fetch accommodations");
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          toast.error("Session expired. Please login again.");
+          localStorage.removeItem("token");
+          localStorage.removeItem("role"); // Clear role too
+          navigate("/login");
+        } else {
+          toast.error("Failed to fetch accommodations");
+        }
       } finally {
         setLoading(false);
       }

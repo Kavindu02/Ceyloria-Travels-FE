@@ -48,103 +48,240 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-white dark:bg-gray-950 ${fontBody} pt-24 pb-20`}>
-      <article className="max-w-4xl mx-auto px-6">
-        {/* Back Button */}
-        <Link to="/blogs" className="inline-flex items-center gap-2 text-gray-500 hover:text-blue-600 transition-colors mb-8 group">
-          <ArrowLeft size={20} className="transform group-hover:-translate-x-1 transition-transform" />
-          Back to Blog
-        </Link>
-
-        {/* Header */}
-        <header className="mb-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="bg-blue-600 text-white text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6 inline-block">
-              {post.category}
-            </span>
-            <h1 className={`text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight ${fontHead}`}>
-              {post.title}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-6 text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-800 pb-10">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
-                  {post.author.charAt(0)}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">{post.author}</p>
-                  <p className="text-xs">Travel Expert</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar size={18} className="text-blue-500" /> {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}
-              </div>
-              {post.readTime && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock size={18} className="text-blue-500" /> {post.readTime}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </header>
-
-        {/* Featured Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="rounded-[2rem] overflow-hidden mb-12 shadow-2xl"
-        >
-          <img src={post.image} alt={post.title} className="w-full h-auto object-cover max-h-[600px]" />
-        </motion.div>
-
-        {/* Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div
-            className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-6 blog-content"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+    <div className="font-sans text-stone-800 bg-stone-50 selection:bg-amber-200 selection:text-amber-900 overflow-x-hidden">
+      {/* ==================== 1. CINEMATIC HERO SECTION ==================== */}
+      <div className="relative h-[85vh] md:h-[95vh] w-full overflow-hidden group mb-0">
+        <div className="absolute inset-0 overflow-hidden">
+            <img 
+              src={post.image || "https://images.unsplash.com/photo-1608481337062-4093bf3ed404"} 
+              alt={post.title} 
+              className="w-full h-full object-cover scale-105 animate-slow-pan"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-stone-900/90 mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
+        </div>
+        
+        {/* Back Navigation */}
+        <div className="absolute top-24 left-6 md:left-16 z-30">
+            <Link to="/blogs" className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors group/btn">
+                <ArrowLeft size={20} className="transform group-hover/btn:-translate-x-1 transition-transform" />
+                <span className="text-sm font-bold uppercase tracking-widest">Back to Journal</span>
+            </Link>
         </div>
 
-        {/* Footer / Share */}
-        <footer className="mt-16 pt-10 border-t border-gray-100 dark:border-gray-800">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-blue-600 transition-colors">
-                <Share2 size={18} /> Share Post
-              </button>
-              <button className="flex items-center gap-2 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-blue-600 transition-colors">
-                <MessageSquare size={18} /> 4 Comments
-              </button>
+        <div className="absolute bottom-0 left-0 w-full p-6 md:p-16 z-20">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 gap-8 items-end">
+            <div className="animate-slide-up">
+              <span className="inline-block px-3 py-1 mb-4 border border-white/30 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase text-white backdrop-blur-md">
+                {post.category || 'Journal'}
+              </span>
+              <h1 className="text-4xl md:text-6xl lg:text-8xl font-serif text-white leading-[0.9] tracking-tighter mb-6">
+                {post.title}
+              </h1>
+              <p className="text-lg md:text-xl text-stone-200 font-light max-w-2xl leading-relaxed border-l-2 border-amber-500 pl-6 line-clamp-2">
+                {post.excerpt}
+              </p>
             </div>
           </div>
-        </footer>
-      </article>
+        </div>
+      </div>
 
-      {/* Custom Styles for Blog Content */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .blog-content h3 {
+      {/* ==================== 2. ELEGANT STATS STRIP ==================== */}
+      <div className="bg-stone-900 text-white py-10 px-6 border-b border-stone-800">
+        <div className="max-w-7xl mx-auto flex flex-wrap gap-8 md:gap-16 items-center">
+            <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-stone-800 flex items-center justify-center text-amber-500 font-serif text-xl border border-stone-700">
+                    {post.author ? post.author.charAt(0) : 'C'}
+                </div>
+                <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 mb-1">Author</p>
+                    <p className="text-lg font-serif text-stone-100">{post.author || 'Ceyloria Team'}</p>
+                </div>
+            </div>
+            
+            <div className="h-10 w-[1px] bg-stone-800/50 hidden md:block"></div>
+
+            <div className="flex items-center gap-4">
+                <Calendar className="w-8 h-8 text-amber-600" />
+                <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500 mb-1">Published</p>
+                    <p className="text-lg font-serif text-stone-100">
+                        {post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Recently'}
+                    </p>
+                </div>
+            </div>
+
+            <div className="flex-1"></div>
+
+            <div className="flex items-center gap-4">
+                <button className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-amber-500 transition-colors">
+                    <Share2 size={16} /> Share
+                </button>
+            </div>
+        </div>
+      </div>
+
+      {/* ==================== 3. NARRATIVE LAYOUT ==================== */}
+      <section className="py-24 px-6 max-w-7xl mx-auto overflow-hidden">
+        <div className="relative">
+             {/* Decorative Background Text */}
+            <div className="absolute -top-20 -left-10 text-[6rem] md:text-[10rem] font-serif text-stone-200 select-none opacity-50 z-0 leading-none whitespace-nowrap overflow-hidden w-full blur-sm">
+                JOURNAL
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+                
+                {/* Visual Anchor (Left Side) - Only show if post has image */}
+                <div className="lg:col-span-4 hidden lg:block sticky top-32 h-fit">
+                     <div className="relative rounded-[2rem] overflow-hidden shadow-2xl h-[400px]">
+                         <img 
+                            src={post.image || "/pagesPhotos/anuradhapura/spa.png"} 
+                            alt="Story Visual" 
+                            className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-1000"
+                         />
+                         <div className="absolute inset-0 bg-amber-900/20 mix-blend-multiply"></div>
+                     </div>
+                </div>
+
+                {/* Text Content (Right Side) */}
+                <div className="lg:col-span-8">
+                    <div className="bg-white/90 backdrop-blur-xl p-8 md:p-12 lg:p-16 rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] border border-white/50">
+                        <div className="flex items-center gap-3 mb-10">
+                            <span className="w-12 h-[1px] bg-amber-600"></span>
+                            <span className="text-amber-600 text-xs font-bold uppercase tracking-widest">Curated Exploration</span>
+                        </div>
+                        
+                        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed quill-content break-words">
+                            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                        </div>
+
+                        {/* Additional Images Section */}
+                        {post.images && post.images.length > 0 && (
+                            <div className="mt-16 pt-12 border-t border-stone-200">
+                                <div className="flex items-center gap-3 mb-8">
+                                    <span className="w-8 h-[1px] bg-amber-600"></span>
+                                    <h4 className="font-serif text-2xl text-stone-800">Visual Gallery</h4>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                                    {post.images.map((imgUrl, idx) => (
+                                        <div key={idx} className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg group">
+                                            <img
+                                                src={imgUrl}
+                                                alt={`Gallery image ${idx + 1}`}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-stone-900/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      {/* Inline Styles for Custom Animations & Blog Typography */}
+      <style>{`
+        @keyframes slow-pan {
+            0% { transform: scale(1.05) translate(0,0); }
+            100% { transform: scale(1.15) translate(-1%, -1%); }
+        }
+        .animate-slow-pan {
+            animation: slow-pan 20s infinite alternate ease-in-out;
+        }
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slide-up 1s ease-out forwards;
+        }
+
+        /* React Quill Specific Overrides */
+        .quill-content .ql-align-center {
+            text-align: center;
+        }
+        .quill-content .ql-align-right {
+            text-align: right;
+        }
+        .quill-content .ql-align-justify {
+            text-align: justify;
+        }
+        .quill-content .ql-size-small {
+            font-size: 0.75em;
+        }
+        .quill-content .ql-size-large {
+            font-size: 1.5em;
+        }
+        .quill-content .ql-size-huge {
+            font-size: 2.5em;
+        }
+        .quill-content blockquote {
+            border-left: 4px solid #f59e0b; /* amber-500 */
+            padding-left: 1rem;
+            margin-left: 0;
+            margin-right: 0;
+            font-style: italic;
+            color: #4b5563; /* gray-600 */
+        }
+        .quill-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .quill-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+        }
+
+        /* Blog Content Elegant Styling */
+        .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4, .blog-content h5, .blog-content h6 {
           font-family: 'Playfair Display', serif;
-          font-size: 1.875rem;
-          font-weight: 700;
-          color: #111827;
-          margin-top: 2.5rem;
-          margin-bottom: 1.25rem;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+          line-height: 1.3;
         }
-        .dark .blog-content h3 {
-          color: #f3f4f6;
-        }
+        .blog-content h1 { font-size: 3rem; }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
         .blog-content p {
-          font-size: 1.125rem;
-          line-height: 1.8;
           margin-bottom: 1.5rem;
+          font-size: 1.125rem;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
+          max-width: 100%;
         }
-      `}} />
+        .blog-content {
+          word-break: break-word;
+          overflow-wrap: break-word;
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem auto;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            display: block;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 700;
+        }
+        .blog-content em {
+            font-style: italic;
+        }
+        .blog-content u {
+            text-decoration: underline;
+        }
+        .blog-content s {
+            text-decoration: line-through;
+        }
+      `}</style>
     </div>
   );
 };

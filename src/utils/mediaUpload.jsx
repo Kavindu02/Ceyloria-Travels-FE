@@ -20,12 +20,17 @@ export default function mediaUpload(file) {
 				cacheControl: "3600",
 				upsert: false,
 			})
-			.then(() => {
+			.then(({ data, error }) => {
+                if (error) {
+                    console.error("Supabase upload error:", error);
+                    return reject(error.message || "Error uploading file");
+                }
 				const publicUrl = supabase.storage.from("images").getPublicUrl(fileName)
 					.data.publicUrl;
 				resolve(publicUrl);
-			}).catch(()=>{
-                reject("Error uploading file")
+			}).catch((err)=>{
+                console.error("Upload exception:", err);
+                reject(err?.message || "Error uploading file")
             })
 	});
 }

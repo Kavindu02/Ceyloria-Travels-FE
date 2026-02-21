@@ -116,73 +116,86 @@ const Blog = () => {
                 Try refreshing
               </button>
             </div>
-          ) : filteredPosts.length > 0 ? (
-            filteredPosts.map((post) => (
-              <div
-                id={post.anchor}
-                key={post._id}
-                className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 group flex flex-col h-full transform hover:-translate-y-2"
-              >
-                {/* Image Container */}
-                <div className="relative h-72 overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
-                  <div className="absolute top-6 left-6">
-                    <span className="bg-blue-600 text-white text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-lg">
-                      {post.category}
-                    </span>
+          ) : (
+            (() => {
+              if (filteredPosts.length === 0) {
+                return (
+                  <div className="col-span-full py-20 text-center">
+                    <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
+                      <Search size={40} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">No results found</h3>
+                    <p className="text-gray-500 mt-2">Try searching for something else like "Colombo" or "Nature"</p>
                   </div>
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
+                );
+              }
 
-                {/* Content Container */}
-                <div className="p-8 md:p-10 flex flex-col flex-1">
-                  <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 leading-tight group-hover:text-blue-600 transition-colors">
-                    {post.title}
-                  </h3>
+              return filteredPosts.map((post) => (
+                <div
+                  key={post._id}
+                  className="group relative bg-white rounded-[2rem] overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col h-full"
+                  onClick={() => window.location.href = post.path || `/blog/${post._id}`}
+                >
+                  {/* --- Image Section --- */}
+                  <div className="relative h-72 overflow-hidden bg-gray-100 cursor-pointer">
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
 
-                  <p className="text-gray-500 leading-relaxed line-clamp-3 mb-8 text-lg font-light">
-                    {post.excerpt}
-                  </p>
+                    <img
+                      src={post.image || "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a"}
+                      alt={post.title}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
 
-                  <div className="mt-auto pt-8 border-t border-gray-50 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-black text-sm">
-                        {post.author ? post.author.charAt(0) : 'C'}
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">{post.author || 'Ceyloria Team'}</p>
-                        <p className="text-[10px] text-gray-400 font-medium">Travel Expert</p>
+                    {/* Top Badges */}
+                    <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-20">
+                      <div className="bg-white/90 backdrop-blur-md text-gray-800 text-xs font-bold px-4 py-2 rounded-full flex items-center gap-2 shadow-sm border border-white/50">
+                        <span className="uppercase tracking-wide">
+                          {post.category || "Journal"}
+                        </span>
                       </div>
                     </div>
+                  </div>
 
-                    <Link
-                      to={`/blog/${post._id}`}
-                      className="relative overflow-hidden group/btn bg-gray-50 text-gray-900 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300"
-                    >
-                      <ArrowRight size={24} className="group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
+                  {/* --- Content Section --- */}
+                  <div className="p-8 flex flex-col flex-grow relative cursor-pointer">
+                    {/* Title */}
+                    <h3 className="text-2xl font-black text-gray-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight line-clamp-1">
+                      {post.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-gray-500 text-sm leading-relaxed mb-8 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+
+                    {/* --- Footer Section --- */}
+                    <div className="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block">
+                        Read Article
+                      </span>
+
+                      {/* Explore Button */}
+                      <button className="relative overflow-hidden group/btn bg-gray-900 text-white pl-6 pr-5 py-3 rounded-full font-bold text-sm shadow-lg shadow-gray-900/20 transition-all hover:shadow-gray-900/40 hover:-translate-y-1">
+                        <span className="relative z-10 flex items-center gap-2">
+                          Read
+                          <div className="bg-white/20 p-1 rounded-full group-hover/btn:translate-x-1 transition-transform">
+                            <ArrowRight size={14} />
+                          </div>
+                        </span>
+                        {/* Hover Gradient */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full py-20 text-center">
-              <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
-                <Search size={40} />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">No results found</h3>
-              <p className="text-gray-500 mt-2">Try searching for something else like "Colombo" or "Nature"</p>
-            </div>
+              ));
+            })()
           )}
         </div>
       </section>
 
-      <style jsx global>{`
+      <style>{`
         @keyframes subtle-zoom {
           0% { transform: scale(1.05); }
           100% { transform: scale(1.15); }

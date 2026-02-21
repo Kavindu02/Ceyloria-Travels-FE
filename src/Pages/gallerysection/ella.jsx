@@ -220,121 +220,50 @@ const EllaPage = () => {
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-         <div className="text-center mb-20">
-            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">Mountain Diaries</span>
-            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Highland Stories</h2>
-            <div className="w-[1px] h-16 bg-yellow-500 mx-auto"></div>
-         </div>
+      {/* ==================== 5. ELLA BLOG CONTENT ==================== */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed">
+            <h2>Up in the Clouds: The Magic of Ella</h2>
+            <p>
+                There is a very specific type of air in <strong>Ella</strong>. It’s crisp, cool, and carries the faint, sweet scent of Ceylon tea. Nestled high in the central highlands of Sri Lanka, this small mountain town has captured the hearts of travelers worldwide, evolving from a sleepy village into the island's premier eco-tourism hub.
+            </p>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Article 1 */}
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/ella/teaplantation.png" alt="Tea Plantation" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Tea Culture & Heritage</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        Sipping History: Ceylon Tea Legacy
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Walk through emerald tea estates where pickers still harvest leaves by hand, and discover how Ceylon tea became the world's finest brew.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
+            <img src="/pagesPhotos/ella/ninearch.png" alt="Train crossing the Nine Arch Bridge" />
 
-            {/* Article 2 */}
-            <div className="group cursor-pointer mt-12 lg:mt-0">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/ella/trainride.png" alt="Train Journey" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Epic Journeys</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        The Most Beautiful Train Ride in the World
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Experience the legendary Kandy to Ella train journey, where every window frames a postcard-perfect view of Sri Lanka's stunning highlands.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
-         </div>
-      </section>
+            <h3>The Golden Hour at the Nine Arch Bridge</h3>
+            <p>
+                Perhaps no image is more synonymous with the Sri Lankan hill country than the <strong>Nine Arch Bridge</strong> (Demodara). Commissioned under the British but constructed entirely by local builders using only stone, brick, and cement (without a single piece of steel), it stands as a colossal architectural triumph amidst the dense jungle.
+            </p>
+            <p>
+                The true magic happens just after dawn. As the morning mist begins to lift from the tea bushes, the whistle of the iconic blue train echoes through the valley. Watching the train slowly curve over the bridge while the rising sun paints the stone arches in shades of gold is an experience that borders on cinematic.
+            </p>
 
-      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
-      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <blockquote>
+                "Ella doesn't ask you to rush. It invites you to sit, sip a cup of world-class tea, and watch the clouds roll through the mountain gaps."
+            </blockquote>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-                <div>
-                   <h2 className="text-4xl md:text-6xl font-serif mb-2">Mountain Retreats</h2>
-                   <p className="text-stone-400 font-light">Curated experiences for nature lovers.</p>
-                </div>
-                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
-                    View All Offers
-                </button> */}
-            </div>
+            <h3>Trails and Tales</h3>
+            <p>
+                Ella is a hiker’s paradise, offering trails that reward every level of effort. For a breathtaking yet accessible trek, <strong>Little Adam’s Peak</strong> is ideal. The path meanders through working tea estates before ascending to a ridge that offers panoramic 360-degree views of the Ella Gap—a dramatic cleft in the mountains that allows you to see all the way to the southern plains on a clear day.
+            </p>
+            <p>
+                For the more adventurous, the hike up <strong>Ella Rock</strong> is a rite of passage. It requires navigating along the active railway tracks (a thrillingly common practice in Sri Lanka) before a steep climb through eucalyptus forests. The summit provides a dramatic, plunging view of the valley below.
+            </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Offer 1 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/ella/ecolodge.png" alt="Eco Lodge" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
-                            Eco-Friendly
-                        </div>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Highland Eco Escape</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Stay in sustainable luxury with mountain views, organic meals, and guided nature walks through tea estates.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$950</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
+            <h3>Essential Tips for Your Visit</h3>
+            <ul>
+                <li><strong>The Train Journey:</strong> The train ride from Kandy to Ella is frequently described as the most scenic in the world. Book tickets well in advance, and try to get a seat on the right side of the train for the best views.</li>
+                <li><strong>Weather:</strong> The weather in the mountains is notoriously unpredictable. Always carry a light rain jacket, even if the morning starts off bright and sunny.</li>
+                <li><strong>Local Flavors:</strong> After a long hike, refuel with a traditional Sri Lankan rice and curry at one of the family-run <em>mateys</em> (small cafes) in town. The highland vegetables here are extraordinarily fresh.</li>
+            </ul>
 
-                {/* Offer 2 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/ella/adventurepack.png" alt="Adventure Package" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Ultimate Adventure Pack</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Hiking, zip-lining, and waterfall rappelling with expert guides and all equipment included.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$675</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p>
+                Ella is the kind of place where days effortlessly slip into weeks. Between the cascading waterfalls, the emerald tea fields, and the incredibly laid-back atmosphere, it remains the undisputed crown jewel of Sri Lanka's high country.
+            </p>
         </div>
       </section>
 
-      {/* Inline Styles for Custom Animations */}
+      {/* Inline Styles for Custom Animations & Blog Typography */}
       <style>{`
         @keyframes slow-pan {
             0% { transform: scale(1.05) translate(0,0); }
@@ -349,6 +278,49 @@ const EllaPage = () => {
         }
         .animate-slide-up {
             animation: slide-up 1s ease-out forwards;
+        }
+        
+        /* Blog Content Elegant Styling */
+        .blog-content h2, .blog-content h3, .blog-content h4 {
+          font-family: 'Playfair Display', serif;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2.5rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.3;
+        }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
+        .blog-content p {
+          margin-bottom: 1.75rem;
+          font-size: 1.125rem;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+        .blog-content blockquote {
+            border-left: 2px solid #ca8a04; /* yellow-600 */
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #44403c; /* stone-700 */
+            margin: 2.5rem 0;
+            background: linear-gradient(to right, #fef08a, transparent); /* yellow-200 */
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.75rem;
+            padding-left: 1.5rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 600;
         }
       `}</style>
 
@@ -375,10 +347,6 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
-                    <div className="h-[1px] w-8 bg-current"></div>
-                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div> */}
             </div>
         </div>
     </div>

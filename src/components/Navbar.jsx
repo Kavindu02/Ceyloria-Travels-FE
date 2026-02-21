@@ -95,7 +95,8 @@ export default function Navbar() {
 
   // Check if on overview pages (white background pages)
   const isOverviewPage = location.pathname.includes('/package-overview/') ||
-    location.pathname.includes('/accommodation-overview/');
+    location.pathname.includes('/accommodation-overview/') ||
+    location.pathname.includes('/plan-my-trip');
 
   return (
     <nav
@@ -106,13 +107,18 @@ export default function Navbar() {
           : "bg-transparent py-4"
         }`}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 xl:px-12 h-16 md:h-20 flex items-center justify-between">
 
         <Link to="/" className="relative z-50 flex flex-col group py-1">
           <div className="flex items-center">
             <span className="text-3xl font-serif font-bold tracking-tight" style={{ fontFamily: "'Alice', serif" }}>
               <span style={{ color: "#FF8C00" }}>Cey</span>
-              <span style={{ color: "#001C57" }}>loria</span>
+              <span 
+                className="transition-colors duration-300" 
+                style={{ color: (scrolled || menuOpen || isOverviewPage) ? "#FFFFFF" : "#001C57" }}
+              >
+                loria
+              </span>
             </span>
           </div>
           <span className="text-[11px] font-medium tracking-[0.22em] text-gray-300 uppercase -mt-1 group-hover:text-blue-400 transition-colors">
@@ -121,14 +127,14 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-8 text-white/90 font-medium text-sm lg:text-base">
-          {['Home', 'About', 'Destinations', 'Packages', 'Accommodations', 'Blogs'].map((item) => (
+        <ul className="hidden lg:flex items-center gap-3 lg:gap-5 xl:gap-6 text-white/90 font-medium text-sm lg:text-[15px]">
+          {['Home', 'About', 'Destinations', 'Packages', 'Accommodations', 'Blogs', 'Contact'].map((item) => (
             <li key={item}>
               <Link
                 to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
                 className="relative hover:text-white transition-colors py-2 group"
               >
-                {item}
+                {item === 'Contact' ? 'Contact Us' : item}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full" />
               </Link>
             </li>
@@ -194,10 +200,10 @@ export default function Navbar() {
           </div>
 
           <Link
-            to="/contact"
+            to="/plan-my-trip"
             className="px-5 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-blue-500 hover:text-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-blue-500/50"
           >
-            Contact Us
+            Plan My Trip
           </Link>
         </div>
 

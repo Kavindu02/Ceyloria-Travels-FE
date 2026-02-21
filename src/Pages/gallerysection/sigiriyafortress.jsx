@@ -220,121 +220,50 @@ const SigiriyaPage = () => {
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-         <div className="text-center mb-20">
-            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">Royal Chronicles</span>
-            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Tales from the Rock</h2>
-            <div className="w-[1px] h-16 bg-yellow-500 mx-auto"></div>
-         </div>
+      {/* ==================== 5. SIGIRIYA BLOG CONTENT ==================== */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed">
+            <h2>The Eighth Wonder of the World: Ascending Sigiriya</h2>
+            <p>
+                Rising abruptly and dramatically from the flat plains of Sri Lanka’s dry zone, <strong>Sigiriya</strong> (Lion Rock) is a sight that defies logic. How, in the 5th century AD, did an ambitious king construct a sprawling palace, complete with sophisticated water gardens and exquisite frescoes, atop a sheer 200-meter column of rock?
+            </p>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Article 1 */}
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/sigiriya/sunrise.png" alt="Sunrise at Sigiriya" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Historical Mystery</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        The Legend of King Kashyapa's Fortress
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Uncover the dramatic story of patricide, exile, and ambition that led to the creation of one of the world's most extraordinary archaeological sites.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
+            <img src="/pagesPhotos/sigiriya/frescoes.png" alt="The Sigiriya Maidens Frescoes" />
 
-            {/* Article 2 */}
-            <div className="group cursor-pointer mt-12 lg:mt-0">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/sigiriya/archaeology.png" alt="Archaeological Discoveries" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Archaeological Wonder</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        Decoding Ancient Urban Planning
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        How Sigiriya's sophisticated water management, gardens, and architectural design continue to astound modern engineers and archaeologists.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
-         </div>
-      </section>
+            <h3>A Story of Betrayal and Brilliance</h3>
+            <p>
+                The history of Sigiriya is as dramatic as its geology. It was built by King Kashyapa, who seized the throne by burying his father alive and driving his brother into exile. Deeply fearful of his brother's eventual return, Kashyapa relocated the capital and built his impregnable "sky palace" atop this massive monolith.
+            </p>
+            <p>
+                Despite his paranoia, Kashyapa was a man of profound artistic vision. The climb begins through the meticulously symmetrical <strong>Water Gardens</strong>, showcasing an understanding of hydraulic engineering that continues to baffle modern scientists. The fountains here still work during the rainy season, driven by ancient underground channels.
+            </p>
 
-      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
-      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <blockquote>
+                "Sigiriya is the ultimate monument to human ambition—a place where architectural genius and intense paranoia collided to create unparalleled beauty."
+            </blockquote>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-                <div>
-                   <h2 className="text-4xl md:text-6xl font-serif mb-2">Heritage Experiences</h2>
-                   <p className="text-stone-400 font-light">Exclusive access to ancient wonders.</p>
-                </div>
-                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
-                    View All Offers
-                </button> */}
-            </div>
+            <h3>The Mirror Wall and the Maidens</h3>
+            <p>
+                Halfway up the rock face, a spiral staircase leads to a sheltered cave housing the world-famous <strong>Sigiriya Frescoes</strong>. Once covering the entire western face of the rock, these vivid paintings of celestial maidens (or perhaps Kashyapa’s concubines) offer a breathtaking glimpse into ancient Sinhalese artistry.
+            </p>
+            <p>
+                Just beyond the frescoes lies the <strong>Mirror Wall</strong>. Originally coated in a glaze so highly polished that the king could see his reflection, it is now covered in ancient graffiti. Visitors from the 6th to 14th centuries left poems expressing their awe at the maidens and the palace, creating one of the world's oldest surviving guestbooks.
+            </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Offer 1 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/sigiriya/guidedtour.png" alt="Private Guided Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
-                            Exclusive
-                        </div>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Private Archaeological Tour</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Experience Sigiriya with a certified archaeologist, including early-morning access before crowds arrive.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$1,450</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
+            <h3>Essential Tips for Your Visit</h3>
+            <ul>
+                <li><strong>Beat the Heat:</strong> The climb involves about 1,200 steps and there is virtually no shade on the summit. Arrive right when the gates open at 7:00 AM, or go late in the afternoon (around 3:30 PM).</li>
+                <li><strong>The Lion Paws:</strong> The final ascent begins at a mid-level terrace guarded by two massive stone lion paws—the only remnants of what was once a gigantic brick lion head through which visitors had to walk.</li>
+                <li><strong>Pidurangala Rock:</strong> For the best view <em>of</em> Sigiriya itself, hike the neighboring Pidurangala Rock for sunrise. It’s cheaper, less crowded, and offers a stunning vantage point of the fortress blending into the jungle.</li>
+            </ul>
 
-                {/* Offer 2 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/sigiriya/culturaltriangle.png" alt="Cultural Triangle Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Cultural Triangle Journey</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Explore Sigiriya, Polonnaruwa, and Dambulla with luxury accommodations and expert guides.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$2,750</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p>
+                Standing on the terraced summit where Kashyapa once ruled, with 360-degree views of the emerald jungle stretching to the horizon, one must admit: the usurper king certainly knew how to build a legacy.
+            </p>
         </div>
       </section>
 
-      {/* Inline Styles for Custom Animations */}
+      {/* Inline Styles for Custom Animations & Blog Typography */}
       <style>{`
         @keyframes slow-pan {
             0% { transform: scale(1.05) translate(0,0); }
@@ -349,6 +278,49 @@ const SigiriyaPage = () => {
         }
         .animate-slide-up {
             animation: slide-up 1s ease-out forwards;
+        }
+        
+        /* Blog Content Elegant Styling */
+        .blog-content h2, .blog-content h3, .blog-content h4 {
+          font-family: 'Playfair Display', serif;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2.5rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.3;
+        }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
+        .blog-content p {
+          margin-bottom: 1.75rem;
+          font-size: 1.125rem;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+        .blog-content blockquote {
+            border-left: 2px solid #ca8a04; /* yellow-600 */
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #44403c; /* stone-700 */
+            margin: 2.5rem 0;
+            background: linear-gradient(to right, #fef08a, transparent); /* yellow-200 */
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.75rem;
+            padding-left: 1.5rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 600;
         }
       `}</style>
 
@@ -375,10 +347,6 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
-                    <div className="h-[1px] w-8 bg-current"></div>
-                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div> */}
             </div>
         </div>
     </div>

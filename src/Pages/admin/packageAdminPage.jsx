@@ -53,7 +53,6 @@ export default function PackageAdminPage() {
   };
 
   if (loading) return <div className="p-10 text-white">Loading packages...</div>;
-  if (!packages.length) return <div className="p-10 text-white">No packages found.</div>;
 
   return (
     <div className="p-6">
@@ -67,44 +66,46 @@ export default function PackageAdminPage() {
         </button>
       </div>
 
-      <table className="min-w-full bg-slate-800 text-white rounded-lg overflow-hidden">
-        <thead className="bg-slate-900">
-          <tr>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Price</th>
-            <th className="px-4 py-2">Duration</th>
-            <th className="px-4 py-2">Cities Covered</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {packages.map((pkg) => (
-            <tr key={pkg._id} className="border-b border-gray-700">
-              <td className="px-4 py-2">{pkg.title}</td>
-              <td className="px-4 py-2">LKR {pkg.price.toLocaleString()}</td>
-              <td className="px-4 py-2">{pkg.duration}</td>
-              <td className="px-4 py-2">{pkg.citiesCovered.join(", ")}</td>
-              <td className="px-4 py-2 flex gap-2">
-                {/* Edit Button */}
-                <Link
-                  to={`/admin/package-admin/${pkg._id}`}
-                  className="bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 flex items-center"
-                >
-                  <FaEdit />
-                </Link>
-
-                {/* Delete Button */}
-                <button
-                  onClick={() => handleDelete(pkg._id)}
-                  className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 flex items-center"
-                >
-                  <FaTrash />
-                </button>
-              </td>
+      {!packages.length ? (
+        <div className="p-10 text-white">No packages found.</div>
+      ) : (
+        <table className="min-w-full bg-slate-800 text-white rounded-lg overflow-hidden">
+          <thead className="bg-slate-900">
+            <tr>
+              <th className="px-4 py-2">Title</th>
+              <th className="px-4 py-2">Price</th>
+              <th className="px-4 py-2">Duration</th>
+              <th className="px-4 py-2">Cities Covered</th>
+              <th className="px-4 py-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {packages.map((pkg) => (
+              <tr key={pkg._id} className="border-b border-gray-700">
+                <td className="px-4 py-2">{pkg.title}</td>
+                <td className="px-4 py-2">LKR {pkg.price.toLocaleString()}</td>
+                <td className="px-4 py-2">{pkg.duration}</td>
+                <td className="px-4 py-2">{pkg.citiesCovered.join(", ")}</td>
+                <td className="px-4 py-2 flex gap-2">
+                  <Link
+                    to={`/admin/package-admin/${pkg._id}`}
+                    className="bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 flex items-center"
+                  >
+                    <FaEdit />
+                  </Link>
+
+                  <button
+                    onClick={() => handleDelete(pkg._id)}
+                    className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 flex items-center"
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

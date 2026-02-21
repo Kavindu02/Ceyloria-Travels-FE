@@ -310,6 +310,56 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ---------------------- 6. PACKAGES ---------------------- */}
+      <section className="py-24 md:py-32 px-6 md:px-16 lg:px-24 bg-gray-50 relative z-40 rounded-t-[3rem] -mt-10 md:-mt-20 shadow-[0_-20px_40px_-20px_rgba(0,0,0,0.1)]">
+        <div className="max-w-7xl mx-auto">
+          <Reveal>
+            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+              <div>
+                <h2 className={`${fontHead} text-5xl md:text-6xl text-gray-900 mb-4`}>Curated Packages</h2>
+                <p className="text-gray-500 max-w-md">Handpicked experiences designed to show you the soul of the island.</p>
+              </div>
+              <Link to="/packages">
+                <button className="px-8 py-3 border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition-colors">View All Offers</button>
+              </Link>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {((latestPackages && latestPackages.length) ? latestPackages : packages).map((pkg, idx) => (
+              <Reveal key={idx} delay={idx * 150}>
+                <div
+                  onClick={() => pkg._id && navigate(`/package-overview/${pkg._id}`)}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full flex flex-col w-full">
+                  <div className="relative h-80 overflow-hidden">
+                    {/* support both sample pkg.image and backend pkg.images array */}
+                    <img src={pkg.image || (Array.isArray(pkg.images) && pkg.images[0]) || "/gallery/img1.jpg"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                      Best Seller
+                    </div>
+                  </div>
+                  <div className="p-8 flex flex-col flex-grow">
+                    <div className="flex items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {pkg.duration || pkg.days || "N/A"}</span>
+                      <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {pkg.maxGuests || pkg.people || "2-8"} Pax</span>
+                    </div>
+                    <h3 className={`${fontHead} text-2xl text-gray-900 mb-3 group-hover:text-blue-600 transition-colors`}>{pkg.title}</h3>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3">{pkg.shortDescription || pkg.description || pkg.desc || "Experience the best of Sri Lanka with our curated packages."}</p>
+                    <div className="flex justify-between items-center mt-auto pt-6 border-t border-gray-100">
+                      <span className="text-sm font-medium underline decoration-gray-300 underline-offset-4 group-hover:decoration-blue-600 transition-all">View Itinerary</span>
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ---------------------- 3. GALLERY ---------------------- */}
       <section ref={capturedMomentsRef} className="py-20 bg-gray-50 border-t border-gray-200">
         <div className="px-6 md:px-12 lg:px-24">
@@ -399,59 +449,9 @@ export default function HomePage() {
         ))}
       </section>
 
-      {/* ---------------------- 6. PACKAGES ---------------------- */}
-      <section className="py-32 px-6 md:px-16 lg:px-24 bg-gray-50 relative z-50 rounded-t-[3rem] -mt-20">
-        <div className="max-w-7xl mx-auto">
-          <Reveal>
-            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-              <div>
-                <h2 className={`${fontHead} text-5xl md:text-6xl text-gray-900 mb-4`}>Curated Packages</h2>
-                <p className="text-gray-500 max-w-md">Handpicked experiences designed to show you the soul of the island.</p>
-              </div>
-              <Link to="/packages">
-                <button className="px-8 py-3 border border-gray-300 rounded-full hover:bg-gray-900 hover:text-white transition-colors">View All Offers</button>
-              </Link>
-            </div>
-          </Reveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {((latestPackages && latestPackages.length) ? latestPackages : packages).map((pkg, idx) => (
-              <Reveal key={idx} delay={idx * 150}>
-                <div
-                  onClick={() => pkg._id && navigate(`/package-overview/${pkg._id}`)}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full flex flex-col w-full">
-                  <div className="relative h-80 overflow-hidden">
-                    {/* support both sample pkg.image and backend pkg.images array */}
-                    <img src={pkg.image || (Array.isArray(pkg.images) && pkg.images[0]) || "/gallery/img1.jpg"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={pkg.title} />
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
-                      Best Seller
-                    </div>
-                  </div>
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-                      <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {pkg.days}</span>
-                      <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                      <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {pkg.people} Pax</span>
-                    </div>
-                    <h3 className={`${fontHead} text-2xl text-gray-900 mb-3 group-hover:text-blue-600 transition-colors`}>{pkg.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-6">{pkg.desc}</p>
-                    <div className="flex justify-between items-center mt-auto pt-6 border-t border-gray-100">
-                      <span className="text-sm font-medium underline decoration-gray-300 underline-offset-4 group-hover:decoration-blue-600 transition-all">View Itinerary</span>
-                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all">
-                        <ArrowRight className="w-4 h-4" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
 
-
-      <style jsx global>{`
+      <style>{`
         @keyframes slideUp {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }

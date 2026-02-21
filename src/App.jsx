@@ -16,6 +16,7 @@ import SigiriyaPage from "./Pages/gallerysection/sigiriyafortress";
 import LoginPage from "./Pages/loginPage";
 import RegisterPage from "./Pages/registerPage";
 import Contact from "./Pages/Contact";
+import PlanMyTrip from "./Pages/PlanMyTrip";
 import PackagesPage from "./Pages/customer/PackagesPage";
 import PackageOverviewPage from "./Pages/customer/packageOverviewPage";
 import AccommodationsPage from "./Pages/customer/accommodationsPage";
@@ -26,6 +27,7 @@ import Loader from "./components/loader";
 import ScrollToTop from "./components/ScrollToTop";
 import SearchResults from "./Pages/SearchResults";
 import LanguageSwitcher from "./components/LanguageSwitcher";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -51,6 +53,9 @@ export default function App() {
       {/* Language Switcher */}
       {!loading && !isAdminRoute && <LanguageSwitcher />}
 
+      {/* WhatsApp Button */}
+      {!loading && !isAdminRoute && <WhatsAppButton />}
+
       {/* Loader */}
       {loading && <Loader />}
 
@@ -68,6 +73,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/plan-my-trip" element={<PlanMyTrip />} />
         <Route path="/packages" element={<PackagesPage />} />
         <Route path="/package-overview/:id" element={<PackageOverviewPage />} />
         <Route path="/accommodations" element={<AccommodationsPage />} />

@@ -220,121 +220,50 @@ const GallePage = () => {
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-         <div className="text-center mb-20">
-            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">Fort Chronicles</span>
-            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Coastal Stories</h2>
-            <div className="w-[1px] h-16 bg-yellow-500 mx-auto"></div>
-         </div>
+      {/* ==================== 5. GALLE BLOG CONTENT ==================== */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed">
+            <h2>A Timeless Fortress: The Charm of Galle</h2>
+            <p>
+                Walking through the arched stone gates of <strong>Galle Fort</strong> is like crossing the threshold into another era. While the rest of the southern coast dances to the rhythm of crashing waves and surf culture, this UNESCO World Heritage site exists in a beautifully preserved bubble of colonial history, art, and slow tropical living.
+            </p>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Article 1 */}
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/galle/boutiquehotel.png" alt="Boutique Hotel" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Luxury & Heritage</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        Living in History: Fort's Boutique Hotels
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Discover restored colonial mansions turned into intimate boutique hotels, where antique furniture meets modern luxury within centuries-old walls.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
+            <img src="/pagesPhotos/galle/gallelighthouse.png" alt="Galle Lighthouse at Sunset" />
 
-            {/* Article 2 */}
-            <div className="group cursor-pointer mt-12 lg:mt-0">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/galle/gallecricketground.png" alt="Galle Cricket" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Sports & Culture</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        Cricket by the Sea: Galle International Stadium
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Experience test cricket at one of the world's most picturesque stadiums, where the sound of leather on willow mingles with ocean breezes.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
-         </div>
-      </section>
+            <h3>Ramparts and Romance</h3>
+            <p>
+                The story of Galle is written in its walls. Originally built by the Portuguese in 1588 and extensively fortified by the Dutch during the 17th century, the massive coral and granite ramparts have protected the city for over four hundred years—even withstanding the devastating 2004 tsunami. 
+            </p>
+            <p>
+                Today, these walls serve as the city’s favorite promenade. A late afternoon walk along the ramparts is a Galle ritual. Join local families flying kites, young couples watching the sunset, and adventurous cliff-jumpers leaping into the Indian Ocean below Flag Rock. The iconic white lighthouse, framed by towering palm trees, provides the perfect backdrop for this daily tropical theatre.
+            </p>
 
-      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
-      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <blockquote>
+                "Galle Fort is not a museum piece; it is a living, breathing community where centuries of architecture cradle a vibrant contemporary culture."
+            </blockquote>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-                <div>
-                   <h2 className="text-4xl md:text-6xl font-serif mb-2">Heritage Experiences</h2>
-                   <p className="text-stone-400 font-light">Curated packages for history enthusiasts.</p>
-                </div>
-                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
-                    View All Offers
-                </button> */}
-            </div>
+            <h3>Cobblestones and Courtyards</h3>
+            <p>
+                Inside the walls, the grid-like streets (designed by the Dutch) are a joy to get lost in. Ancient merchant houses with red-tiled roofs and deep verandas have been lovingly restored into incredible boutique hotels, chic cafes, and contemporary art galleries. 
+            </p>
+            <p>
+                Take a stroll down Pedlar Street to browse for Ceylon sapphires, hand-woven lace, or vintage posters. Stop by the Dutch Reformed Church, whose floor is paved with gravestones from the old cemetery, offering a poignant glimpse into the lives of early European settlers.
+            </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Offer 1 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/galle/colonialstay.png" alt="Colonial Stay" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
-                            Heritage
-                        </div>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Colonial Heritage Stay</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Sleep within the fort walls in a restored Dutch mansion, complete with guided historical tours and sunset rampart walks.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$250</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
+            <h3>Essential Tips for Your Visit</h3>
+            <ul>
+                <li><strong>Timing:</strong> The fort gets incredibly hot during midday. Explore early in the morning or late in the afternoon, reserving the hottest hours for a prolonged, lazy lunch in a shaded courtyard.</li>
+                <li><strong>Beyond the Fort:</strong> While the fort is captivating, don't miss the surrounding area. Unawatuna's crescent-shaped beach is just a short tuk-tuk ride away, offering great swimming and snorkeling.</li>
+                <li><strong>Culinary Delights:</strong> Galle’s dining scene is arguably the best outside of Colombo. Expect incredible seafood, refined Sri Lankan fusion, and world-class gelato.</li>
+            </ul>
 
-                {/* Offer 2 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/galle/whalewatching.png" alt="Whale Watching" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Coastal Explorer Package</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Fort tour, whale watching excursion, and traditional Sri Lankan cooking class with a local family.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$150</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p>
+                Galle offers a coastal experience unlike any other in Sri Lanka—one where the elegance of European architecture meets the irresistible warmth of the tropics. It is a place that demands you slow down, sip a gin and tonic, and simply soak it all in.
+            </p>
         </div>
       </section>
 
-      {/* Inline Styles for Custom Animations */}
+      {/* Inline Styles for Custom Animations & Blog Typography */}
       <style>{`
         @keyframes slow-pan {
             0% { transform: scale(1.05) translate(0,0); }
@@ -349,6 +278,49 @@ const GallePage = () => {
         }
         .animate-slide-up {
             animation: slide-up 1s ease-out forwards;
+        }
+        
+        /* Blog Content Elegant Styling */
+        .blog-content h2, .blog-content h3, .blog-content h4 {
+          font-family: 'Playfair Display', serif;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2.5rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.3;
+        }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
+        .blog-content p {
+          margin-bottom: 1.75rem;
+          font-size: 1.125rem;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+        .blog-content blockquote {
+            border-left: 2px solid #ca8a04; /* yellow-600 */
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #44403c; /* stone-700 */
+            margin: 2.5rem 0;
+            background: linear-gradient(to right, #fef08a, transparent); /* yellow-200 */
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.75rem;
+            padding-left: 1.5rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 600;
         }
       `}</style>
 
@@ -375,10 +347,6 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
-                    <div className="h-[1px] w-8 bg-current"></div>
-                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div> */}
             </div>
         </div>
     </div>

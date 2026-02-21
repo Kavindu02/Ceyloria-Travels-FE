@@ -221,121 +221,50 @@ const ColomboPage = () => {
         </div>
       </section>
 
-      {/* ==================== 5. EDITORIAL JOURNAL ==================== */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-         <div className="text-center mb-20">
-            <span className="text-stone-400 font-bold uppercase tracking-[0.2em] text-xs">City Stories</span>
-            <h2 className="text-5xl font-serif text-stone-900 mt-4 mb-6">Urban Chronicles</h2>
-            <div className="w-[1px] h-16 bg-yellow-500 mx-auto"></div>
-         </div>
+      {/* ==================== 5. COLOMBO BLOG CONTENT ==================== */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="prose prose-stone prose-lg max-w-none blog-content font-light text-stone-600 leading-relaxed">
+            <h2>The Heartbeat of the Island: Discovering Colombo</h2>
+            <p>
+                Often dismissed as merely a transit point, <strong>Colombo</strong> is an essential piece of the Sri Lankan puzzle. It's a city where the island's many cultures, religions, and histories converge into a vibrant, chaotic, and utterly charming mosaic. From the red dirt of the bustling Pettah market to the polished floors of colonial boutique hotels, Colombo is a city of delightful contradictions.
+            </p>
 
-         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* Article 1 */}
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/colombo/cafeculture.png" alt="Cafe Culture" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Lifestyle & Culture</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        The New Wave: Colombo's Café Revolution
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        From specialty coffee roasters to chic brunch spots, discover how Colombo's café culture is redefining urban sophistication in South Asia.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
+            <img src="/pagesPhotos/colombo/galleface.png" alt="Sunset at Galle Face Green" />
 
-            {/* Article 2 */}
-            <div className="group cursor-pointer mt-12 lg:mt-0">
-                <div className="overflow-hidden h-[400px] mb-8 relative">
-                    <div className="absolute inset-0 bg-stone-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                    <img src="/pagesPhotos/colombo/streetfood.png" alt="Street Food" className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"/>
-                </div>
-                <div className="flex flex-col gap-4 pr-10">
-                    <span className="text-xs font-bold text-yellow-600 uppercase tracking-widest">Culinary Adventures</span>
-                    <h3 className="text-3xl font-serif text-stone-800 leading-snug group-hover:text-yellow-700 transition-colors">
-                        Street Food Safari: Flavors of the Fort
-                    </h3>
-                    <p className="text-stone-500 font-light leading-relaxed">
-                        Navigate the aromatic lanes where kottu roti sizzles and hoppers steam, exploring the authentic tastes that define Colombo's soul.
-                    </p>
-                    {/* <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-900 group-hover:underline decoration-yellow-500 underline-offset-4">
-                        Read Story <ChevronRight size={14} />
-                    </div> */}
-                </div>
-            </div>
-         </div>
-      </section>
+            <h3>A Stroll Through Fort and Pettah</h3>
+            <p>
+                The chronological layers of Colombo are best explored on foot. Start in the <strong>Fort district</strong>, the historical center defined by grand Portuguese, Dutch, and British colonial architecture. Walking past the stoic Old Parliament Building or the red-brick facade of the Cargills main store feels like stepping onto a 19th-century movie set.
+            </p>
+            <p>
+                As you cross over into <strong>Pettah</strong>, the energy shifts instantly. This is the commercial vein of the city. Narrow streets are organized by trade—one street dedicated entirely to fabrics, another to gold jewelry, and others to aromatic spices. The air is thick with the scent of cinnamon and the sounds of merchants negotiating deals. Don't miss the striking red-and-white candy-striped exterior of the Jami Ul-Alfar Mosque standing proudly amid the chaos.
+            </p>
 
-      {/* ==================== 6. DARK MODE OFFERS SECTION ==================== */}
-      <section className="bg-stone-900 py-32 px-6 text-white relative overflow-hidden">
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+            <blockquote>
+                "Colombo doesn't politely introduce itself; it overwhelms your senses in the best possible way, demanding you experience it rather than just observe it."
+            </blockquote>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-8">
-                <div>
-                   <h2 className="text-4xl md:text-6xl font-serif mb-2">City Experiences</h2>
-                   <p className="text-stone-400 font-light">Curated packages for the modern explorer.</p>
-                </div>
-                {/* <button className="hidden md:block px-8 py-3 border border-white/20 rounded-full hover:bg-white hover:text-stone-900 transition-all text-xs font-bold uppercase tracking-widest">
-                    View All Offers
-                </button> */}
-            </div>
+            <h3>The Culinary Capital</h3>
+            <p>
+                If you leave Colombo without indulging in its street food, you haven't truly visited. As the sun sets, head to <strong>Galle Face Green</strong>. This vast oceanfront promenade is flanked by luxury hotels on one side and crashing waves on the other. Dozens of food carts light up, offering everything from crispy <em>isso vadai</em> (lentil and prawn fritters) to the iconic Sri Lankan <em>kottu roti</em>, prepared with rhythmic, musical chopping on hot iron griddles.
+            </p>
+            <p>
+                Beyond street food, Colombo boasts a rapidly evolving dining scene. Hidden behind unsassuming walls in leafy Colombo 7 (Cinnamon Gardens), you'll find chic cafes housed in restored heritage villas, offering world-class coffees featuring Ceylon's finest beans.
+            </p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Offer 1 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/colombo/luxuryhotel.png" alt="Luxury Stay" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                        <div className="absolute top-4 right-4 bg-white text-stone-900 px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest">
-                            Premium
-                        </div>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Urban Luxury Escape</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Experience five-star comfort with rooftop dining, spa treatments, and personalized city tours.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$1,250</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
+            <h3>Essential Tips for Your Visit</h3>
+            <ul>
+                <li><strong>Sunset Drinks:</strong> For the best views of the Indian Ocean, grab a drink at one of the rooftop bars in the city, or opt for classic colonial elegance at the Galle Face Hotel's historic terrace.</li>
+                <li><strong>Getting Around:</strong> Three-wheelers (tuk-tuks) are the lifeblood of Colombo transport. Always ensure they use the meter, or use local ride-hailing apps like PickMe for hassle-free travel.</li>
+                <li><strong>Oasis in the City:</strong> Need a break from the noise? Viharamahadevi Park offers a lush green escape right in the city center, complete with giant bats sleeping in the canopy and a stunning golden Buddha statue.</li>
+            </ul>
 
-                {/* Offer 2 */}
-                <div className="bg-stone-800 rounded-3xl p-4 group hover:bg-stone-800/80 transition-colors">
-                    <div className="relative h-64 overflow-hidden rounded-2xl mb-6">
-                        <img src="/pagesPhotos/colombo/shopping.png" alt="Shopping Tour" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
-                    </div>
-                    <div className="px-4 pb-4">
-                        <h3 className="text-2xl font-serif mb-2">Heritage & Shopping Tour</h3>
-                        <p className="text-stone-400 text-sm mb-6 line-clamp-2">Explore colonial landmarks, vibrant markets, and contemporary boutiques with a local guide.</p>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-[10px] text-stone-500 uppercase tracking-widest">Starting from</p>
-                                <p className="text-xl font-serif text-yellow-500">$850</p>
-                            </div>
-                            {/* <button className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-yellow-600 transition-colors">
-                                <ArrowRight size={16} />
-                            </button> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p>
+                Take the time to peel back the layers of this coastal metropolis. You'll find that the true magic of Colombo lies not in its monuments, but in the irrepressible energy of its people and its streets.
+            </p>
         </div>
       </section>
 
-      {/* Inline Styles for Custom Animations */}
+      {/* Inline Styles for Custom Animations & Blog Typography */}
       <style>{`
         @keyframes slow-pan {
             0% { transform: scale(1.05) translate(0,0); }
@@ -350,6 +279,49 @@ const ColomboPage = () => {
         }
         .animate-slide-up {
             animation: slide-up 1s ease-out forwards;
+        }
+        
+        /* Blog Content Elegant Styling */
+        .blog-content h2, .blog-content h3, .blog-content h4 {
+          font-family: 'Playfair Display', serif;
+          color: #1c1917; /* stone-900 */
+          margin-top: 2.5rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.3;
+        }
+        .blog-content h2 { font-size: 2.5rem; }
+        .blog-content h3 { font-size: 2rem; }
+        .blog-content p {
+          margin-bottom: 1.75rem;
+          font-size: 1.125rem;
+        }
+        .blog-content img {
+            border-radius: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+        }
+        .blog-content blockquote {
+            border-left: 2px solid #ca8a04; /* yellow-600 */
+            padding-left: 1.5rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #44403c; /* stone-700 */
+            margin: 2.5rem 0;
+            background: linear-gradient(to right, #fef08a, transparent); /* yellow-200 */
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.75rem;
+            padding-left: 1.5rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .blog-content strong {
+            color: #292524; /* stone-800 */
+            font-weight: 600;
         }
       `}</style>
 
@@ -376,10 +348,6 @@ const ExperienceCard = ({ img, title, subtitle, desc }) => (
                         {desc}
                     </p>
                 </div>
-                {/* <div className="flex items-center gap-3 text-white/50 group-hover:text-white transition-colors">
-                    <div className="h-[1px] w-8 bg-current"></div>
-                    <span className="text-xs font-bold uppercase tracking-widest">Discover</span>
-                </div> */}
             </div>
         </div>
     </div>
