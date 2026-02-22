@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import Home from "./Pages/Homepage";
 import Blog from "./Pages/blog";
 import BlogDetail from "./Pages/blogDetail";
+import Activities from "./Pages/Activities";
+import ActivityDetail from "./Pages/ActivityDetail";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AnuradhapuraPage from "./Pages/gallerysection/anuradhapura";
@@ -85,6 +87,8 @@ export default function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blogs" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/activities" element={<Activities />} />
+        <Route path="/activity/:id" element={<ActivityDetail />} />
       </Routes>
 
       {/* Footer only after loader and not in admin panel */}

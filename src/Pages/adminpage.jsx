@@ -26,6 +26,9 @@ import UpdateBlog from "./admin/updateBlog";
 import DestinationAdminPage from "./admin/destinationAdminPage"; // [NEW]
 import AddDestinationCategory from "./admin/addDestinationCategory";
 import UpdateDestinationCategory from "./admin/updateDestinationCategory"; // [NEW] // [NEW]
+import ActivityAdminPage from "./admin/activityAdminPage";
+import AddActivityAdminPage from "./admin/addActivityAdminPage";
+import UpdateActivity from "./admin/updateActivity";
 
 // Placeholder pages
 const UsersPage = () => (
@@ -60,6 +63,7 @@ function DashboardHero() {
     { label: "Users", to: "/admin/users", icon: FaUsers },
     { label: "Packages", to: "/admin/packages", icon: FaMapMarkedAlt },
     { label: "Hotels", to: "/admin/hotels", icon: FaHotel },
+    { label: "Activities", to: "/admin/activities", icon: FaMapMarkedAlt },
     { label: "Blogs", to: "/admin/blogs", icon: RiArticleLine },
   ];
 
@@ -195,6 +199,11 @@ export default function AdminPage() {
               icon={FaMapMarkedAlt}
               label="Destinations"
             />{" "}
+            <SidebarLink
+              to="/admin/activities"
+              icon={FaMapMarkedAlt}
+              label="Activities"
+            />
             {/* [NEW] */}
             <SidebarLink to="/admin/blogs" icon={RiArticleLine} label="Blogs" />
             <button
@@ -244,6 +253,9 @@ export default function AdminPage() {
               path="update-destination-category/:id"
               element={<UpdateDestinationCategory />}
             />
+            <Route path="activities" element={<ActivityAdminPage />} />
+            <Route path="add-activity" element={<AddActivityAdminPage />} />
+            <Route path="update-activity/:id" element={<UpdateActivity />} />
           </Routes>
         </main>
       </div>

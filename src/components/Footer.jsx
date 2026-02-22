@@ -59,6 +59,7 @@ export default function Footer() {
             <ul className="space-y-3 text-left md:text-center">
               <FooterLink to="/" label="Home" />
               <FooterLink to="/destinations" label="Destinations" />
+              <FooterLink to="/activities" label="Activities" />
               <FooterLink to="/packages" label="Packages" />
               <FooterLink to="/accommodations" label="Accommodations" />
               <FooterLink to="/blogs" label="Blogs" />
